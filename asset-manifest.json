@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/SimutopiaHomePage/static/css/main.ab434561.css",
+    "main.js": "/SimutopiaHomePage/static/js/main.2020a3cf.js",
+    "index.html": "/SimutopiaHomePage/index.html",
+    "main.ab434561.css.map": "/SimutopiaHomePage/static/css/main.ab434561.css.map",
+    "main.2020a3cf.js.map": "/SimutopiaHomePage/static/js/main.2020a3cf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ab434561.css",
+    "static/js/main.2020a3cf.js"
+  ]
+}
