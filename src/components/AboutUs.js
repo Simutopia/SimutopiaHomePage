@@ -21,7 +21,7 @@ const AboutUs = () => {
             lg={{ span: 4 }}
           >
             <img
-              src="/images/krishnaPicture.JPG"
+              src="images/krishnaPicture.JPG"
               alt="Krishna Tamminana"
               style={{
                 width: "100%",
@@ -103,7 +103,7 @@ const AboutUs = () => {
             lg={{ span: 4, order: 2 }}
           >
             <img
-              src="/images/gabePicture.jpg"
+              src="images/gabePicture.jpg"
               alt="Gabriel King"
               style={{
                 width: "100%",

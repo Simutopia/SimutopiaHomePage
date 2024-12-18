@@ -12,7 +12,7 @@ const Header = () => {
       {/* Head component from react-helmet to add external resources */}
       <Helmet>
         <title>SIMUTOPIA</title>
-        <link rel="icon" href="/images/favicon.png" />
+        <link rel="icon" href="images/favicon.png" />
         <meta
           name="description"
           content="Advancing Design and Innovation through Simulation and Analysis"
@@ -42,7 +42,7 @@ const Header = () => {
         {/* Brand Logo wrapped with Navbar.Brand */}
         <Navbar.Brand href="/" className="mx-4">
           <img
-            src="/images/logoSFullRes.png"
+            src="images/logoSFullRes.png"
             height={48}
             width={26}
             alt="Simutopia Logo"
