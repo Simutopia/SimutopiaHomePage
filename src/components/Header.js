@@ -7,6 +7,13 @@ import { Helmet } from "react-helmet"; // Importing react-helmet for head manage
 const Header = () => {
   const [navbarCollapsed, setNavbarCollapsed] = useState(true);
 
+  const handleLogoClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Smooth scrolling to the top
+    });
+  };
+
   return (
     <>
       {/* Head component from react-helmet to add external resources */}
@@ -40,7 +47,7 @@ const Header = () => {
         onToggle={() => setNavbarCollapsed(!navbarCollapsed)}
       >
         {/* Brand Logo wrapped with Navbar.Brand */}
-        <Navbar.Brand href="/" className="mx-4">
+        <Navbar.Brand className="mx-4" onClick={handleLogoClick} style={{ cursor: "pointer" }}>
           <img
             src="images/logoSFullRes.png"
             height={48}
@@ -48,7 +55,16 @@ const Header = () => {
             alt="Simutopia Logo"
             className="d-inline-block"
           />{" "}
-          <div style={{ verticalAlign: "middle", fontSize: "40px",padding:"2px", letterSpacing: "0.65px", fontWeight: "200" }} className="d-inline-block">
+          <div
+            style={{
+              verticalAlign: "middle",
+              fontSize: "40px",
+              padding: "2px",
+              letterSpacing: "0.65px",
+              fontWeight: "200",
+            }}
+            className="d-inline-block"
+          >
             <b>SIM</b>UTOPIA
           </div>
         </Navbar.Brand>
