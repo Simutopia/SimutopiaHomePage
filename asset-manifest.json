@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/SimutopiaHomePage/static/css/main.ab434561.css",
-    "main.js": "/SimutopiaHomePage/static/js/main.951ac82e.js",
+    "main.js": "/SimutopiaHomePage/static/js/main.25ba8089.js",
     "index.html": "/SimutopiaHomePage/index.html",
     "main.ab434561.css.map": "/SimutopiaHomePage/static/css/main.ab434561.css.map",
-    "main.951ac82e.js.map": "/SimutopiaHomePage/static/js/main.951ac82e.js.map"
+    "main.25ba8089.js.map": "/SimutopiaHomePage/static/js/main.25ba8089.js.map"
   },
   "entrypoints": [
     "static/css/main.ab434561.css",
-    "static/js/main.951ac82e.js"
+    "static/js/main.25ba8089.js"
   ]
 }
