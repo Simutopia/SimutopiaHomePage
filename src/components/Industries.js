@@ -18,7 +18,7 @@ const Industries = () => {
             lg={{ span: 8 }}
           >
             <img
-              src="images/heavyEquipment.jpeg"
+              src={`${process.env.PUBLIC_URL}/images/heavyEquipment.jpeg`}
               alt="Heavy Equipment"
               width={1500}
               height={1000}
@@ -93,7 +93,7 @@ const Industries = () => {
             lg={{ span: 8, order: 2 }}
           >
             <img
-              src="images/industrialAutomation.jpeg"
+              src={`${process.env.PUBLIC_URL}/images/industrialAutomation.jpeg`}
               alt="Industrial Automation"
               width={1500}
               height={1000}
@@ -109,7 +109,7 @@ const Industries = () => {
             lg={{ span: 8 }}
           >
             <img
-              src="images/entertainment.jpeg"
+              src={`${process.env.PUBLIC_URL}/images/entertainment.jpeg`}
               alt="Entertainment"
               width={1500}
               height={1000}
@@ -178,7 +178,7 @@ const Industries = () => {
             lg={{ span: 8, order: 2 }}
           >
             <img
-              src="images/robotics.jpeg"
+              src={`${process.env.PUBLIC_URL}/images/robotics.jpeg`}
               alt="Robotics"
               width={1500}
               height={1000}
@@ -194,7 +194,7 @@ const Industries = () => {
             lg={{ span: 8 }}
           >
             <img
-              src="images/medicalDevices.jpeg"
+              src={`${process.env.PUBLIC_URL}/images/medicalDevices.jpeg`}
               alt="Medical Devices"
               width={1500}
               height={1000}

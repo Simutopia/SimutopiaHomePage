@@ -14,6 +14,8 @@ const Header = () => {
     });
   };
 
+  const logoSFullRes = process.env.PUBLIC_URL + "/images/logoSFullRes.png";
+
   return (
     <>
       {/* Head component from react-helmet to add external resources */}
@@ -47,9 +49,13 @@ const Header = () => {
         onToggle={() => setNavbarCollapsed(!navbarCollapsed)}
       >
         {/* Brand Logo wrapped with Navbar.Brand */}
-        <Navbar.Brand className="mx-4" onClick={handleLogoClick} style={{ cursor: "pointer" }}>
+        <Navbar.Brand
+          className="mx-4"
+          onClick={handleLogoClick}
+          style={{ cursor: "pointer" }}
+        >
           <img
-            src="images/logoSFullRes.png"
+            src={logoSFullRes}
             height={48}
             width={26}
             alt="Simutopia Logo"
