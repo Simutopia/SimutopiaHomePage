@@ -6,8 +6,12 @@ const NavbarScrollButtons = ({ navbarCollapsed }) => {
     const targetElement = document.getElementById(destination);
 
     if (targetElement) {
-      const offset = navbarCollapsed ? 50 : 260;
-      const targetPosition = targetElement.offsetTop - offset;
+      // Get the current screen width
+      const isMobile = window.innerWidth <= 768; // Adjust the breakpoint for mobile screens
+      // Apply an additional offset if not on mobile
+      const additionalOffset = isMobile ? 270 : 85; // 0px on mobile, 10px on desktop
+
+      const targetPosition = targetElement.offsetTop- additionalOffset;
 
       // Scroll to the target element with the calculated position
       window.scrollTo({
