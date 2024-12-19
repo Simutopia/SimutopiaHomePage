@@ -6,9 +6,8 @@ import Services from './components/Services';
 import AboutUs from './components/AboutUs';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
-import './global.css';
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import './global.css';
 function App() {
 
   return(

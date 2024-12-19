@@ -21,7 +21,7 @@ const ContactSection = () => {
         >
           <img
             className="landingImage"
-            src="/images/simulinkBackgroundBW.jpeg"
+            src="/images/simulinkbackgroundbw.jpeg"
             alt="Background"
             style={{
               objectFit: "cover",

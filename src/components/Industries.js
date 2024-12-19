@@ -4,7 +4,7 @@ const Industries = () => {
   const industries = [
     {
       title: "HEAVY EQUIPMENT",
-      image: "/images/heavyEquipment.jpeg",
+      image: "/images/heavyequipment.jpeg",
       description: [
         "Develop models (digital twins) describing dynamic behavior of the machine comprising multiple interacting domains: electrical, hydraulic, mechanical, etc.",
         "Develop and test supervisory machine control algorithms.",
@@ -16,7 +16,7 @@ const Industries = () => {
     },
     {
       title: "INDUSTRIAL AUTOMATION",
-      image: "/images/industrialAutomation.jpeg",
+      image: "/images/industrialautomation.jpeg",
       description: [
         "Develop models (digital twins) describing dynamic behavior of the machine comprising multiple interacting domains: electrical, hydraulic, mechanical, etc.",
         "Develop and test supervisory control logic algorithms.",
@@ -50,7 +50,7 @@ const Industries = () => {
     },
     {
       title: "MEDICAL DEVICES",
-      image: "/images/medicalDevices.jpeg",
+      image: "/images/medicaldevices.jpeg",
       description: [
         "Develop models (digital twins) describing dynamic behavior of the device comprising multiple interacting domains: electrical, hydraulic, mechanical, etc.",
         "Develop and test supervisory device control algorithms.",

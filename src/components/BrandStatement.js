@@ -21,7 +21,7 @@ const BrandStatement = () => {
         >
           <img
             className="landingImage"
-            src="/images/simulinkBackgroundBW.jpeg"
+            src="/images/simulinkbackgroundbw.jpeg"
             alt="Background"
             style={{
               objectFit: "cover",
@@ -54,7 +54,7 @@ const BrandStatement = () => {
               >
                 <img
                   className="fullLogo"
-                  src="/images/simutopiaLogoWithReg.png"
+                  src="/images/simutopialogowithreg.png"
                   alt="Simutopia Logo"
                   style={{
                     width: "100%",
