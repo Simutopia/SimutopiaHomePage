@@ -14,14 +14,14 @@ const Header = () => {
     });
   };
 
-  const logoSFullRes = process.env.PUBLIC_URL + "/images/logoSFullRes.png";
+  const logoSFullRes = "/images/logoSFullRes.png";
 
   return (
     <>
       {/* Head component from react-helmet to add external resources */}
       <Helmet>
         <title>SIMUTOPIA</title>
-        <link rel="icon" href="images/favicon.png" />
+        <link rel="icon" href="/images/favicon.png" />
         <meta
           name="description"
           content="Advancing Design and Innovation through Simulation and Analysis"
