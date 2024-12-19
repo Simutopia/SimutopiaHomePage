@@ -66,6 +66,7 @@ const Header = () => {
               verticalAlign: "middle",
               fontSize: "40px",
               padding: "2px",
+              paddingBottom: "0px",
               letterSpacing: "0.65px",
               fontWeight: "200",
             }}

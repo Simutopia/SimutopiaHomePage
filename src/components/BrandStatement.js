@@ -16,6 +16,7 @@ const BrandStatement = () => {
             position: "absolute",
             overflow: "hidden",
             height: "80vh",
+            width: "100%",
           }}
         >
           <img
@@ -26,6 +27,9 @@ const BrandStatement = () => {
               objectFit: "cover",
               width: "100%",
               height: "100%",
+              position: "absolute",
+              top: "0",
+              left: "0",
             }}
           />
         </Container>
@@ -54,8 +58,11 @@ const BrandStatement = () => {
                     process.env.PUBLIC_URL + "/images/simutopiaLogoWithReg.png"
                   }
                   alt="Simutopia Logo"
-                  width={600}
-                  height={158}
+                  style={{
+                    width: "100%",
+                    maxWidth: "600px",
+                    height: "auto",
+                  }}
                 />
               </Row>
             </Container>

@@ -6,7 +6,7 @@ const NavbarScrollButtons = ({ navbarCollapsed }) => {
     const targetElement = document.getElementById(destination);
 
     if (targetElement) {
-      const offset = navbarCollapsed ? 89 : 260;
+      const offset = navbarCollapsed ? 50 : 260;
       const targetPosition = targetElement.offsetTop - offset;
 
       // Scroll to the target element with the calculated position
