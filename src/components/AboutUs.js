@@ -21,7 +21,7 @@ const AboutUs = () => {
             lg={{ span: 4 }}
           >
             <img
-              src="/images/krishnapicture.png"
+              src="/images/krishnaPicture.png"
               alt="Krishna Tamminana"
               style={{
                 width: "100%",

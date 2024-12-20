@@ -14,7 +14,7 @@ const Header = () => {
     });
   };
 
-  const logoSFullRes = "/images/logosfullres.png";
+  const logoSFullRes = "/images/logoSFullRes.png";
 
   return (
     <>
