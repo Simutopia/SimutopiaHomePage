@@ -8,7 +8,7 @@ const ApplicationCarousel = () => {
         {/* Heavy Equipment */}
         <Carousel.Item className="photoCarItem">
           <img
-            src="/images/heavyequipment.jpeg"
+            src="/images/heavyequipment.png"
             alt="Heavy Equipment"
             style={{
               width: "100%",
@@ -24,7 +24,7 @@ const ApplicationCarousel = () => {
         {/* Industrial Automation */}
         <Carousel.Item className="photoCarItem">
           <img
-            src="/images/industrialautomation.jpeg"
+            src="/images/industrialautomation.png"
             alt="Industrial Automation"
             style={{
               width: "100%",
@@ -40,7 +40,7 @@ const ApplicationCarousel = () => {
         {/* Entertainment */}
         <Carousel.Item className="photoCarItem">
           <img
-            src="/images/entertainment.jpeg"
+            src="/images/entertainment.png"
             alt="Entertainment"
             style={{
               width: "100%",
@@ -58,7 +58,7 @@ const ApplicationCarousel = () => {
         {/* Medical Devices */}
         <Carousel.Item className="photoCarItem">
           <img
-            src="/images/medicaldevices.jpeg"
+            src="/images/medicaldevices.png"
             alt="Medical Devices"
             style={{
               width: "100%",

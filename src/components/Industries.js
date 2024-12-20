@@ -4,7 +4,7 @@ const Industries = () => {
   const industries = [
     {
       title: "HEAVY EQUIPMENT",
-      image: "/images/heavyequipment.jpeg",
+      image: "/images/heavyequipment.png",
       description: [
         "Develop models (digital twins) describing dynamic behavior of the machine comprising multiple interacting domains: electrical, hydraulic, mechanical, etc...",
         "Develop and test supervisory machine control algorithms.",
@@ -16,7 +16,7 @@ const Industries = () => {
     },
     {
       title: "INDUSTRIAL AUTOMATION",
-      image: "/images/industrialautomation.jpeg",
+      image: "/images/industrialautomation.png",
       description: [
         "Develop models (digital twins) describing dynamic behavior of the machine comprising multiple interacting domains: electrical, hydraulic, mechanical, etc...",
         "Develop and test supervisory control logic algorithms.",
@@ -27,7 +27,7 @@ const Industries = () => {
     },
     {
       title: "ENTERTAINMENT",
-      image: "/images/entertainment.jpeg",
+      image: "/images/entertainment.png",
       description: [
         "Develop dynamic models for both tracked and trackless ride systems.",
         "Perform motion analysis, predict dynamic forces on the ride system components and guest accelerations.",
@@ -39,7 +39,7 @@ const Industries = () => {
     },
     {
       title: "ROBOTICS",
-      image: "/images/robotics.jpeg",
+      image: "/images/robotics.png",
       description: [
         "Develop dynamic robotic system models with kinematics, dynamics and collision detection capabilities.",
         "Develop and test supervisory control logic algorithms.",
@@ -50,7 +50,7 @@ const Industries = () => {
     },
     {
       title: "MEDICAL DEVICES",
-      image: "/images/medicaldevices.jpeg",
+      image: "/images/medicaldevices.png",
       description: [
         "Develop models (digital twins) describing dynamic behavior of the device comprising multiple interacting domains: electrical, hydraulic, mechanical, etc...",
         "Develop and test supervisory device control algorithms.",

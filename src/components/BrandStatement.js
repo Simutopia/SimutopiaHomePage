@@ -21,7 +21,7 @@ const BrandStatement = () => {
         >
           <img
             className="landingImage"
-            src="/images/simulinkbackgroundbw.jpeg"
+            src="/images/simulinkbackgroundbw.png"
             alt="Background"
             style={{
               objectFit: "cover",
