@@ -6,7 +6,7 @@ const Industries = () => {
       title: "HEAVY EQUIPMENT",
       image: "/images/heavyequipment.jpeg",
       description: [
-        "Develop models (digital twins) describing dynamic behavior of the machine comprising multiple interacting domains: electrical, hydraulic, mechanical, etc.",
+        "Develop models (digital twins) describing dynamic behavior of the machine comprising multiple interacting domains: electrical, hydraulic, mechanical, etc...",
         "Develop and test supervisory machine control algorithms.",
         "Predict machine performance in terms of its ability to achieve target operating cycle requirements.",
         "Test embedded controls software using machine models in a hardware-in-the-loop (HIL) test platform.",
@@ -18,7 +18,7 @@ const Industries = () => {
       title: "INDUSTRIAL AUTOMATION",
       image: "/images/industrialautomation.jpeg",
       description: [
-        "Develop models (digital twins) describing dynamic behavior of the machine comprising multiple interacting domains: electrical, hydraulic, mechanical, etc.",
+        "Develop models (digital twins) describing dynamic behavior of the machine comprising multiple interacting domains: electrical, hydraulic, mechanical, etc...",
         "Develop and test supervisory control logic algorithms.",
         "Perform Monte Carlo scenario simulation studies for anomaly detection, fault isolation, and to increase operational efficiency.",
         "Leverage machine models and in-field data to synthesize artificial intelligence (AI) algorithms for predictive maintenance and operations optimization.",
@@ -52,7 +52,7 @@ const Industries = () => {
       title: "MEDICAL DEVICES",
       image: "/images/medicaldevices.jpeg",
       description: [
-        "Develop models (digital twins) describing dynamic behavior of the device comprising multiple interacting domains: electrical, hydraulic, mechanical, etc.",
+        "Develop models (digital twins) describing dynamic behavior of the device comprising multiple interacting domains: electrical, hydraulic, mechanical, etc...",
         "Develop and test supervisory device control algorithms.",
         "Test embedded controls software using device models in a hardware-in-the-loop (HIL) test platform.",
       ],
