@@ -54,7 +54,7 @@ const BrandStatement = () => {
               >
                 <img
                   className="fullLogo"
-                  src="/images/simutopiaLogoWithReg.png"
+                  src="/images/simutopiaLogoWithReg.png" 
                   alt="Simutopia Logo"
                   style={{
                     width: "100%",
