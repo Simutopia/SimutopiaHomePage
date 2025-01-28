@@ -43,19 +43,34 @@ const ContactSection = () => {
           </Row>
           <Row className="py-2 m-0 d-flex justify-content-center">
             <h2 className="display-5" id="contactEmail">
-              <i className="far fa-envelope"></i> consulting@simutopia.com
+              <a
+                href="mailto:consulting@simutopia.com"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <i className="far fa-envelope"></i> consulting@simutopia.com
+              </a>
             </h2>
           </Row>
           <Row className="py-3 m-0 d-flex justify-content-center">
             <h2 className="display-5" id="contactNumber">
-              <i className="fas fa-phone"></i> <u>USA Office</u> <br /> (+1)
-              774-207-8005
+              <a
+                href="tel:+17742078005"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <i className="fas fa-phone"></i> <u>USA Office</u> <br /> (+1)
+                774-207-8005
+              </a>
             </h2>
           </Row>
           <Row className="py-3 m-0 d-flex justify-content-center">
             <h2 className="display-5" id="contactNumber">
-              <i className="fas fa-phone"></i> <u>India Office</u>
-              <br /> (+91) 897-764-1377
+              <a
+                href="tel:+918977641377"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <i className="fas fa-phone"></i> <u>India Office</u>
+                <br /> (+91) 897-764-1377
+              </a>
             </h2>
           </Row>
         </Container>
