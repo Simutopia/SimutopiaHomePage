@@ -136,7 +136,7 @@ const AboutUs = () => {
             lg={{ span: 4 }}
           >
             <img
-              src="/images/rinkyPicture.png"
+              src="/images/RinkyPicture.png"
               alt="Rinky Gold Petla"
               style={{
                 width: "100%",
