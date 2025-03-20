@@ -37,7 +37,7 @@ const AboutUs = () => {
             <hr />
             <ListGroup className="pb-4" variant="flush">
               <ListGroup.Item className="pt-1">
-                Krishna is the President and Founder of Simutopia<sup>&reg;</sup>. He holds a B.Tech degree in Mechanical Engineering from IIT Madras (2003), an M.S.M.E degree from The Ohio State University (2005) and has {getYearsSince(2005)}+ years of experience in engineering, simulation, and analysis.
+                Krishna is the President and Founder of Simutopia<sup>®</sup>. He holds a B.Tech degree in Mechanical Engineering from IIT Madras (2003), an M.S.M.E degree from The Ohio State University (2005) and has {getYearsSince(2005)}+ years of experience in engineering, simulation, and analysis.
                 <br />
                 <br />
                 At MathWorks, Krishna worked with clients in their adoption of a model-based design approach, primarily, in modeling multi-domain physical systems for controls design. Industries served include Automotive, Aerospace, Industrial Machinery, and Medical Devices.
@@ -80,7 +80,7 @@ const AboutUs = () => {
             <hr />
             <ListGroup className="pb-4" variant="flush" style={{ textAlign: "end" }}>
               <ListGroup.Item className="pt-1">
-                Gabriel is the Lead Engineer for Simutopia<sup>&reg;</sup>. He holds a B.S. in Mechanical Engineering from the University of Central Florida (2015) and has {getYearsSince(2014)}+ years of experience in engineering.
+                Gabriel is the Lead Engineer for Simutopia<sup>®</sup>. He holds a B.S. in Mechanical Engineering from the University of Central Florida (2015) and has {getYearsSince(2014)}+ years of experience in engineering.
                 <br />
                 <br />
                 Prior to his engineering career, Gabriel spent 6 years working as a technician at an automotive shop, working on everything from custom-built high horsepower drag race engines to replacing brake pads on a 15-year-old commuter car.
@@ -115,19 +115,65 @@ const AboutUs = () => {
             />
           </Col>
         </Row>
-      </Container>
 
-      {/* Final Divider */}
-      <hr
-        style={{
-          height: "10px",
-          backgroundColor: "#212529",
-          opacity: "0.6",
-          marginTop: "0",
-          marginBottom: "0",
-          border: "none",
-        }}
-      />
+        {/* Divider */}
+        <hr
+          style={{
+            height: "5px",
+            backgroundColor: "#212529",
+            opacity: "0.6",
+            marginTop: "0",
+            marginBottom: "0",
+            border: "none",
+          }}
+        />
+
+        {/* Rinky's Section */}
+        <Row className="mx-0">
+          <Col
+            className="p-0 applicationPicture"
+            xs={{ span: 12 }}
+            lg={{ span: 4 }}
+          >
+            <img
+              src="/images/rinkyPicture.png"
+              alt="Rinky Gold Petla"
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "cover",
+              }}
+            />
+          </Col>
+          <Col className="d-flex flex-column justify-content-center">
+            <h1 className="pt-2 px-3 mb-0">Rinky Gold Petla</h1>
+            <hr />
+            <ListGroup className="pb-4" variant="flush">
+              <ListGroup.Item className="pt-1">
+                Rinky is a Systems Engineer at Simutopia<sup>®</sup>. He holds a B.Tech degree in Mechanical Engineering from Lendi Institute of Engineering and Technology (2020) and an M.Tech degree with a specialization in machine design from Andhra University (2024).
+                <br />
+                <br />
+                During his M.Tech studies, he published a paper titled "Experimental and Simulative Investigation of Vibration Isolator Using Transfer Matrix Method" in the Journal of the Acoustical Society of India (JASI). With strong proficiency in the experimentation of vibration isolators and in using design and analysis tools, including SolidWorks<sup>®</sup>, MATLAB<sup>®</sup>, and Ansys<sup>®</sup>, Rinky brings a robust technical skillset to Simutopia<sup>®</sup>.
+                <br />
+                <br />
+                Beyond his professional and academic pursuits, Rinky is a skilled musician. He plays the drums and the guitar, and enjoys reading theology.
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
+        </Row>
+
+        {/* Final Divider */}
+        <hr
+          style={{
+            height: "10px",
+            backgroundColor: "#212529",
+            opacity: "0.6",
+            marginTop: "0",
+            marginBottom: "0",
+            border: "none",
+          }}
+        />
+      </Container>
     </>
   );
 };
