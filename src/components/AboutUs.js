@@ -2,6 +2,8 @@ import React from "react";
 import { Container, Row, Col, ListGroup } from "react-bootstrap";
 
 const AboutUs = () => {
+  const getYearsSince = (startYear) => new Date().getFullYear() - startYear;
+
   return (
     <>
       <Container fluid className="px-0 py-0 my-0" id="aboutUsTarget">
@@ -35,7 +37,7 @@ const AboutUs = () => {
             <hr />
             <ListGroup className="pb-4" variant="flush">
               <ListGroup.Item className="pt-1">
-                Krishna is the President and Founder of Simutopia<sup>&reg;</sup>. He holds a B.Tech degree in Mechanical Engineering from IIT Madras (2003), an M.S.M.E degree from The Ohio State University (2005) and has 18+ years of experience in engineering, simulation, and analysis.
+                Krishna is the President and Founder of Simutopia<sup>&reg;</sup>. He holds a B.Tech degree in Mechanical Engineering from IIT Madras (2003), an M.S.M.E degree from The Ohio State University (2005) and has {getYearsSince(2005)}+ years of experience in engineering, simulation, and analysis.
                 <br />
                 <br />
                 At MathWorks, Krishna worked with clients in their adoption of a model-based design approach, primarily, in modeling multi-domain physical systems for controls design. Industries served include Automotive, Aerospace, Industrial Machinery, and Medical Devices.
@@ -78,7 +80,7 @@ const AboutUs = () => {
             <hr />
             <ListGroup className="pb-4" variant="flush" style={{ textAlign: "end" }}>
               <ListGroup.Item className="pt-1">
-                Gabriel is the Lead Engineer for Simutopia<sup>&reg;</sup>. He holds a B.S. in Mechanical Engineering from the University of Central Florida (2015) and has 9+ years of experience in engineering.
+                Gabriel is the Lead Engineer for Simutopia<sup>&reg;</sup>. He holds a B.S. in Mechanical Engineering from the University of Central Florida (2015) and has {getYearsSince(2014)}+ years of experience in engineering.
                 <br />
                 <br />
                 Prior to his engineering career, Gabriel spent 6 years working as a technician at an automotive shop, working on everything from custom-built high horsepower drag race engines to replacing brake pads on a 15-year-old commuter car.
