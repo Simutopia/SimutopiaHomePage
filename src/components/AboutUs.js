@@ -162,6 +162,104 @@ const AboutUs = () => {
           </Col>
         </Row>
 
+        {/* Divider */}
+        <hr
+          style={{
+            height: "5px",
+            backgroundColor: "#212529",
+            opacity: "0.6",
+            marginTop: "0",
+            marginBottom: "0",
+            border: "none",
+          }}
+        />
+
+        {/* Pavan's Section */}
+        <Row className="mx-0">
+          <Col
+            className="d-flex flex-column justify-content-center"
+            xs={{ span: 12, order: 2 }}
+            lg={{ span: 8, order: 1 }}
+          >
+            <h1 className="pt-2 px-3 mb-0" style={{ textAlign: "end" }}>
+              Pavan Venkat Pabbineedi
+            </h1>
+            <hr />
+            <ListGroup className="pb-4" variant="flush" style={{ textAlign: "end" }}>
+              <ListGroup.Item className="pt-1">
+                Pavan is a Systems Engineer at Simutopia<sup>®</sup>. He holds a B.Tech degree in Mechanical Engineering from the Indian Institute of Information Technology, Design and Manufacturing (IIITD&M), Kancheepuram (2025).
+                <br />
+                <br />
+                During his time at IIITD&M, Pavan led a team in the design and fabrication of a remote-control aircraft. This project provided direct, practical experience in airframe development, team leadership, and applying computational analysis to solve complex engineering challenges, providing him with a strong foundation in technical problem-solving.
+                <br />
+                <br />
+                Outside of work, Pavan enjoys playing basketball, cricket and watching movies.
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
+          <Col
+            className="p-0 applicationPicture"
+            xs={{ span: 12, order: 1 }}
+            lg={{ span: 4, order: 2 }}
+          >
+            <img
+              src="/images/PavanPicture.png"
+              alt="Pavan Venkat Pabbineedi"
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "cover",
+              }}
+            />
+          </Col>
+        </Row>
+
+        {/* Divider */}
+        <hr
+          style={{
+            height: "5px",
+            backgroundColor: "#212529",
+            opacity: "0.6",
+            marginTop: "0",
+            marginBottom: "0",
+            border: "none",
+          }}
+        />
+
+        {/* Ramana's Section */}
+        <Row className="mx-0">
+          <Col
+            className="p-0 applicationPicture"
+            xs={{ span: 12 }}
+            lg={{ span: 4 }}
+          >
+            <img
+              src="/images/RamanaPicture.jpeg"
+              alt="Veera Venkata Ramana Senapathi"
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "cover",
+              }}
+            />
+          </Col>
+          <Col className="d-flex flex-column justify-content-center">
+            <h1 className="pt-2 px-3 mb-0">Veera Venkata Ramana Senapathi</h1>
+            <hr />
+            <ListGroup className="pb-4" variant="flush">
+              <ListGroup.Item className="pt-1">
+                Ramana is a Systems Engineer at Simutopia<sup>®</sup>. He holds a B.Tech degree in Mechanical Engineering from the Indian Institute of Information Technology, Design and Manufacturing (IIITD&M), Kancheepuram (2025).
+                <br />
+                <br />
+                He previously contributed to the R&D team at Tharam-Thiran Green Energy Flow Private Limited, where he developed multi-physics based simulation models to optimize electrolyte flow in batteries. This experience established his core proficiency in Computational Fluid Dynamics (CFD) and dynamic systems modeling, skills he now leverages to solve real-world engineering challenges at Simutopia.
+                <br />
+                <br />
+                Outside of work, Ramana enjoys playing cricket, watching movies, and managing his farm.
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
+        </Row>
+
         {/* Final Divider */}
         <hr
           style={{
