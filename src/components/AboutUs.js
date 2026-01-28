@@ -128,52 +128,6 @@ const AboutUs = () => {
           }}
         />
 
-        {/* Rinky's Section */}
-        <Row className="mx-0">
-          <Col
-            className="p-0 applicationPicture"
-            xs={{ span: 12 }}
-            lg={{ span: 4 }}
-          >
-            <img
-              src="/images/RinkyPicture.png"
-              alt="Rinky Gold Petla"
-              style={{
-                width: "100%",
-                height: "auto",
-                objectFit: "cover",
-              }}
-            />
-          </Col>
-          <Col className="d-flex flex-column justify-content-center">
-            <h1 className="pt-2 px-3 mb-0">Rinky Gold Petla</h1>
-            <hr />
-            <ListGroup className="pb-4" variant="flush">
-              <ListGroup.Item className="pt-1">
-                Rinky is a Systems Engineer at Simutopia<sup>®</sup>. He holds a B.Tech degree in Mechanical Engineering from Lendi Institute of Engineering and Technology (2020) and an M.Tech degree with a specialization in machine design from Andhra University (2024).
-                <br />
-                <br />
-                During his M.Tech studies, he published a paper titled "Experimental and Simulative Investigation of Vibration Isolator Using Transfer Matrix Method" in the Journal of the Acoustical Society of India (JASI). With strong proficiency in the experimentation of vibration isolators and in using design and analysis tools, including SolidWorks<sup>®</sup>, MATLAB<sup>®</sup>, and Ansys<sup>®</sup>, Rinky brings a robust technical skillset to Simutopia<sup>®</sup>.
-                <br />
-                <br />
-                Beyond his professional and academic pursuits, Rinky is a skilled musician. He plays the drums and the guitar, and enjoys reading theology.
-              </ListGroup.Item>
-            </ListGroup>
-          </Col>
-        </Row>
-
-        {/* Divider */}
-        <hr
-          style={{
-            height: "5px",
-            backgroundColor: "#212529",
-            opacity: "0.6",
-            marginTop: "0",
-            marginBottom: "0",
-            border: "none",
-          }}
-        />
-
         {/* Pavan's Section */}
         <Row className="mx-0">
           <Col
