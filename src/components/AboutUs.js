@@ -214,6 +214,61 @@ const AboutUs = () => {
           </Col>
         </Row>
 
+        {/* Divider */}
+        <hr
+          style={{
+            height: "5px",
+            backgroundColor: "#212529",
+            opacity: "0.6",
+            marginTop: "0",
+            marginBottom: "0",
+            border: "none",
+          }}
+        />
+
+        {/* Prasad's Section */}
+        <Row className="mx-0">
+          <Col
+            className="d-flex flex-column justify-content-center"
+            xs={{ span: 12, order: 2 }}
+            lg={{ span: 8, order: 1 }}
+          >
+            <h1 className="pt-2 px-3 mb-0" style={{ textAlign: "end" }}>
+              Durga Prasad Matta
+            </h1>
+            <hr />
+            <ListGroup className="pb-4" variant="flush" style={{ textAlign: "end" }}>
+              <ListGroup.Item className="pt-1">
+                Prasad is a Systems Engineer at Simutopia<sup>®</sup>. He holds a B.Tech degree in Mechanical Engineering from GIET College of Engineering (2022) and an M.Tech degree in Machine Design from Andhra University (2026).
+                <br />
+                <br />
+                For his M.Tech dissertation, Prasad completed a project titled "Model-Based Design of a Fuzzy Logic Series Regenerative Braking Strategy for Electric Vehicles Considering 7DOF Dynamic Load Transfer"
+                <br />
+                <br />
+                Prior to joining Simutopia, Prasad gained industry training as an Automotive Automation and Robotics Engineer at the AU APSSDC Siemens Centre of Excellence, where he developed skills in CAD design and robot operations.
+                <br />
+                <br />
+                Outside of work, Prasad enjoys reading novels, cooking and watching anime.
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
+          <Col
+            className="p-0 applicationPicture"
+            xs={{ span: 12, order: 1 }}
+            lg={{ span: 4, order: 2 }}
+          >
+            <img
+              src="/images/DurgaPicture.jpeg"
+              alt="Prasad"
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "cover",
+              }}
+            />
+          </Col>
+        </Row>
+
         {/* Final Divider */}
         <hr
           style={{
