@@ -19,6 +19,7 @@ const Footer = () => {
           <h3 className="m-0">
             <u>India Office</u>
           </h3>
+          <h6>Simutopia (India) Private Limited</h6>
           <h6 className="m-0">4-60-5/4/1, Lawsons Bay Colony</h6>
           <h6 className="m-0">Visakhapatnam, Andhra Pradesh 530017</h6>
         </Col>
