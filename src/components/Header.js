@@ -1,91 +1,62 @@
-import React, { useState } from "react";
-import { Navbar } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS
+import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import NavbarScrollButtons from "./NavbarScrollButtons";
-import { Helmet } from "react-helmet"; // Importing react-helmet for head management
 
-const Header = () => {
-  const [navbarCollapsed, setNavbarCollapsed] = useState(true);
-
-  const handleLogoClick = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth", // Smooth scrolling to the top
-    });
-  };
-
-  const logoSFullRes = "/images/logoSFullRes.png";
-
-  return (
-    <>
-      {/* Head component from react-helmet to add external resources */}
-      <Helmet>
-        <title>SIMUTOPIA</title>
-        <link rel="icon" href="/images/favicon.png" />
-        <meta
-          name="description"
-          content="Advancing Design and Innovation through Simulation and Analysis"
-        />
-        {/* Fontawesome Icons */}
-        <link
-          rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"
-        />
-        {/* Google Font */}
-        <link
-          href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,700"
-          rel="stylesheet"
-        />
-      </Helmet>
-
-      <Navbar
-        expand="lg"
-        sticky="top"
-        bg="dark"
-        variant="dark"
-        py="0"
-        id="mainNavbar"
-        collapseOnSelect={true}
-        onToggle={() => setNavbarCollapsed(!navbarCollapsed)}
+const Header = () => (
+  <AppBar
+    id="mainNavbar"
+    position="sticky"
+    elevation={0}
+    sx={{ bgcolor: "#212529", color: "common.white" }}
+  >
+    <Toolbar sx={{ minHeight: 80, gap: { xs: 0.5, sm: 1 }, px: { xs: 1, sm: 2 } }}>
+      <Box
+        component="a"
+        href="/"
+        onClick={(event) => {
+          event.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          color: "inherit",
+          textDecoration: "none",
+          mr: { xs: 0, lg: 2 },
+          flexShrink: 0,
+        }}
       >
-        {/* Brand Logo wrapped with Navbar.Brand */}
-        <Navbar.Brand
-          className="mx-4"
-          onClick={handleLogoClick}
-          style={{ cursor: "pointer" }}
+        <Box
+          component="img"
+          src="/images/logoSFullRes.png"
+          alt=""
+          sx={{ height: 48, width: { xs: 22, sm: 26 }, objectFit: "contain" }}
+        />
+        <Typography
+          component="span"
+          sx={{
+            fontSize: { xs: "1.5rem", sm: "2.5rem" },
+            fontWeight: 200,
+            letterSpacing: "0.65px",
+            whiteSpace: "nowrap",
+          }}
         >
-          <img
-            src={logoSFullRes}
-            height={48}
-            width={26}
-            alt="Simutopia Logo"
-            className="d-inline-block"
-          />{" "}
-          <div
-            style={{
-              verticalAlign: "middle",
-              fontSize: "40px",
-              padding: "2px",
-              paddingBottom: "0px",
-              letterSpacing: "0.65px",
-              fontWeight: "200",
-            }}
-            className="d-inline-block"
-          >
-            <b>SIM</b>UTOPIA
-          </div>
-        </Navbar.Brand>
-
-        {/* Navbar Toggle */}
-        <Navbar.Toggle />
-
-        {/* Collapsible Menu */}
-        <Navbar.Collapse>
-          <NavbarScrollButtons navbarCollapsed={navbarCollapsed} />
-        </Navbar.Collapse>
-      </Navbar>
-    </>
-  );
-};
+          <strong>SIM</strong>UTOPIA
+        </Typography>
+      </Box>
+      <NavbarScrollButtons />
+      <Button
+        component={RouterLink}
+        to="/workspace/signin"
+        variant="outlined"
+        color="inherit"
+        sx={{ ml: { xs: "auto", lg: 1 }, flexShrink: 0 }}
+      >
+        Login
+      </Button>
+    </Toolbar>
+  </AppBar>
+);
 
 export default Header;

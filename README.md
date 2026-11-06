@@ -1,70 +1,47 @@
-# Getting Started with Create React App
+# Simutopia website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The React app serves the Simutopia marketing website at `/` and the protected
+RBAC workspace under `/workspace`.
+The original marketing layout remains the default; its navbar theme control
+toggles the site-wide light/dark preference. The workspace uses Material UI
+with a MATLAB-inspired blue, slate, and amber theme.
 
-## Available Scripts
+## Run locally
 
-In the project directory, you can run:
+1. Install dependencies with `npm ci`.
+2. Start the frontend with `npm start`.
 
-### `npm start`
+The workspace uses `http://localhost:5000` for its API by default. Set
+`REACT_APP_API_URL` before starting the app to use another backend URL.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Workspace routes
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- `/workspace` — workspace landing page.
+- `/workspace/signin` — sign-in for authorized members.
+- `/workspace/dashboard` — authenticated user dashboard.
+- `/workspace/admin` — dashboard for administrators with role-management permission.
 
-### `npm test`
+The API service lives in the `Simutopia-CentralAuth` project. Configure its
+private `.env` file using `.env.example` before starting the backend.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Sub-app access control
 
-### `npm run build`
+Administrators can register sub-apps from **Admin control center → App
+management**. Each app has a stable public app key, app type, launch URL,
+description, enabled state, and exact SSO callback URL. Choose **Browser app
+(PKCE, no secret)** for a static SPA, or **Server app (client secret)** for an
+app with a trusted backend; secrets are only generated for the latter. In
+**Roles & permissions**, grant a role **Open app** access. Disabling an app
+blocks SSO; deleting it removes its grants from every role. The built-in
+admin role also needs an explicit app grant; its core role permissions remain
+protected.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Sub-apps can list the signed-in user's enabled apps with
+`GET /api/apps/accessible` and the workspace JWT. Browser apps use
+authorization-code + PKCE: their React frontend requests a one-time code,
+exchanges it for a short-lived app token, and validates that token with Central
+Auth. No sub-app backend or client secret is required for this flow. Apps that
+need protected data must still enforce authorization in their APIs. Existing
+server apps can continue using the confidential-client server-side exchange.
+See [Simutopia-CentralAuth README](../Simutopia-CentralAuth/README.md) for
+protocol details and deployment requirements.

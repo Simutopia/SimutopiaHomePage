@@ -1,82 +1,77 @@
-import { Row, Container } from "react-bootstrap";
+import { Box, Container, Typography } from "@mui/material";
 
-const BrandStatement = () => {
-  return (
-    <>
-      <Container
-        fluid
-        className="p-0 d-flex flex-column justify-content-center"
-        style={{ height: "80vh" }}
+const BrandStatement = () => (
+  <Box
+    component="section"
+    sx={{
+      position: "relative",
+      height: "80vh",
+      minHeight: 420,
+      display: "grid",
+      placeItems: "center",
+      overflow: "hidden",
+      px: 2,
+      py: 8,
+      textAlign: "center",
+    }}
+  >
+    <Box
+      component="img"
+      src="/images/simulinkBackgroundBW.png"
+      alt=""
+      aria-hidden="true"
+      sx={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        opacity: 0.2,
+      }}
+    />
+    <Container
+      maxWidth="md"
+      sx={{
+        position: "relative",
+        width: "fit-content",
+        maxWidth: "100%",
+        py: { xs: 3, md: 4 },
+        px: { xs: 2, md: 4 },
+        bgcolor: "#fff",
+      }}
+    >
+      <Box
+        component="img"
+        src="/images/simutopiaLogoWithReg.png"
+        alt="Simutopia"
+        sx={{ width: "100%", maxWidth: 600, height: "auto", mb: 3 }}
+      />
+      <Typography
+        id="missionStatement"
+        variant="body1"
+        component="p"
+        sx={{
+          fontWeight: 400,
+          fontSize: "1.4rem",
+          mx: "auto",
+          p: 2,
+          border: "2px solid #000",
+          borderRadius: "19px",
+          width: 350,
+          maxWidth: "100%",
+          bgcolor: "#fff",
+        }}
       >
-        <Container
-          fluid
-          className="p-0"
-          style={{
-            zIndex: "0",
-            position: "absolute",
-            overflow: "hidden",
-            height: "80vh",
-            width: "100%",
-          }}
-        >
-          <img
-            className="landingImage"
-            src="/images/simulinkBackgroundBW.png"
-            alt="Background"
-            style={{
-              objectFit: "cover",
-              width: "100%",
-              height: "100%",
-              position: "absolute",
-              top: "0",
-              left: "0",
-            }}
-          />
-        </Container>
-
-        <Container
-          fluid
-          className="p-0"
-          style={{ zIndex: "1", position: "absolute" }}
-        >
-          <Container
-            fluid
-            className="pb-4 pt-3 px-0"
-            style={{
-              width: "fit-content",
-              backgroundColor: "rgba(255,255,255,1)",
-            }}
-          >
-            <Container className="d-flex justify-content-center px-4 mb-3">
-              <Row
-                className="m-0 d-flex justify-content-center"
-                style={{ width: "fit-content" }}
-              >
-                <img
-                  className="fullLogo"
-                  src="/images/simutopiaLogoWithReg.png" 
-                  alt="Simutopia Logo"
-                  style={{
-                    width: "100%",
-                    maxWidth: "600px",
-                    height: "auto",
-                  }}
-                />
-              </Row>
-            </Container>
-
-            <Row className="m-0 d-flex justify-content-center align-items-start">
-              <h3 className="m-0" id="missionStatement">
-                ADVANCING <br /> <b>DESIGN AND INNOVATION</b>
-                <br />
-                THROUGH <br /> <b>SIMULATION AND ANALYSIS</b>
-              </h3>
-            </Row>
-          </Container>
-        </Container>
-      </Container>
-    </>
-  );
-};
+        ADVANCING
+        <br />
+        <strong>DESIGN AND INNOVATION</strong>
+        <br />
+        THROUGH
+        <br />
+        <strong>SIMULATION AND ANALYSIS</strong>
+      </Typography>
+    </Container>
+  </Box>
+);
 
 export default BrandStatement;

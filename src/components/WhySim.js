@@ -1,109 +1,63 @@
-import { faAngleDoubleDown, faArrowDown, faCompressArrowsAlt, faSearch,  faUsers } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Card, Row, Col, Container } from "react-bootstrap";
+import {
+  ArrowDownward,
+  Groups,
+  Search,
+  CompareArrows,
+  KeyboardDoubleArrowDown,
+} from "@mui/icons-material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
 
-const WhySim = ({}) => {
-  return (
-    <>
-      <Container
-        fluid
-        className="p-0"
-        style={{ backgroundColor: "rgb(94, 96, 99)", height: "80px" }}
-      ></Container>
-      <Container
-        fluid
-        className="d-flex align-items-center"
-        style={{ backgroundColor: "rgb(94, 96, 99)", color: "white" }}
+const benefits = [
+  { icon: <Search fontSize="inherit" />, text: "Identify system level risks early in design" },
+  { icon: <CompareArrows fontSize="inherit" />, text: "Increase traceability of the design requirements" },
+  { icon: <KeyboardDoubleArrowDown fontSize="inherit" />, text: "Minimize physical prototyping and field testing" },
+  { icon: <Groups fontSize="inherit" />, text: "Improve collaboration across disciplines and perform system integration" },
+];
+
+const WhySim = () => (
+  <Box component="section" sx={{ bgcolor: "#5e6063", color: "common.white", py: 10 }}>
+    <Container maxWidth="xl">
+      <Stack spacing={2} alignItems="center" textAlign="center" sx={{ mb: 5 }}>
+        <Typography variant="h2" component="h2" sx={{ fontSize: { xs: "2rem", md: "4rem" } }}>
+          Why use <strong>SIMULATION</strong> and <strong>ANALYSIS</strong>?
+        </Typography>
+        <ArrowDownward aria-hidden="true" />
+        <Typography variant="h4" component="p" sx={{ fontSize: { xs: "1.5rem", md: "3rem" } }}>
+          Understand the <strong>DYNAMIC BEHAVIOR</strong> of the <strong>SYSTEM</strong>
+        </Typography>
+        <Typography variant="h2" aria-hidden="true">+</Typography>
+      </Stack>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(2, minmax(0, 1fr))",
+            lg: "repeat(4, minmax(0, 1fr))",
+          },
+          gap: 3,
+        }}
       >
-        <Row className="d-flex justify-content-around w-80 mx-0">
-          <h1 className="display-3" style={{ textAlign: "center" }}>
-            Why use <b>SIMULATION</b> and <b>ANALYSIS</b>?
-          </h1>
-
-          <h1 style={{ textAlign: "center" }} className="display-4">
-            {/* <i className="fas fa-arrow-down"></i> */}
-            <FontAwesomeIcon icon={faArrowDown} />
-          </h1>
-
-          <h2 style={{ textAlign: "center" }} className="m-0">
-            understand the <b>DYNAMIC BEHAVIOR</b> of the <b>SYSTEM</b>
-          </h2>
-          <h1 className="display-2 mt-2 mb-3" style={{ textAlign: "center" }}>
-            +
-          </h1>
-
-          {/* Risk Identification */}
-          <Col lg={true} className="mb-4">
-            <Card className="whySimCard h-100">
-              <Card.Body className="py-5">
-                <h1 className="display-1 justify-content-center d-flex">
-                  {/* <i className="fas fa-search"></i> */}
-                  <FontAwesomeIcon icon={faSearch} />
-                </h1>
-                <hr />
-                <h3 className="justify-content-center d-flex">
-                  Identify system level risks early in design
-                </h3>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          {/* Requirements Traceability */}
-          <Col lg={true} className="mb-4">
-            <Card className="whySimCard h-100">
-              <Card.Body className="py-5">
-                <h1 className="display-1 justify-content-center d-flex">
-                  {/* <i className="fas fa-compress-arrows-alt"></i> */}
-                  <FontAwesomeIcon icon={faCompressArrowsAlt} />
-                </h1>
-                <hr />
-                <h3 className="justify-content-center d-flex">
-                  Increase traceability of the design requirements
-                </h3>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          {/* Minimize Prototypes */}
-          <Col lg={true} className="mb-4">
-            <Card className="whySimCard h-100">
-              <Card.Body className="py-5">
-                <h1 className="display-1 justify-content-center d-flex">
-                  {/* <i className="fas fa-angle-double-down"></i> */}
-                  <FontAwesomeIcon icon={faAngleDoubleDown} />
-                </h1>
-                <hr />
-                <h3 className="justify-content-center d-flex">
-                  Minimize physical prototyping and field testing
-                </h3>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          {/* Team Collaboration */}
-          <Col lg={true} className="mb-4">
-            <Card className="whySimCard h-100">
-              <Card.Body className="py-5">
-                <h1 className="display-1 justify-content-center d-flex">
-                  {/* <i className="fas fa-users"></i> */}
-                  <FontAwesomeIcon icon={faUsers} />
-                </h1>
-                <hr />
-                <h3 className="justify-content-center d-flex">
-                  Improve collaboration across disciplines and perform system
-                  integration
-                </h3>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-      <Container
-        fluid
-        style={{ backgroundColor: "rgb(94, 96, 99)", height: "80px" }}
-      ></Container>
-    </>
-  );
-};
+        {benefits.map(({ icon, text }) => (
+          <Card key={text} sx={{ height: "100%", minHeight: 240, bgcolor: "#89d386", color: "common.black" }}>
+            <CardContent sx={{ p: 4, textAlign: "center" }}>
+              <Box sx={{ fontSize: 64 }}>{icon}</Box>
+              <Divider sx={{ my: 2, borderColor: "rgba(0,0,0,0.3)" }} />
+              <Typography variant="h6" component="p">{text}</Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </Box>
+    </Container>
+  </Box>
+);
 
 export default WhySim;

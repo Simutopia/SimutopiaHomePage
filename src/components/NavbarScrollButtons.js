@@ -1,70 +1,84 @@
-import { Nav } from "react-bootstrap";
+import { useState } from "react";
+import {
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  useMediaQuery,
+} from "@mui/material";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
-const NavbarScrollButtons = ({ navbarCollapsed }) => {
+const sections = [
+  ["Industries", "industriesTarget"],
+  ["Services", "servicesTarget"],
+  ["About Us", "aboutUsTarget"],
+  ["Contact Us", "contactTarget"],
+];
+
+const NavbarScrollButtons = () => {
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const isMobile = useMediaQuery("(max-width: 991.98px)");
+
   const handleScrollClick = (destination) => {
-    // Get the target element by id
-    const targetElement = document.getElementById(destination);
+    const target = document.getElementById(destination);
+    setMenuAnchor(null);
+    if (!target) return;
 
-    if (targetElement) {
-      // Get the current screen width
-      const isMobile = window.innerWidth <= 768; // Adjust the breakpoint for mobile screens
-      // Apply an additional offset if not on mobile
-      const additionalOffset = isMobile ? 270 : 85; // 0px on mobile, 10px on desktop
-
-      const targetPosition = targetElement.offsetTop- additionalOffset;
-
-      // Scroll to the target element with the calculated position
-      window.scrollTo({
-        top: targetPosition,
-        behavior: "smooth", // Enable smooth scrolling
-      });
-    }
+    const offset = window.innerWidth <= 768 ? 270 : 85;
+    window.scrollTo({
+      top: target.getBoundingClientRect().top + window.scrollY - offset,
+      behavior: "smooth",
+    });
   };
 
+  if (isMobile) {
+    return (
+      <>
+        <IconButton
+          color="inherit"
+          aria-label="Open page navigation"
+          aria-controls={menuAnchor ? "page-navigation-menu" : undefined}
+          aria-haspopup="true"
+          onClick={(event) => setMenuAnchor(event.currentTarget)}
+        >
+          <MenuRoundedIcon />
+        </IconButton>
+        <Menu
+          id="page-navigation-menu"
+          anchorEl={menuAnchor}
+          open={Boolean(menuAnchor)}
+          onClose={() => setMenuAnchor(null)}
+          MenuListProps={{ "aria-label": "Main navigation" }}
+        >
+          {sections.map(([label, id]) => (
+            <MenuItem key={id} onClick={() => handleScrollClick(id)}>
+              {label}
+            </MenuItem>
+          ))}
+        </Menu>
+      </>
+    );
+  }
+
   return (
-    <>
-      <Nav className="mr-auto">
-        <Nav.Item>
-          <Nav.Link
-            eventKey="1"
-            className="navbarLink"
-            onClick={() => handleScrollClick("industriesTarget")}
-          >
-            Industries
-          </Nav.Link>
-        </Nav.Item>
-
-        <Nav.Item>
-          <Nav.Link
-            eventKey="2"
-            className="navbarLink"
-            onClick={() => handleScrollClick("servicesTarget")}
-          >
-            Services
-          </Nav.Link>
-        </Nav.Item>
-
-        <Nav.Item>
-          <Nav.Link
-            eventKey="3"
-            className="navbarLink"
-            onClick={() => handleScrollClick("aboutUsTarget")}
-          >
-            About Us
-          </Nav.Link>
-        </Nav.Item>
-
-        <Nav.Item>
-          <Nav.Link
-            eventKey="4"
-            className="navbarLink"
-            onClick={() => handleScrollClick("contactTarget")}
-          >
-            Contact Us
-          </Nav.Link>
-        </Nav.Item>
-      </Nav>
-    </>
+    <Stack
+      component="nav"
+      direction="row"
+      aria-label="Main navigation"
+      sx={{ flexGrow: 1, ml: 2 }}
+    >
+      {sections.map(([label, id]) => (
+        <Button
+          key={id}
+          color="inherit"
+          sx={{ fontSize: "1.25rem", whiteSpace: "nowrap" }}
+          onClick={() => handleScrollClick(id)}
+        >
+          {label}
+        </Button>
+      ))}
+    </Stack>
   );
 };
 

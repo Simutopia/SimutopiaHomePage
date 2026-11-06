@@ -4,19 +4,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@mui/icons-material": "^6.1.8",
+    "@mui/material": "^6.1.8",
     "@popperjs/core": "^2.6.0",
-    "bootstrap": "^5.0.0-beta1",
-    "cra-template": "1.2.0",
-    "install-peerdeps": "^3.0.3",
     "react": "^19.0.0",
-    "react-bootstrap": "^2.10.7",
     "react-dom": "^19.0.0",
-    "react-helmet": "^6.1.0",
-    "react-scripts": "5.0.1",
-    "simutopiawebpage": "file:"
+    "react-router-dom": "^7.0.1",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

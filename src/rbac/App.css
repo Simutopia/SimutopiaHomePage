@@ -1,0 +1,971 @@
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-width: 320px;
+  font-family: "Nunito", "Segoe UI", "Roboto", sans-serif;
+}
+
+.MuiTypography-root,
+.MuiButton-root,
+.MuiInputBase-root {
+  font-family: Arial, "Helvetica Neue", sans-serif !important;
+}
+
+.route-loader {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.landing-page {
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background: #fff;
+}
+
+.landing-page > .MuiAppBar-root,
+.landing-page > .MuiContainer-root {
+  position: relative;
+  z-index: 1;
+}
+
+.landing-toolbar {
+  min-height: 80px;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.simutopia-navbar {
+  color: #fff !important;
+  background: #18374a !important;
+}
+
+.simutopia-navbar::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    #005789 0 25%,
+    #ee3525 25% 50%,
+    #ffc527 50% 75%,
+    #6ebe44 75% 100%
+  );
+}
+
+.simutopia-navbar-brand,
+.signin-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.simutopia-navbar-brand img,
+.signin-brand img {
+  width: 31px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.simutopia-navbar-brand span,
+.signin-brand span {
+  font-size: 1.65rem;
+  font-weight: 300;
+  letter-spacing: 0.045em;
+}
+
+.landing-nav-links {
+  margin-left: auto;
+}
+
+.landing-nav-link {
+  min-width: 0 !important;
+  padding: 8px 10px !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+  font-size: 0.92rem !important;
+}
+
+.landing-nav-link:hover {
+  color: #dceef5 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.highlight-icon {
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: #0076a8;
+  box-shadow: 0 10px 24px rgba(0, 118, 168, 0.2);
+}
+
+.top-signin {
+  border-radius: 7px !important;
+  padding: 10px 20px !important;
+  color: #212529 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+.top-signin:hover {
+  background: #dceef5 !important;
+}
+
+.landing-orb {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(1px);
+  pointer-events: none;
+  animation: orb-drift 12s ease-in-out infinite alternate;
+}
+
+.landing-orb-one {
+  width: 460px;
+  height: 460px;
+  top: 100px;
+  right: -170px;
+  background: radial-gradient(circle, rgba(0, 87, 137, 0.1), transparent 68%);
+}
+
+.landing-orb-two {
+  width: 400px;
+  height: 400px;
+  top: 550px;
+  left: -230px;
+  background: radial-gradient(circle, rgba(110, 190, 68, 0.12), transparent 70%);
+  animation-delay: -4s;
+}
+
+.landing-hero {
+  position: relative;
+  min-height: 640px;
+  padding: 56px 0 88px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 0.95fr);
+  align-items: center;
+  gap: 48px;
+}
+
+.landing-hero::before {
+  position: absolute;
+  z-index: 0;
+  inset: 14px -10vw 24px;
+  content: "";
+  background-image: url("../../public/images/simutopia-engineering-background.png");
+  background-position: center;
+  background-size: cover;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  animation: fade-up 650ms ease-out both;
+}
+
+.hero-badge {
+  margin-bottom: 24px;
+  border-color: rgba(0, 118, 168, 0.3) !important;
+  color: #0076a8 !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.09em !important;
+}
+
+.hero-company-logo {
+  width: min(100%, 560px);
+  height: 158px;
+  margin-bottom: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(33, 37, 41, 0.1);
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(33, 37, 41, 0.08);
+}
+
+.hero-logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 50%;
+}
+
+.hero-title {
+  margin: 0;
+  max-width: 620px;
+  font-size: clamp(1.05rem, 2vw, 1.42rem) !important;
+  line-height: 1.4 !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+}
+
+.hero-title-accent {
+  display: block;
+  color: #0076a8;
+  font-weight: 800;
+}
+
+.hero-description {
+  max-width: 500px;
+  margin-top: 24px !important;
+  font-size: 1.12rem !important;
+  line-height: 1.75 !important;
+  color: rgba(90, 94, 112, 0.92);
+}
+
+.hero-cta {
+  min-height: 54px;
+  padding: 0 24px !important;
+  border-radius: 7px !important;
+  color: #fff !important;
+  background: #0076a8 !important;
+  box-shadow: 0 12px 28px rgba(0, 118, 168, 0.22) !important;
+  transition: transform 180ms ease, box-shadow 180ms ease !important;
+}
+
+.hero-cta:hover {
+  transform: translateY(-3px);
+  background: #005a84 !important;
+  box-shadow: 0 16px 34px rgba(0, 90, 132, 0.3) !important;
+}
+
+.trust-dot,
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6ebe44;
+  box-shadow: 0 0 0 4px rgba(110, 190, 68, 0.15);
+}
+
+.hero-stats {
+  margin-top: 54px;
+}
+
+.hero-stats > div {
+  min-width: 92px;
+}
+
+.hero-visual {
+  position: relative;
+  z-index: 1;
+  min-height: 470px;
+  display: grid;
+  place-items: center;
+  animation: fade-up 750ms 100ms ease-out both;
+}
+
+.visual-glow {
+  position: absolute;
+  width: 90%;
+  height: 80%;
+  border-radius: 50%;
+  background: linear-gradient(140deg, rgba(0, 87, 137, 0.14), rgba(110, 190, 68, 0.12));
+  filter: blur(46px);
+}
+
+.workspace-card,
+.floating-role-card,
+.highlight-card {
+  border: 1px solid rgba(33, 37, 41, 0.12);
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(14px);
+}
+
+.workspace-card {
+  z-index: 1;
+  width: min(100%, 470px);
+  overflow: visible;
+  border-radius: 24px !important;
+  box-shadow: 0 28px 80px rgba(32, 37, 72, 0.15) !important;
+  animation: card-float 6s ease-in-out infinite;
+}
+
+.workspace-card-content {
+  padding: 28px !important;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: #326b31;
+  background: rgba(110, 190, 68, 0.16);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.live-indicator .live-dot {
+  width: 7px;
+  height: 7px;
+}
+
+.access-chart {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 24px;
+  padding: 22px 4px;
+}
+
+.chart-ring {
+  width: 164px;
+  height: 164px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(#0076a8 0 58%, #e19a00 58% 81%, #dceef5 81% 100%);
+  transform: rotate(-35deg);
+}
+
+.chart-ring-inner {
+  width: 132px;
+  height: 132px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+  transform: rotate(35deg);
+}
+
+.chart-legend {
+  display: grid;
+  flex: 1;
+  gap: 16px;
+}
+
+.access-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 15px;
+  border-radius: 12px;
+  color: #326b31;
+  background: rgba(110, 190, 68, 0.12);
+}
+
+.floating-role-card {
+  position: absolute;
+  z-index: 2;
+  right: -14px;
+  bottom: 24px;
+  border-radius: 16px !important;
+  box-shadow: 0 18px 48px rgba(32, 37, 72, 0.16) !important;
+  animation: card-float 5s 800ms ease-in-out infinite;
+}
+
+.floating-role-card .MuiCardContent-root {
+  padding: 14px 18px !important;
+}
+
+.role-avatar {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: #006a97;
+  background: #dceef5;
+  font-weight: 800;
+}
+
+.verified-small {
+  color: #6ebe44;
+  margin-left: 8px;
+}
+
+.highlights-section {
+  padding: 32px 28px 36px;
+  margin-bottom: 34px;
+  color: #fff;
+  background: #18374a;
+}
+
+.highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.highlight-card {
+  border-radius: 5px !important;
+  color: #212529 !important;
+  background: #dceef5 !important;
+  transition: transform 200ms ease, box-shadow 200ms ease !important;
+  animation: fade-up 550ms ease-out both;
+  animation-delay: var(--card-delay);
+}
+
+.highlight-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18) !important;
+}
+
+.highlights-section .MuiTypography-colorTextSecondary {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.highlights-section .highlights-heading .MuiTypography-root {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.highlights-section .highlights-heading .MuiTypography-h4 {
+  color: #fff;
+}
+
+.highlights-section .highlights-heading .MuiTypography-colorPrimary {
+  color: #dceef5;
+}
+
+.highlights-section .highlight-card .MuiTypography-colorTextSecondary {
+  color: rgba(33, 37, 41, 0.82) !important;
+}
+
+.highlight-card .MuiCardContent-root {
+  padding: 25px !important;
+}
+
+.highlight-icon {
+  width: 46px;
+  height: 46px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background: #0076a8;
+}
+
+.landing-footer {
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid rgba(33, 37, 41, 0.16);
+}
+
+.signin-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  background-image: url("../../public/images/simutopia-engineering-background.png");
+  background-position: center;
+  background-size: cover;
+}
+
+.signin-page::before {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  content: "";
+  background: rgba(255, 255, 255, 0.82);
+  pointer-events: none;
+}
+
+.signin-container {
+  position: relative;
+  z-index: 1;
+  padding-top: 96px;
+  padding-bottom: 48px;
+}
+
+.signin-card {
+  max-width: 470px;
+  margin: 0 auto;
+  padding: clamp(24px, 6vw, 48px);
+  border: 1px solid rgba(33, 37, 41, 0.14);
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 30px 90px rgba(32, 37, 72, 0.12) !important;
+  animation: fade-up 550ms ease-out both;
+}
+
+.signin-page > .MuiAppBar-root {
+  z-index: 2;
+  color: #fff;
+  background: #212529;
+}
+
+.signin-page > .MuiAppBar-root .MuiToolbar-root {
+  min-height: 80px;
+}
+
+.signin-brand {
+  gap: 9px;
+}
+
+.signin-brand img {
+  width: 25px;
+  height: 38px;
+}
+
+.signin-brand span {
+  font-size: 1.4rem;
+}
+
+.signin-icon {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  align-self: center;
+  border-radius: 8px;
+  color: #fff;
+  background: #fff;
+  border: 1px solid rgba(33, 37, 41, 0.1);
+  box-shadow: 0 12px 28px rgba(33, 37, 41, 0.12);
+}
+
+.signin-icon img {
+  width: 32px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.signin-submit {
+  min-height: 52px;
+  border-radius: 6px !important;
+  background: #0076a8 !important;
+}
+
+.workspace-dashboard {
+  min-height: 100vh;
+  color: #202b33;
+  background: #f3f6f8;
+}
+
+.workspace-appbar {
+  z-index: 1201 !important;
+  color: #fff !important;
+  background: #18374a !important;
+  border-bottom: 3px solid #0076a8;
+}
+
+.workspace-toolbar {
+  min-height: 68px !important;
+  gap: 18px;
+}
+
+.workspace-brand {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 9px;
+}
+
+.workspace-brand img {
+  width: 25px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.workspace-brand .MuiTypography-root {
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+.workspace-toolbar-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.workspace-toolbar-title {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.workspace-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.workspace-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: 190px;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.workspace-user-avatar {
+  width: 32px !important;
+  height: 32px !important;
+  color: #18374a !important;
+  background: #e4f2f8 !important;
+  font-size: 0.9rem !important;
+}
+
+.workspace-sidebar {
+  flex: 0 0 auto;
+}
+
+.workspace-permanent-drawer .MuiDrawer-paper,
+.workspace-mobile-drawer .MuiDrawer-paper {
+  width: 256px;
+  box-sizing: border-box;
+  color: #263640;
+  background: #fff;
+  border: 0;
+  border-right: 1px solid #dce5ea;
+}
+
+.workspace-permanent-drawer .MuiDrawer-paper {
+  top: 68px;
+  height: calc(100% - 68px);
+}
+
+.workspace-drawer-heading {
+  padding: 28px 22px 18px;
+}
+
+.workspace-drawer-heading .MuiTypography-overline,
+.workspace-page-heading .MuiTypography-overline {
+  color: #0076a8;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.workspace-drawer-heading .MuiTypography-h6 {
+  margin-top: 4px;
+  font-size: 1rem;
+}
+
+.workspace-nav-list {
+  padding: 12px !important;
+}
+
+.workspace-nav-item {
+  min-height: 46px;
+  margin-bottom: 5px !important;
+  border-radius: 6px !important;
+  color: #43545e !important;
+}
+
+.workspace-nav-item .MuiListItemIcon-root {
+  min-width: 40px;
+  color: inherit;
+}
+
+.workspace-nav-item.Mui-selected {
+  color: #006a97 !important;
+  background: #e7f3f8 !important;
+  font-weight: 700;
+}
+
+.workspace-nav-item.Mui-selected .MuiListItemIcon-root {
+  color: #0076a8;
+}
+
+.workspace-drawer-footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 18px 22px;
+  color: #82919a;
+  border-top: 1px solid #e5ecef;
+}
+
+.workspace-main {
+  width: calc(100% - 256px);
+  min-width: 0;
+  min-height: 100vh;
+  margin-left: 256px;
+  padding: 98px clamp(20px, 3.2vw, 48px) 48px;
+}
+
+.workspace-page-heading {
+  margin-bottom: 26px;
+}
+
+.workspace-page-heading .MuiTypography-h4 {
+  margin: 4px 0 6px;
+  font-size: clamp(1.7rem, 3vw, 2.15rem);
+}
+
+.workspace-content,
+.workspace-empty {
+  width: 100%;
+  min-width: 0;
+  animation: fade-up 260ms ease-out both;
+}
+
+.workspace-content > .MuiContainer-root {
+  width: 100%;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.workspace-loading {
+  display: flex;
+  min-height: 180px;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border: 1px solid #d7e1e6;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.workspace-content > .MuiContainer-root > .MuiToolbar-root,
+.workspace-content .MuiContainer-root > .MuiToolbar-root {
+  display: none;
+}
+
+.workspace-empty {
+  padding: 32px;
+  border: 1px dashed #b6c8d1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.workspace-empty .MuiTypography-root + .MuiTypography-root {
+  margin-top: 8px;
+}
+
+.workspace-dashboard .MuiPaper-root {
+  border-color: #d7e1e6;
+  border-radius: 8px;
+}
+
+.workspace-dashboard .MuiTableContainer-root {
+  overflow-x: auto;
+}
+
+.workspace-dashboard .MuiTableRow-root:hover {
+  background-color: rgba(0, 118, 168, 0.045);
+}
+
+.workspace-dashboard .MuiTabs-indicator {
+  height: 3px;
+  background-color: #0076a8;
+}
+
+.workspace-dashboard .MuiTab-root.Mui-selected {
+  color: #006b97;
+  font-weight: 700;
+}
+
+.workspace-dashboard .MuiButton-contained {
+  box-shadow: none;
+}
+
+.signin-page {
+  background-image: linear-gradient(rgba(242, 247, 250, 0.88), rgba(242, 247, 250, 0.88)),
+    url("../../public/images/simutopia-engineering-background.png");
+}
+
+.signin-card {
+  border-top: 4px solid #0076a8;
+  border-radius: 8px !important;
+  box-shadow: 0 14px 40px rgba(25, 55, 74, 0.12) !important;
+}
+
+.signin-submit {
+  min-height: 48px;
+  background: #0076a8 !important;
+}
+
+.signin-submit:hover {
+  background: #005a84 !important;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes orb-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-24px, 18px, 0);
+  }
+}
+
+@media (max-width: 900px) {
+  .landing-hero {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-top: 52px;
+  }
+
+  .hero-visual {
+    min-height: 430px;
+  }
+
+  .workspace-permanent-drawer {
+    display: none;
+  }
+
+  .workspace-main {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .floating-role-card {
+    right: 3%;
+  }
+}
+
+@media (max-width: 600px) {
+  .landing-toolbar {
+    min-height: 70px;
+    flex-wrap: wrap;
+    padding: 8px 0;
+  }
+
+  .landing-nav-links {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+  }
+
+  .landing-nav-link {
+    padding: 6px 8px !important;
+    font-size: 0.82rem !important;
+  }
+
+  .landing-hero {
+    padding: 38px 0 48px;
+  }
+
+  .hero-title {
+    font-size: clamp(1rem, 4vw, 1.3rem) !important;
+  }
+
+  .hero-company-logo {
+    height: 110px;
+  }
+
+  .hero-description {
+    font-size: 1rem !important;
+  }
+
+  .hero-stats {
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 40px;
+  }
+
+  .hero-stats > div {
+    min-width: 0;
+  }
+
+  .hero-visual {
+    min-height: 380px;
+  }
+
+  .workspace-card-content {
+    padding: 20px !important;
+  }
+
+  .access-chart {
+    gap: 14px;
+  }
+
+  .chart-ring {
+    width: 128px;
+    height: 128px;
+  }
+
+  .chart-ring-inner {
+    width: 102px;
+    height: 102px;
+  }
+
+  .chart-legend {
+    gap: 12px;
+  }
+
+  .floating-role-card {
+    right: 0;
+    bottom: 2px;
+  }
+
+  .highlight-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-footer {
+    padding: 18px 0;
+  }
+
+  .workspace-toolbar {
+    gap: 10px;
+    padding-right: 12px !important;
+    padding-left: 12px !important;
+  }
+
+  .workspace-brand .MuiTypography-root {
+    font-size: 0.95rem;
+  }
+
+  .workspace-toolbar-divider {
+    display: none;
+  }
+
+  .workspace-toolbar-title {
+    font-size: 0.88rem;
+  }
+
+  .workspace-main {
+    padding: 88px 16px 30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
