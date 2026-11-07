@@ -439,7 +439,7 @@ const RolePermissionManagement = () => {
                       size="small"
                       variant="outlined"
                       disabled={
-                        role.roleName === "guest" || role.roleName === "admin"
+                        role.roleName === "admin"
                       }
                       style={{ fontSize: "0.75rem" }}
                     />
@@ -572,8 +572,7 @@ const RolePermissionManagement = () => {
                           onClick={() => handleDelete(role)}
                           size="small"
                           disabled={
-                            role?.roleName === "admin" ||
-                            role?.roleName === "guest"
+                            role?.roleName === "admin"
                           }
                         >
                           <DeleteIcon fontSize="small" />

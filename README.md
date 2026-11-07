@@ -1,47 +1,106 @@
-# Simutopia website
+# Simutopia website and workspace
 
-The React app serves the Simutopia marketing website at `/` and the protected
-RBAC workspace under `/workspace`.
-The original marketing layout remains the default; its navbar theme control
-toggles the site-wide light/dark preference. The workspace uses Material UI
-with a MATLAB-inspired blue, slate, and amber theme.
+This is the public Simutopia website and the React-based team workspace. The
+backend API is in the [Simutopia-CentralAuth
+repository](https://github.com/Simutopia/Simutopia-CentralAuth/tree/Dhanesh-devel).
 
 ## Run locally
 
-1. Install dependencies with `npm ci`.
-2. Start the frontend with `npm start`.
+Requirements: Node.js/npm and a running backend API. For a fresh local setup,
+first configure and start the backend using the
+[backend setup instructions](https://github.com/Simutopia/Simutopia-CentralAuth/blob/Dhanesh-devel/README.md#run-locally).
+Then, in this project folder, run:
 
-The workspace uses `http://localhost:5000` for its API by default. Set
-`REACT_APP_API_URL` before starting the app to use another backend URL.
+```powershell
+npm ci
+if (-not (Test-Path .env.local)) { Copy-Item .env.example .env.local }
+npm start
+```
 
-## Workspace routes
+The development server serves `http://localhost:3000`. The sample
+`REACT_APP_API_URL` points to the local API at `http://localhost:5000`. Edit
+`.env.local` if the API runs at another origin, then restart the frontend.
+The backend must allow the frontend's exact origin through its CORS
+configuration.
 
+## Frontend architecture
+
+- **Tooling:** Create React App (`react-scripts`), JavaScript, React, and
+  React Router.
+- **UI:** Material UI components and theme providers, with project CSS for
+  site-specific layout and styling.
+- [`src/App.js`](./src/App.js) defines the public website at `/` and mounts the
+  workspace at `/workspace/*`.
+- `src/components/` contains the public site's page sections and layout.
+- [`src/rbac/RbacApp.js`](./src/rbac/RbacApp.js) defines workspace routes,
+  session verification, and the workspace theme.
+- `src/rbac/components/dashboard/` contains the workspace layout and pages for
+  overview, users, roles, app management, and assigned apps.
+- [`src/rbac/constants.js`](./src/rbac/constants.js) holds the API origin and
+  commonly used endpoint paths. Pages call the API with `fetch`.
+
+The marketing site is public. Workspace routes verify the saved session with
+`GET /api/users/me`; the admin route additionally requires the
+`role_management` permission. Workspace content is shown according to the
+signed-in user's role.
+
+## Frontend-to-backend authentication
+
+`REACT_APP_API_URL` is the backend origin and must not end with a slash. It is
+read at build/start time by Create React App; changing a deployment's
+environment requires rebuilding the frontend.
+
+Sign-in sends email and password to `POST /api/users/login` with
+`credentials: "include"`. On success, the API responds with a workspace JWT
+and sets an HttpOnly SSO cookie. The frontend stores the workspace JWT and
+user profile in browser local storage. Authenticated API calls send the token
+as `x-auth-token`; the backend reloads the account and role before authorizing
+each protected request. Signing out calls `POST /api/users/logout` to clear
+the SSO cookie and then removes the local workspace session.
+
+The shared workspace API origin and commonly used paths are defined in
+`src/rbac/constants.js`. UI pages use browser `fetch` calls and handle HTTP
+errors in their page state or notifications; they do not call MongoDB or
+access backend models directly.
+
+The API's `FRONTEND_URL` must match the browser's frontend origin (including
+scheme and port), or the browser will block cross-origin API responses. The
+SSO cookie is also used when the user opens a registered external app. See the
+backend README for the browser PKCE and server-app flows.
+
+Frontend environment variables are public: Create React App embeds
+`REACT_APP_*` values into the downloaded JavaScript. Put no passwords, JWT
+secrets, client secrets, or other credentials in this project’s environment.
+For a production build, set `REACT_APP_API_URL` to the deployed Central Auth
+API origin before running `npm run build`; the development sample URL is only
+for local use.
+
+## Routes
+
+- `/` — public Simutopia website.
 - `/workspace` — workspace landing page.
-- `/workspace/signin` — sign-in for authorized members.
-- `/workspace/dashboard` — authenticated user dashboard.
-- `/workspace/admin` — dashboard for administrators with role-management permission.
+- `/workspace/signin` — sign-in.
+- `/workspace/dashboard` — authenticated workspace.
+- `/workspace/admin` — workspace for users with role-management permission.
 
-The API service lives in the `Simutopia-CentralAuth` project. Configure its
-private `.env` file using `.env.example` before starting the backend.
+## Commands
 
-## Sub-app access control
+```powershell
+npm start       # local development server
+npm test        # Create React App tests (watch mode in an interactive terminal)
+npm run build   # optimized static production build in build/
+```
 
-Administrators can register sub-apps from **Admin control center → App
-management**. Each app has a stable public app key, app type, launch URL,
-description, enabled state, and exact SSO callback URL. Choose **Browser app
-(PKCE, no secret)** for a static SPA, or **Server app (client secret)** for an
-app with a trusted backend; secrets are only generated for the latter. In
-**Roles & permissions**, grant a role **Open app** access. Disabling an app
-blocks SSO; deleting it removes its grants from every role. The built-in
-admin role also needs an explicit app grant; its core role permissions remain
-protected.
+The configured GitHub Pages deployment command is `npm run deploy`; it builds
+first and publishes `build/`. For another static host, publish the contents of
+`build/` and configure SPA route fallback to `index.html`.
 
-Sub-apps can list the signed-in user's enabled apps with
-`GET /api/apps/accessible` and the workspace JWT. Browser apps use
-authorization-code + PKCE: their React frontend requests a one-time code,
-exchanges it for a short-lived app token, and validates that token with Central
-Auth. No sub-app backend or client secret is required for this flow. Apps that
-need protected data must still enforce authorization in their APIs. Existing
-server apps can continue using the confidential-client server-side exchange.
-See [Simutopia-CentralAuth README](../Simutopia-CentralAuth/README.md) for
-protocol details and deployment requirements.
+## Apps and permissions
+
+Administrators register external apps from **App management** and assign
+**Open app** access through **Roles & permissions**. The app key is a public
+identifier. Use **Browser app (PKCE, no secret)** for a static SPA; use a
+server app/client secret only when a trusted backend can keep the secret.
+Never put a server client secret in frontend code. For details and endpoint
+examples, see the
+[Central Auth documentation](https://github.com/Simutopia/Simutopia-CentralAuth/blob/Dhanesh-devel/README.md).
