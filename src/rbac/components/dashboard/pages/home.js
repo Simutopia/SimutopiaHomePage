@@ -3,31 +3,23 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
   Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Divider,
-  Grid,
   IconButton,
   Paper,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import VerifiedIcon from "@mui/icons-material/Verified";
 import KeyRoundedIcon from "@mui/icons-material/KeyRounded";
 import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
-import SecurityRoundedIcon from "@mui/icons-material/SecurityRounded";
 import BusinessRoundedIcon from "@mui/icons-material/BusinessRounded";
-import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import FingerprintRoundedIcon from "@mui/icons-material/FingerprintRounded";
 import { useSnackbar } from "../../snackbar";
 import API from "../../../constants";
 
@@ -139,19 +131,6 @@ function Home({ role, editable }) {
     }
     setEditing(!editing);
   };
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "Active Session";
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const permissionsMap = role?.permissions || {};
-  const activePermissions = Object.entries(permissionsMap).filter(([, val]) => Boolean(val));
 
   return (
     <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto", pb: 4 }}>
