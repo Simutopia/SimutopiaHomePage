@@ -25,37 +25,34 @@ function RequireSession({ children, adminOnly = false }) {
   const [session, setSession] = useState({ loading: true, user: null });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      localStorage.removeItem("user");
-      setSession({ loading: false, user: null });
-      return undefined;
-    }
-
+    let isMounted = true;
     const controller = new AbortController();
+
     const verifySession = async () => {
       try {
         const response = await fetch(
           `${API.DATA_URL}${API.DATA_ENDPOINTS.currentUser}`,
           {
-            headers: { "x-auth-token": token },
+            credentials: "include",
             signal: controller.signal,
           }
         );
-        const data = await response.json();
+        if (!isMounted) return;
+
         if (!response.ok) {
-          throw new Error(data.message || "Your session is no longer valid.");
+          setSession({ loading: false, user: null });
+          return;
         }
 
-        localStorage.setItem("user", JSON.stringify(data.user));
-        window.dispatchEvent(
-          new CustomEvent("workspace-session-updated", { detail: data.user })
-        );
+        const data = await response.json();
+        if (!data?.user || data.user.status !== "Active" || !data.user.roleId) {
+          setSession({ loading: false, user: null });
+          return;
+        }
+
         setSession({ loading: false, user: data.user });
       } catch (error) {
-        if (error.name === "AbortError") return;
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        if (!isMounted || error.name === "AbortError") return;
         setSession({ loading: false, user: null });
       }
     };
@@ -63,6 +60,7 @@ function RequireSession({ children, adminOnly = false }) {
     verifySession();
     const intervalId = window.setInterval(verifySession, 60_000);
     return () => {
+      isMounted = false;
       window.clearInterval(intervalId);
       controller.abort();
     };
@@ -76,7 +74,7 @@ function RequireSession({ children, adminOnly = false }) {
     );
   }
 
-  if (!session.user) {
+  if (!session.user || session.user.status !== "Active" || !session.user.roleId) {
     return (
       <Navigate
         to="/workspace/signin"
@@ -90,7 +88,7 @@ function RequireSession({ children, adminOnly = false }) {
     return <Navigate to="/workspace/dashboard" replace />;
   }
 
-  return children;
+  return typeof children === "function" ? children(session.user) : children;
 }
 
 function AppRoutes() {
@@ -108,7 +106,7 @@ function AppRoutes() {
         path="dashboard"
         element={
           <RequireSession>
-            <MainPage />
+            {(currentUser) => <MainPage currentUser={currentUser} />}
           </RequireSession>
         }
       />
@@ -116,7 +114,7 @@ function AppRoutes() {
         path="admin"
         element={
           <RequireSession adminOnly>
-            <MainPage />
+            {(currentUser) => <MainPage currentUser={currentUser} />}
           </RequireSession>
         }
       />

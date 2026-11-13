@@ -51,11 +51,11 @@ function Home({ role, editable }) {
       const response = await fetch(
         `${API.DATA_URL}${API.DATA_ENDPOINTS.editPassword}/${userDetails?.id}/password`,
         {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": localStorage.getItem("token"),
-        },
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ currentPassword, password: newPassword }),
         }
       );
@@ -74,14 +74,36 @@ function Home({ role, editable }) {
   };
 
   useEffect(() => {
-    // Fetch user details from local storage
-    showSnackbar("Loading user details...", 3000, "info");
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      setUserDetails(user);
-      setName(user.name);
-      showSnackbar("User details loaded", 3000, "success");
-    }
+    const fetchCurrentUser = async () => {
+      showSnackbar("Loading user details...", 3000, "info");
+      try {
+        const response = await fetch(
+          `${API.DATA_URL}${API.DATA_ENDPOINTS.currentUser}`,
+          {
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        if (!response.ok) {
+          if (response.status === 401) {
+            showSnackbar("Session Expired. Please login again.", 3000, "error");
+            setTimeout(() => (window.location.href = "/workspace/signin"), 3000);
+            return;
+          }
+          showSnackbar(data.message || "Failed to load user details.", 3000, "error");
+          return;
+        }
+        if (data.user) {
+          setUserDetails(data.user);
+          setName(data.user.name);
+          showSnackbar("User details loaded", 3000, "success");
+        }
+      } catch (error) {
+        console.error("Error loading user details:", error);
+        showSnackbar("Failed to load user details.", 3000, "error");
+      }
+    };
+    fetchCurrentUser();
   }, [showSnackbar]);
 
   const handleEditToggle = async () => {
@@ -91,9 +113,9 @@ function Home({ role, editable }) {
           `${API.DATA_URL}${API.DATA_ENDPOINTS.editUserDetails}${userDetails.id}/edit`,
           {
             method: "PUT",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              "x-auth-token": localStorage.getItem("token"),
             },
             body: JSON.stringify({ name }),
           }
@@ -102,10 +124,8 @@ function Home({ role, editable }) {
         const data = await response.json();
 
         if (!response.ok) {
-          if (data.error === "jwt expired") {
+          if (response.status === 401) {
             showSnackbar("Session Expired. Please login again.", 3000, "error");
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
             setTimeout(() => (window.location.href = "/workspace/signin"), 3000);
           } else {
             showSnackbar(
@@ -117,15 +137,11 @@ function Home({ role, editable }) {
           return;
         }
 
-        // Update user details in state and local storage
         const updatedUser = {
-          ...data.user,
-          id: data.user._id,
-          createdAt: new Date(data.user.createdAt).toLocaleString(),
+          ...userDetails,
+          name: data.user.name,
         };
-        delete updatedUser._id;
 
-        localStorage.setItem("user", JSON.stringify(updatedUser));
         setUserDetails(updatedUser);
 
         showSnackbar(

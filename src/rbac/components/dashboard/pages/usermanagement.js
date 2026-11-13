@@ -11,15 +11,17 @@ import UserTable from "./usertable";
 import { useSnackbar } from "../../snackbar";
 
 const UserManagement = () => {
-  const [usersData, setUsersData] = React.useState([]);
+  const [usersList, setUsersList] = React.useState([]);
+  const [organizationsList, setOrganizationsList] = React.useState([]);
   const [rolesList, setRolesList] = React.useState([]);
   const [roleMap, setRoleMap] = React.useState({});
+  const [currentUser, setCurrentUser] = React.useState(null);
   const [currentPermissions, setCurrentPermissions] = React.useState({});
   const [isLoading, setIsLoading] = React.useState(true);
   const [loadError, setLoadError] = React.useState("");
   const showSnackbar = useSnackbar();
 
-  const editableFields = ["name", "email", "roleName", "status"];
+  const editableFields = ["organization", "name", "email", "roleName", "status"];
   const columns = [
     { columnName: "name", type: "text", displayName: "Name" },
     { columnName: "email", type: "email", displayName: "Email" },
@@ -42,7 +44,7 @@ const UserManagement = () => {
     const response = await fetch(
       `${API.DATA_URL}${API.DATA_ENDPOINTS.getAllUsers}`,
       {
-        headers: { "x-auth-token": localStorage.getItem("token") },
+        credentials: "include",
       }
     );
     const data = await response.json();
@@ -56,7 +58,7 @@ const UserManagement = () => {
     const response = await fetch(
       `${API.DATA_URL}${API.DATA_ENDPOINTS.getAssignableRoles}`,
       {
-        headers: { "x-auth-token": localStorage.getItem("token") },
+        credentials: "include",
       }
     );
     const data = await response.json();
@@ -66,36 +68,65 @@ const UserManagement = () => {
     return data;
   }, []);
 
-  const getCurrentPermissions = React.useCallback(() => {
-    try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      setCurrentPermissions(user?.roleId?.permissions || {});
-    } catch (error) {
-      console.error("Unable to read current user permissions:", error);
-      showSnackbar("Unable to read current user permissions.", 3000, "error");
+  const getCurrentUser = React.useCallback(async () => {
+    const response = await fetch(
+      `${API.DATA_URL}${API.DATA_ENDPOINTS.currentUser}`,
+      {
+        credentials: "include",
+      }
+    );
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Unable to fetch current user.");
     }
-  }, [showSnackbar]);
+    return data;
+  }, []);
+
+  const getOrganizations = React.useCallback(async () => {
+    try {
+      const response = await fetch(
+        `${API.DATA_URL}${API.DATA_ENDPOINTS.organizations}`,
+        { credentials: "include" }
+      );
+      if (!response.ok) return { organizations: [] };
+      return await response.json();
+    } catch {
+      return { organizations: [] };
+    }
+  }, []);
 
   const handleRefresh = React.useCallback(async () => {
     setIsLoading(true);
     setLoadError("");
     showSnackbar("Loading data", 3000, "info");
     try {
-      const [usersResponse, rolesResponse] = await Promise.all([
-        getAllUsers(),
-        getAssignableRoles(),
-      ]);
-      setUsersData(
-        (usersResponse.users || []).map((user) => ({
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          roleName: user.roleId?.roleName || "",
-          status: user.status,
-          createdAt: user.createdAt,
-          isProtectedAdmin: user.isProtectedAdmin,
-        }))
-      );
+      const [usersResponse, rolesResponse, currentUserResponse, orgsResponse] =
+        await Promise.all([
+          getAllUsers(),
+          getAssignableRoles(),
+          getCurrentUser(),
+          getOrganizations(),
+        ]);
+
+      const rawUsers = (usersResponse.users || []).map((user) => ({
+        id: user._id,
+        organization: user.organization || "",
+        name: user.name,
+        email: user.email,
+        roleName: user.roleId?.roleName || "",
+        status: user.status,
+        createdAt: user.createdAt,
+        isProtectedAdmin: user.isProtectedAdmin,
+      }));
+
+      const rawOrgs = (orgsResponse.organizations || []).map((org) => ({
+        id: org._id,
+        name: org.name,
+        createdAt: org.createdAt,
+      }));
+
+      setUsersList(rawUsers);
+      setOrganizationsList(rawOrgs);
 
       const nextRoleMap = {};
       (rolesResponse.roles || []).forEach((role) => {
@@ -103,16 +134,21 @@ const UserManagement = () => {
       });
       setRoleMap(nextRoleMap);
       setRolesList(Object.keys(nextRoleMap));
-      getCurrentPermissions();
+      const current = currentUserResponse?.user;
+      setCurrentUser(current);
+      setCurrentPermissions(current?.roleId?.permissions || {});
     } catch (error) {
       console.error("Unable to load user management data:", error);
-      const message = error.message || "Unable to load management data.";
+      let message = "Unable to load workspace members. Please verify your connection or sign in again.";
+      if (error && typeof error.message === "string" && !error.message.includes("fetch") && !error.message.includes("JSON")) {
+        message = error.message;
+      }
       setLoadError(message);
       showSnackbar(message, 3000, "error");
     } finally {
       setIsLoading(false);
     }
-  }, [getAllUsers, getAssignableRoles, getCurrentPermissions, showSnackbar]);
+  }, [getAllUsers, getAssignableRoles, getCurrentUser, getOrganizations, showSnackbar]);
 
   React.useEffect(() => {
     handleRefresh();
@@ -142,17 +178,15 @@ const UserManagement = () => {
     );
   }
 
-  if (usersData.length === 0) {
-    return <Alert severity="info">No workspace members found.</Alert>;
-  }
-
   return (
     <UserTable
       editableFields={editableFields}
       columns={columns}
       rolesList={rolesList}
-      data={usersData}
+      users={usersList}
+      organizations={organizationsList}
       roleMap={roleMap}
+      currentUser={currentUser}
       currentPermissions={currentPermissions}
       handleRefresh={handleRefresh}
     />

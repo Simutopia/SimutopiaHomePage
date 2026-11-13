@@ -2,6 +2,7 @@ const API = {
   DATA_URL: process.env.REACT_APP_API_URL || "http://localhost:5000",
   DATA_ENDPOINTS: {
     signin: "/api/users/login",
+    logout: "/api/users/logout",
     currentUser: "/api/users/me",
     getAllRequests: "/api/user-requests/admin/requests",
     updateRequestStatus: "/api/user-requests/admin/update-status",
@@ -17,6 +18,8 @@ const API = {
     deleteRole: "/api/roles/",
     editRole: "/api/roles/",
     editPassword: "/api/users",
+    permissions: "/api/roles/permissions",
+    organizations: "/api/organizations",
   },
 };
 

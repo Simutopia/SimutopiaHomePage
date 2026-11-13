@@ -12,6 +12,7 @@ import {
   Button,
   Tabs,
   Tab,
+  Typography,
 } from "@mui/material";
 import LoopIcon from "@mui/icons-material/Loop";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -38,9 +39,9 @@ const UserRequests = () => {
         `${API.DATA_URL}${API.DATA_ENDPOINTS.getAllRequests}`,
         {
           method: "GET",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "x-auth-token": localStorage.getItem("token"),
           },
         }
       );
@@ -48,11 +49,9 @@ const UserRequests = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.error === "jwt expired") {
+        if (response.status === 401) {
           // Handle session expiration
           showSnackbar("Session expired. Please log in again.", 3000, "error");
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
           setTimeout(() => {
             window.location.href = "/workspace/signin";
           }, 3000);
@@ -108,9 +107,9 @@ const UserRequests = () => {
 
     fetch(`${API.DATA_URL}${API.DATA_ENDPOINTS.updateRequestStatus}`, {
       method: "PUT",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        "x-auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({ requestId: id, status }),
     })

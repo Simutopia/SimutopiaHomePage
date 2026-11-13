@@ -67,12 +67,10 @@ const Signin = () => {
         return;
       }
 
-      if (!data.token || !data.user) {
+      if (!data.user) {
         throw new Error("The server returned an invalid sign-in response.");
       }
 
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("token", data.token);
       const ssoReturnUrl = getSsoReturnUrl();
       if (ssoReturnUrl) {
         window.location.assign(ssoReturnUrl);

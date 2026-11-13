@@ -29,10 +29,10 @@ import RoleManagement from "./pages/rolemanagement";
 import AppManagement from "./pages/appmanagement";
 import MyApps from "./pages/myapps";
 import { useSnackbar } from "../snackbar";
+import API from "../../constants";
 
-const AppLayout = () => {
+const AppLayout = ({ currentUser }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [user, setUser] = useState(null);
   const [selectedSection, setSelectedSection] = useState("");
   const navigate = useNavigate();
   const showSnackbar = useSnackbar();
@@ -41,26 +41,7 @@ const AppLayout = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isAdminDashboard = location.pathname === "/workspace/admin";
 
-  useEffect(() => {
-    try {
-      setUser(JSON.parse(localStorage.getItem("user") || "null"));
-    } catch (error) {
-      console.error("Unable to read the verified user session:", error);
-      setUser(null);
-    }
-
-    const handleSessionUpdate = (event) => {
-      setUser(event.detail);
-    };
-    window.addEventListener("workspace-session-updated", handleSessionUpdate);
-    return () =>
-      window.removeEventListener(
-        "workspace-session-updated",
-        handleSessionUpdate
-      );
-  }, []);
-
-  const role = user?.roleId;
+  const role = currentUser?.roleId;
   const menuItems = useMemo(() => {
     const permissions = role?.permissions || {};
     const items = [];
@@ -109,12 +90,12 @@ const AppLayout = () => {
   const currentSection = menuItems.find(
     (item) => item.label === selectedSection
   );
-  const displayName = user?.name || "Member";
+  const displayName = currentUser?.name || "Member";
 
   const handleLogout = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/users/logout`,
+        `${API.DATA_URL}${API.DATA_ENDPOINTS.logout}`,
         { method: "POST", credentials: "include" }
       );
       if (!response.ok) {
@@ -126,8 +107,6 @@ const AppLayout = () => {
       return;
     }
 
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
     navigate("/workspace/signin", { replace: true });
   };
 

@@ -27,48 +27,8 @@ import {
 import LoopIcon from "@mui/icons-material/Loop";
 import API from "../../../constants";
 import { useSnackbar } from "../../snackbar";
+import { usePopper } from "../../poppercontext";
 import AddModeratorIcon from "@mui/icons-material/AddModerator";
-
-const permissionList = [
-  {
-    key: "create",
-    label: "Create",
-    description:
-      "Allows creating new entities such as records, items, or users.",
-  },
-  {
-    key: "edit",
-    label: "Edit",
-    description:
-      "Allows editing existing entities such as records, items, or users.",
-  },
-  {
-    key: "delete",
-    label: "Delete",
-    description: "Allows deleting entities such as records, items, or users.",
-  },
-  {
-    key: "view_all_users",
-    label: "View All Users",
-    description: "Allows viewing details of all users in the system.",
-  },
-  {
-    key: "view_personal_details",
-    label: "View Personal Details",
-    description: "Allows viewing personal details of individual users.",
-  },
-  {
-    key: "approve_user_creation",
-    label: "Approve User Creation",
-    description: "Allows approving the creation of new users in the system.",
-  },
-  {
-    key: "role_management",
-    label: "Role Management",
-    description:
-      "Allows managing roles, including creating, editing, or deleting roles.",
-  },
-];
 
 const canOpenApp = (grant) =>
   grant === true ||
@@ -76,12 +36,14 @@ const canOpenApp = (grant) =>
 
 const RolePermissionManagement = () => {
   const [roles, setRoles] = useState([]);
+  const [permissionList, setPermissionList] = useState([]);
   const [editingRoleId, setEditingRoleId] = useState(null);
   const [editedRole, setEditedRole] = useState(null);
   const [newRoleName, setNewRoleName] = useState("");
   const [apps, setApps] = useState([]);
 
   const showSnackbar = useSnackbar();
+  const { confirm } = usePopper();
 
   // Handle entering edit mode
   const handleEdit = (role) => {
@@ -127,9 +89,9 @@ const RolePermissionManagement = () => {
         `${API.DATA_URL}${API.DATA_ENDPOINTS.editRole}${editingRoleId}`,
         {
           method: "PUT",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "x-auth-token": localStorage.getItem("token"),
           },
           body: JSON.stringify(body),
         }
@@ -224,9 +186,9 @@ const RolePermissionManagement = () => {
         `${API.DATA_URL}${API.DATA_ENDPOINTS.addRole}`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "x-auth-token": localStorage.getItem("token"),
           },
           body: JSON.stringify(body),
         }
@@ -244,6 +206,7 @@ const RolePermissionManagement = () => {
       const newRole = {
         roleId: data?.role?._id,
         roleName: data?.role?.roleName,
+        isProtected: data?.role?.isProtected || false,
         permissions: data?.role?.permissions || {},
       };
       if (!newRole.roleId) {
@@ -270,6 +233,9 @@ const RolePermissionManagement = () => {
       showSnackbar("Invalid role. Unable to delete.", 3000, "error");
       return;
     }
+
+    const result = await confirm("Are you sure you want to delete this role?");
+    if (!result) return;
   
     try {
       // Optimistically remove role from the state
@@ -281,9 +247,9 @@ const RolePermissionManagement = () => {
         `${API.DATA_URL}${API.DATA_ENDPOINTS.deleteRole}${role.roleId}`,
         {
           method: "DELETE",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "x-auth-token": localStorage.getItem("token"),
           },
         }
       );
@@ -310,17 +276,21 @@ const RolePermissionManagement = () => {
   // Get all roles
   const getAllRoles = useCallback(async () => {
     try {
-      const headers = {
-        "Content-Type": "application/json",
-        "x-auth-token": localStorage.getItem("token"),
-      };
-      const [rolesResponse, appsResponse] = await Promise.all([
-        fetch(`${API.DATA_URL}${API.DATA_ENDPOINTS.getAllRoles}`, { headers }),
-        fetch(`${API.DATA_URL}${API.DATA_ENDPOINTS.apps}`, { headers }),
+      const [rolesResponse, appsResponse, permissionsResponse] = await Promise.all([
+        fetch(`${API.DATA_URL}${API.DATA_ENDPOINTS.getAllRoles}`, {
+          credentials: "include",
+        }),
+        fetch(`${API.DATA_URL}${API.DATA_ENDPOINTS.apps}`, {
+          credentials: "include",
+        }),
+        fetch(`${API.DATA_URL}${API.DATA_ENDPOINTS.permissions}`, {
+          credentials: "include",
+        }),
       ]);
-      const [rolesData, appsData] = await Promise.all([
+      const [rolesData, appsData, permissionsData] = await Promise.all([
         rolesResponse.json(),
         appsResponse.json(),
+        permissionsResponse.json(),
       ]);
       if (!rolesResponse.ok) {
         throw new Error(rolesData.message || "Unable to fetch roles.");
@@ -328,7 +298,17 @@ const RolePermissionManagement = () => {
       if (!appsResponse.ok) {
         throw new Error(appsData.message || "Unable to fetch apps.");
       }
-      return { roles: rolesData.roles || [], apps: appsData.apps || [] };
+      if (!permissionsResponse.ok) {
+        throw new Error(permissionsData.message || "Unable to fetch permissions.");
+      }
+      const permissions = Array.isArray(permissionsData)
+        ? permissionsData
+        : permissionsData.permissions || [];
+      return {
+        roles: rolesData.roles || [],
+        apps: appsData.apps || [],
+        permissions,
+      };
     } catch (error) {
       console.error("Unable to fetch roles:", error);
       throw error;
@@ -342,6 +322,7 @@ const RolePermissionManagement = () => {
       const rolesList = data.roles.map((role) => ({
         roleId: role._id,
         roleName: role.roleName,
+        isProtected: role.isProtected,
         permissions: role.permissions,
         appPermissions: Object.fromEntries(
           Object.entries(role.appPermissions || {}).map(([appKey, grant]) => [
@@ -352,9 +333,14 @@ const RolePermissionManagement = () => {
       }));
       setRoles(rolesList);
       setApps(data.apps);
+      setPermissionList(data.permissions);
       showSnackbar("Data loaded", 3000, "success");
     } catch (error) {
-      showSnackbar(error.message || "Unable to load roles.", 3000, "error");
+      let message = "Unable to load roles. Please check your connection or sign in again.";
+      if (error && typeof error.message === "string" && !error.message.includes("fetch") && !error.message.includes("JSON")) {
+        message = error.message;
+      }
+      showSnackbar(message, 3000, "error");
     }
   }, [getAllRoles, showSnackbar]);
 
@@ -439,7 +425,7 @@ const RolePermissionManagement = () => {
                       size="small"
                       variant="outlined"
                       disabled={
-                        role.roleName === "admin"
+                        role.isProtected
                       }
                       style={{ fontSize: "0.75rem" }}
                     />
@@ -470,7 +456,7 @@ const RolePermissionManagement = () => {
                             handlePermissionChange(permission.key)
                           }
                           size="small"
-                          disabled={role.roleName === "admin"}
+                          disabled={role.roleName.toLowerCase() === "admin"}
                         />
                       ) : (
                         <Checkbox
@@ -572,7 +558,7 @@ const RolePermissionManagement = () => {
                           onClick={() => handleDelete(role)}
                           size="small"
                           disabled={
-                            role?.roleName === "admin"
+                            role?.isProtected
                           }
                         >
                           <DeleteIcon fontSize="small" />
