@@ -134,64 +134,114 @@ const UserRequests = () => {
   };
 
   const renderTable = (data) => (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} elevation={0} className="sim-table-container">
       <Table
         sx={{
           width: "100%",
-          overflowX: "scroll",
         }}
       >
-        <TableHead>
+        <TableHead className="sim-table-head">
           <TableRow>
-            <TableCell>
-              <Typography fontWeight={700}>Name</Typography>
+            <TableCell sx={{ fontWeight: 700 }}>
+              Candidate Name
             </TableCell>
-            <TableCell>
-              <Typography fontWeight={700}>Email</Typography>
+            <TableCell sx={{ fontWeight: 700 }}>
+              Identity Email
             </TableCell>
-            <TableCell>
-              <Typography fontWeight={700}>Status</Typography>
+            <TableCell sx={{ fontWeight: 700 }}>
+              Request Status
             </TableCell>
-            <TableCell>
-              <Typography fontWeight={700}>Created At</Typography>
+            <TableCell sx={{ fontWeight: 700 }}>
+              Timestamp
             </TableCell>
             {activeTab === 1 && (
-              <TableCell>
-                <Typography fontWeight={700}>Actions</Typography>
+              <TableCell sx={{ fontWeight: 700 }} align="right">
+                Decision Actions
               </TableCell>
             )}
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((request) => (
-            <TableRow key={request._id}>
-              <TableCell>{request.name}</TableCell>
-              <TableCell>{request.email}</TableCell>
-              <TableCell>{request.status}</TableCell>
-              <TableCell>{formatDate(request.createdAt)}</TableCell>
-              {activeTab === 1 && (
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    size="small"
-                    onClick={() => handleAction(request._id, "Approved")}
-                    sx={{ marginRight: 1 }}
-                  >
-                    <PersonAddIcon />
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    size="small"
-                    onClick={() => handleAction(request._id, "Declined")}
-                  >
-                    <PersonRemoveIcon />
-                  </Button>
-                </TableCell>
-              )}
+          {data.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={activeTab === 1 ? 5 : 4} align="center" sx={{ py: 6 }}>
+                <Typography color="text.secondary">
+                  No access requests recorded in this queue category.
+                </Typography>
+              </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            data.map((request) => (
+              <TableRow key={request._id} className="sim-table-row">
+                <TableCell sx={{ fontWeight: 700, color: "#0f172a" }}>
+                  {request.name}
+                </TableCell>
+                <TableCell className="sim-telemetry-chip" sx={{ color: "text.secondary" }}>
+                  {request.email}
+                </TableCell>
+                <TableCell>
+                  <span
+                    className={
+                      request.status === "Approved"
+                        ? "sim-badge-active"
+                        : request.status === "Declined"
+                        ? "sim-badge-inactive"
+                        : "sim-telemetry-chip"
+                    }
+                    style={{
+                      padding: "4px 10px",
+                      borderRadius: "6px",
+                      fontWeight: 600,
+                      display: "inline-block",
+                      backgroundColor:
+                        request.status === "Pending" ? "rgba(245, 158, 11, 0.1)" : undefined,
+                      color:
+                        request.status === "Pending" ? "#b45309" : undefined,
+                      border:
+                        request.status === "Pending" ? "1px solid #fde68a" : undefined,
+                    }}
+                  >
+                    {request.status}
+                  </span>
+                </TableCell>
+                <TableCell className="sim-telemetry-chip" sx={{ color: "text.secondary" }}>
+                  {formatDate(request.createdAt)}
+                </TableCell>
+                {activeTab === 1 && (
+                  <TableCell align="right">
+                    <Button
+                      variant="contained"
+                      color="success"
+                      size="small"
+                      onClick={() => handleAction(request._id, "Approved")}
+                      className="sim-btn-glow"
+                      sx={{
+                        marginRight: 1,
+                        borderRadius: 2,
+                        textTransform: "none",
+                        fontWeight: 700,
+                      }}
+                    >
+                      <PersonAddIcon sx={{ mr: 0.5, fontSize: 18 }} /> Approve
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      onClick={() => handleAction(request._id, "Declined")}
+                      sx={{
+                        borderRadius: 2,
+                        textTransform: "none",
+                        fontWeight: 700,
+                      }}
+                    >
+                      <PersonRemoveIcon sx={{ mr: 0.5, fontSize: 18 }} /> Decline
+                    </Button>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>
@@ -199,14 +249,16 @@ const UserRequests = () => {
 
   return (
     <Container sx={{ padding: 0, minWidth: "96%", margin: 0 }}>
-      {/* Tabs for navigation with color coding */}
+      {/* Tabs navigation with cyber styling */}
       <Box
         component={Paper}
+        elevation={0}
+        className="sim-matrix-panel"
         sx={{
           display: "flex",
           alignItems: "center",
-          padding: 0,
-          margin: 0,
+          justifyContent: "space-between",
+          padding: 1.5,
           marginBottom: 3,
           flexWrap: "wrap",
         }}
@@ -217,30 +269,29 @@ const UserRequests = () => {
           textColor="inherit"
           TabIndicatorProps={{
             sx: {
-              backgroundColor: ["gray", "orange", "green", "red"][activeTab], // Colors for each tab
+              height: 3,
+              borderRadius: "3px 3px 0 0",
+              backgroundColor: ["#0076a8", "#d97706", "#10b981", "#ef4444"][activeTab],
             },
           }}
           sx={{
-            marginRight: 2,
             "& .MuiTab-root": {
-              color: "gray",
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: "0.9rem",
+              minHeight: 44,
+              color: "#64748b",
               "&.Mui-selected": {
-                color: ["gray", "orange", "green", "red"][activeTab], // Tab text color
-                fontWeight: "bold",
+                color: ["#0076a8", "#d97706", "#10b981", "#ef4444"][activeTab],
+                fontWeight: 700,
               },
             },
-            // minWidth: "98%",
-            // overflowX: "scroll",
-            // display: "flex",
-            // alignItems: "center",
-            // justifyContent: "center",
-            // flexWrap: "wrap",
           }}
         >
-          <Tab label="All Requests" />
-          <Tab label="Pending Requests" />
-          <Tab label="Approved Requests" />
-          <Tab label="Declined Requests" />
+          <Tab label={`All Requests (${requests.length})`} />
+          <Tab label={`Pending (${filteredRequests.pending.length})`} />
+          <Tab label={`Approved (${filteredRequests.approved.length})`} />
+          <Tab label={`Declined (${filteredRequests.declined.length})`} />
         </Tabs>
 
         {/* Refresh Button */}
@@ -248,10 +299,17 @@ const UserRequests = () => {
           variant="outlined"
           color="primary"
           onClick={getUserRequests}
-          sx={{ margin: "auto", alignSelf: "center" }}
+          className="sim-btn-glow"
+          sx={{
+            minWidth: 42,
+            px: 1.5,
+            borderRadius: 2,
+            borderColor: "rgba(0, 180, 216, 0.4)",
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+          }}
           size="small"
         >
-          <LoopIcon />
+          <LoopIcon fontSize="small" />
         </Button>
       </Box>
 

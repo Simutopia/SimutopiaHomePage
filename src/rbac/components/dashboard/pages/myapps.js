@@ -470,17 +470,15 @@ const MyApps = () => {
           return (
             <Card
               key={app.key}
-              variant="outlined"
+              elevation={0}
+              className="sim-matrix-panel"
               sx={{
-                borderRadius: 3,
-                transition: "all 0.22s cubic-bezier(0.4, 0, 0.2, 1)",
-                border: "1px solid #e2e8f0",
-                backgroundColor: "#ffffff",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                p: 0.5,
+                transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+                backgroundColor: "rgba(255, 255, 255, 0.94)",
                 "&:hover": {
-                  transform: "translateY(-4px)",
-                  boxShadow: "0 10px 20px -3px rgba(0, 118, 168, 0.14)",
-                  borderColor: "#0076a8",
+                  transform: "translateY(-5px)",
+                  boxShadow: "0 14px 28px -4px rgba(0, 118, 168, 0.25)",
                 },
                 "&:active": {
                   transform: "scale(0.97)",
@@ -585,10 +583,9 @@ const MyApps = () => {
         fullWidth
         TransitionComponent={Fade}
         PaperProps={{
+          className: "sim-dialog-paper",
           sx: {
-            borderRadius: 3.5,
-            p: 1,
-            boxShadow: "0 20px 40px -10px rgba(0, 30, 50, 0.25)",
+            p: 1.5,
             maxHeight: "90vh",
           },
         }}

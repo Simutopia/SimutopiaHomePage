@@ -3,6 +3,7 @@ import {
   AppBar,
   Avatar,
   Box,
+  Chip,
   Divider,
   Drawer,
   IconButton,
@@ -10,6 +11,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Stack,
   Toolbar,
   Tooltip,
   Typography,
@@ -117,14 +119,35 @@ const AppLayout = ({ currentUser }) => {
 
   const drawer = (
     <Box className="workspace-drawer-content">
-      <Box className="workspace-drawer-heading">
-        <Typography variant="overline">WORKSPACE</Typography>
-        <Typography variant="h6">
-          {isAdminDashboard ? "Administration" : "My workspace"}
+      <Box className="workspace-drawer-heading" sx={{ pb: 1 }}>
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
+          <Box
+            sx={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              bgcolor: "#00b4d8",
+              boxShadow: "0 0 10px #00b4d8",
+            }}
+          />
+          <Typography
+            variant="overline"
+            sx={{
+              letterSpacing: "0.15em",
+              fontWeight: 800,
+              color: "#0076a8",
+              fontSize: "0.68rem",
+            }}
+          >
+            SIMULATION SUITE
+          </Typography>
+        </Stack>
+        <Typography variant="h6" fontWeight={800} sx={{ letterSpacing: "-0.01em", color: "#0f172a" }}>
+          {isAdminDashboard ? "Admin Command" : "Team Platform"}
         </Typography>
       </Box>
-      <Divider />
-      <List className="workspace-nav-list" aria-label="Workspace sections">
+      <Divider sx={{ borderColor: "#f1f5f9" }} />
+      <List className="workspace-nav-list" aria-label="Workspace sections" sx={{ py: 1.5 }}>
         {menuItems.map((item) => (
           <ListItemButton
             key={item.label}
@@ -132,13 +155,39 @@ const AppLayout = ({ currentUser }) => {
             onClick={() => handleSelectSection(item.label)}
             className="workspace-nav-item"
           >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} />
+            <ListItemIcon sx={{ minWidth: 38 }}>{item.icon}</ListItemIcon>
+            <ListItemText
+              primary={item.label}
+              primaryTypographyProps={{
+                fontSize: "0.92rem",
+                fontWeight: selectedSection === item.label ? 700 : 500,
+              }}
+            />
           </ListItemButton>
         ))}
       </List>
-      <Box className="workspace-drawer-footer">
-        <Typography variant="caption">SIMUTOPIA · CENTRAL ACCESS</Typography>
+      <Box
+        className="workspace-drawer-footer"
+        sx={{
+          bgcolor: "#f8fafc",
+          borderTop: "1px solid #e2e8f0",
+          p: 2,
+        }}
+      >
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Box className="sim-live-beacon" />
+          <Typography
+            variant="caption"
+            sx={{
+              fontFamily: "monospace",
+              color: "#64748b",
+              fontWeight: 600,
+              fontSize: "0.68rem",
+            }}
+          >
+            SYS · 256-BIT ENCRYPTED
+          </Typography>
+        </Stack>
       </Box>
     </Box>
   );
@@ -146,7 +195,7 @@ const AppLayout = ({ currentUser }) => {
   return (
     <Box className="workspace-dashboard">
       <AppBar position="fixed" className="workspace-appbar">
-        <Toolbar className="workspace-toolbar">
+        <Toolbar className="workspace-toolbar" sx={{ minHeight: "68px !important" }}>
           {isMobile && (
             <IconButton
               color="inherit"
@@ -158,33 +207,113 @@ const AppLayout = ({ currentUser }) => {
               <MenuRoundedIcon />
             </IconButton>
           )}
-          <Box className="workspace-brand">
-            <Box component="img" src="/images/simutopia-mark.png" alt="" />
-            <Typography component="span">SIMUTOPIA</Typography>
+          <Box className="workspace-brand" sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+            <Box
+              component="img"
+              src="/images/simutopia-mark.png"
+              alt=""
+              sx={{
+                width: 28,
+                height: 38,
+                filter: "drop-shadow(0 0 8px rgba(0, 180, 216, 0.4))",
+              }}
+            />
+            <Typography
+              component="span"
+              sx={{
+                fontWeight: 800,
+                letterSpacing: "0.08em",
+                background: "linear-gradient(90deg, #ffffff 0%, #00b4d8 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              SIMUTOPIA
+            </Typography>
           </Box>
+
           <Box className="workspace-toolbar-divider" />
-          <Typography className="workspace-toolbar-title" noWrap>
-            {isAdminDashboard ? "Admin control center" : "Team workspace"}
-          </Typography>
-          <Box className="workspace-toolbar-actions">
+
+          {/* Realtime Innovation / Simulation Telemetry Beacon */}
+          {!isMobile && (
+            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flex: 1, ml: 1 }}>
+              <Chip
+                size="small"
+                icon={<Box className="sim-live-beacon" sx={{ ml: 1, mr: -0.5 }} />}
+                label="SIMULATION CORE ACTIVE"
+                sx={{
+                  bgcolor: "rgba(16, 185, 129, 0.12)",
+                  color: "#34d399",
+                  border: "1px solid rgba(16, 185, 129, 0.3)",
+                  fontFamily: "monospace",
+                  fontSize: "0.7rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
+                }}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "rgba(255, 255, 255, 0.5)",
+                  fontFamily: "monospace",
+                  display: { xs: "none", lg: "inline" },
+                }}
+              >
+                LATENCY: 18ms · TLS 1.3
+              </Typography>
+            </Stack>
+          )}
+
+          <Box className="workspace-toolbar-actions" sx={{ ml: "auto" }}>
             {!isMobile && (
-              <Box className="workspace-user">
-                <Avatar className="workspace-user-avatar">
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.5,
+                  px: 1.5,
+                  py: 0.5,
+                  borderRadius: 2,
+                  bgcolor: "rgba(255, 255, 255, 0.06)",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                }}
+              >
+                <Avatar
+                  sx={{
+                    width: 32,
+                    height: 32,
+                    background: "linear-gradient(135deg, #0076a8 0%, #6366f1 100%)",
+                    fontWeight: 700,
+                    fontSize: "0.85rem",
+                    border: "1px solid rgba(255, 255, 255, 0.3)",
+                  }}
+                >
                   {displayName.charAt(0).toUpperCase()}
                 </Avatar>
-                <Typography variant="body2" noWrap>
-                  {displayName}
-                </Typography>
+                <Box>
+                  <Typography variant="body2" sx={{ color: "#ffffff", fontWeight: 700, lineHeight: 1.2 }}>
+                    {displayName}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "#94a3b8", fontSize: "0.68rem" }}>
+                    {currentUser?.roleId?.roleName || "Member"}
+                  </Typography>
+                </Box>
               </Box>
             )}
-            <Tooltip title="Sign out">
+
+            <Tooltip title="Secure Sign out">
               <IconButton
                 color="inherit"
                 edge="end"
                 onClick={handleLogout}
                 aria-label="Sign out"
+                sx={{
+                  bgcolor: "rgba(255, 255, 255, 0.08)",
+                  "&:hover": { bgcolor: "rgba(239, 68, 68, 0.2)", color: "#f87171" },
+                  ml: 1,
+                }}
               >
-                <LogoutRoundedIcon />
+                <LogoutRoundedIcon fontSize="small" />
               </IconButton>
             </Tooltip>
           </Box>
@@ -214,19 +343,42 @@ const AppLayout = ({ currentUser }) => {
       </Box>
 
       <Box component="main" className="workspace-main">
-        <Box className="workspace-page-heading">
-          <Typography variant="overline">
-            {isAdminDashboard ? "ADMINISTRATION" : "SIMUTOPIA WORKSPACE"}
-          </Typography>
-          <Typography variant="h4" component="h1">
+        {/* Dynamic Telemetry Heading */}
+        <Box className="workspace-page-heading" sx={{ mb: 3 }}>
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
+            <Typography
+              variant="overline"
+              sx={{
+                letterSpacing: "0.14em",
+                fontWeight: 800,
+                color: "#0076a8",
+                fontSize: "0.72rem",
+              }}
+            >
+              {isAdminDashboard ? "CENTRAL COMMAND // ADMIN" : "COLLABORATION ENGINE // WORKSPACE"}
+            </Typography>
+          </Stack>
+
+          <Typography
+            variant="h4"
+            component="h1"
+            fontWeight={800}
+            sx={{
+              letterSpacing: "-0.02em",
+              background: "linear-gradient(135deg, #0f172a 0%, #0076a8 60%, #6366f1 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
             {currentSection?.label || "Workspace"}
           </Typography>
-          <Typography color="text.secondary">
+          <Typography color="text.secondary" variant="body2" sx={{ mt: 0.5 }}>
             {isAdminDashboard
-              ? "Manage members, roles, and apps."
-              : "Your account and team access at a glance."}
+              ? "Enterprise identity, multi-tenant organizations, access rules, and simulation integrations."
+              : "Access your cloud simulators, manage assigned workspace entities, and monitor execution state."}
           </Typography>
         </Box>
+
         {currentSection ? (
           <Box className="workspace-content">{currentSection.component}</Box>
         ) : (

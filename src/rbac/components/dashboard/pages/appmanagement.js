@@ -298,13 +298,11 @@ const AppManagement = () => {
     <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto" }}>
       {/* Header & Stats Banner */}
       <Paper
-        variant="outlined"
+        elevation={0}
+        className="sim-matrix-panel"
         sx={{
-          p: 3,
+          p: { xs: 2.5, sm: 3 },
           mb: 3,
-          borderRadius: 3,
-          background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
-          border: "1px solid #e2e8f0",
         }}
       >
         <Stack
@@ -314,32 +312,44 @@ const AppManagement = () => {
           spacing={2}
         >
           <Box>
-            <Typography variant="h5" fontWeight={700} color="text.primary">
-              Manage Applications
+            <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 0.5 }}>
+              <span className="sim-live-beacon" />
+              <Typography
+                variant="caption"
+                className="sim-telemetry-chip"
+                sx={{ color: "#0076a8", fontWeight: 700 }}
+              >
+                SIMUTOPIA APP MESH · SECURE OAUTH2 & PKCE GATEWAY
+              </Typography>
+            </Stack>
+            <Typography variant="h5" fontWeight={800} color="#0f172a">
+              App Ecosystem & Connectors
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, maxWidth: 650 }}>
-              Register external apps, configure rich multimedia descriptions (pictures, videos, long descriptions), manage client secrets, and link downloadable packages.
+              Register ecosystem applications, curate simulation multimedia showcases, distribute client secrets, and link SDK packages.
             </Typography>
             <Stack direction="row" spacing={1} sx={{ mt: 1.5, flexWrap: "wrap", gap: 0.5 }}>
-              <Chip size="small" label={`Total Apps: ${apps.length}`} color="primary" variant="outlined" />
-              <Chip size="small" label={`Active: ${apps.filter((a) => a.enabled).length}`} color="success" />
-              <Chip size="small" label={`Browser PKCE: ${apps.filter((a) => a.clientType === "public").length}`} />
-              <Chip size="small" label={`Server SSO: ${apps.filter((a) => a.clientType !== "public").length}`} />
+              <Chip size="small" className="sim-telemetry-chip" label={`TOTAL APPS: ${apps.length}`} sx={{ bgcolor: "rgba(255, 255, 255, 0.9)", border: "1px solid #cbd5e1" }} />
+              <Chip size="small" className="sim-telemetry-chip" label={`ONLINE: ${apps.filter((a) => a.enabled).length}`} sx={{ bgcolor: "rgba(240, 253, 244, 0.9)", color: "#166534", border: "1px solid #bbf7d0" }} />
+              <Chip size="small" className="sim-telemetry-chip" label={`BROWSER PKCE: ${apps.filter((a) => a.clientType === "public").length}`} sx={{ bgcolor: "rgba(238, 242, 255, 0.9)", color: "#4338ca", border: "1px solid #c7d2fe" }} />
+              <Chip size="small" className="sim-telemetry-chip" label={`CONFIDENTIAL: ${apps.filter((a) => a.clientType !== "public").length}`} sx={{ bgcolor: "rgba(254, 243, 199, 0.9)", color: "#92400e", border: "1px solid #fde68a" }} />
             </Stack>
           </Box>
 
           <Button
             variant="contained"
-            color="primary"
             startIcon={<AddRoundedIcon />}
             onClick={() => setShowRegisterForm((prev) => !prev)}
+            className="sim-btn-glow"
             sx={{
               borderRadius: 2.5,
               px: 2.5,
-              py: 1,
-              fontWeight: 600,
-              boxShadow: "0 4px 12px rgba(0, 118, 168, 0.2)",
+              py: 1.2,
+              fontWeight: 700,
+              background: "linear-gradient(135deg, #0076a8 0%, #00b4d8 100%)",
+              boxShadow: "0 4px 16px rgba(0, 118, 168, 0.35)",
               whiteSpace: "nowrap",
+              textTransform: "none",
             }}
           >
             {showRegisterForm ? "Hide Form" : "Register New App"}
@@ -573,16 +583,12 @@ const AppManagement = () => {
           apps.map((app) => (
             <Card
               key={app.key}
-              variant="outlined"
+              elevation={0}
+              className="sim-matrix-panel"
               sx={{
-                borderRadius: 3,
-                border: "1px solid #e2e8f0",
-                transition: "all 0.2s ease",
-                backgroundColor: app.enabled ? "#ffffff" : "#f8fafc",
-                "&:hover": {
-                  boxShadow: "0 6px 18px rgba(0,0,0,0.06)",
-                  borderColor: "#cbd5e1",
-                },
+                p: 0.5,
+                transition: "all 0.25s ease",
+                backgroundColor: app.enabled ? "rgba(255, 255, 255, 0.94)" : "rgba(248, 250, 252, 0.8)",
               }}
             >
               <CardContent sx={{ pb: 1.5 }}>
@@ -783,7 +789,7 @@ const AppManagement = () => {
         onClose={() => setEditingApp(null)}
         maxWidth="md"
         fullWidth
-        PaperProps={{ sx: { borderRadius: 3, p: 1 } }}
+        PaperProps={{ className: "sim-dialog-paper", sx: { p: 1 } }}
       >
         {editingApp && (
           <>

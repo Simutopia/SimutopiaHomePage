@@ -552,15 +552,13 @@ const UserTable = ({
 
   return (
     <Container sx={{ minWidth: "96%", px: 0, py: 1 }}>
-      {/* Top Header Card */}
+      {/* Top Header Card with Simulation Telemetry */}
       <Paper
         elevation={0}
+        className="sim-matrix-panel"
         sx={{
-          p: 2.5,
+          p: { xs: 2, sm: 3 },
           mb: 3,
-          borderRadius: 3,
-          border: "1px solid #e2e8f0",
-          background: "#ffffff",
         }}
       >
         <Stack
@@ -571,25 +569,37 @@ const UserTable = ({
           sx={{ mb: 2 }}
         >
           <Box>
-            <Typography variant="h5" fontWeight={700} color="#0f172a">
-              Organization & User Management
+            <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 0.5 }}>
+              <span className="sim-live-beacon" />
+              <Typography
+                variant="caption"
+                className="sim-telemetry-chip"
+                sx={{ color: "#0076a8", fontWeight: 700 }}
+              >
+                SIMULATION CLUSTER CONTROL · NODE MESH ACTIVE
+              </Typography>
+            </Stack>
+            <Typography variant="h5" fontWeight={800} color="#0f172a">
+              Cluster & Identity Mesh
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Select an organization to view and add members, or create a new organization.
+              Configure organizations, distribute cluster memberships, and enforce zero-trust role clearance.
             </Typography>
           </Box>
 
           <Stack direction="row" spacing={1.5} alignItems="center">
-            <Tooltip title="Refresh data">
+            <Tooltip title="Synchronize telemetry state">
               <Button
                 variant="outlined"
                 color="primary"
                 onClick={handleRefresh}
+                className="sim-btn-glow"
                 sx={{
                   minWidth: 42,
                   px: 1.5,
                   borderRadius: 2,
-                  borderColor: "#cbd5e1",
+                  borderColor: "rgba(0, 180, 216, 0.4)",
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
                 }}
               >
                 <LoopIcon fontSize="small" />
@@ -599,17 +609,19 @@ const UserTable = ({
             {currentPermissions?.create && (
               <Button
                 variant="contained"
-                color="primary"
                 startIcon={<BusinessIcon />}
                 onClick={() => {
                   setNewOrgName("");
                   setOpenAddOrgDialog(true);
                 }}
+                className="sim-btn-glow"
                 sx={{
-                  fontWeight: 600,
+                  fontWeight: 700,
                   borderRadius: 2,
                   px: 2.5,
-                  boxShadow: "0 4px 12px rgba(0, 118, 168, 0.25)",
+                  background: "linear-gradient(135deg, #0076a8 0%, #00b4d8 100%)",
+                  boxShadow: "0 4px 16px rgba(0, 118, 168, 0.35)",
+                  textTransform: "none",
                 }}
               >
                 Add Organization
@@ -618,7 +630,48 @@ const UserTable = ({
           </Stack>
         </Stack>
 
-        <Divider sx={{ my: 1.5 }} />
+        {/* Live Telemetry Ribbon */}
+        <Stack
+          direction="row"
+          spacing={1.5}
+          alignItems="center"
+          flexWrap="wrap"
+          sx={{
+            py: 1.2,
+            px: 2,
+            mb: 2,
+            borderRadius: 2,
+            background: "linear-gradient(90deg, rgba(0, 118, 168, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%)",
+            border: "1px solid rgba(0, 180, 216, 0.18)",
+          }}
+        >
+          <Chip
+            size="small"
+            className="sim-telemetry-chip"
+            label={`NODES: ${users.length}`}
+            sx={{ bgcolor: "rgba(255, 255, 255, 0.9)", border: "1px solid #cbd5e1" }}
+          />
+          <Chip
+            size="small"
+            className="sim-telemetry-chip"
+            label={`CLUSTERS: ${organizations.length}`}
+            sx={{ bgcolor: "rgba(255, 255, 255, 0.9)", border: "1px solid #cbd5e1" }}
+          />
+          <Chip
+            size="small"
+            className="sim-telemetry-chip"
+            label={`ACTIVE: ${users.filter((u) => u.status === "Active").length}`}
+            sx={{ bgcolor: "rgba(240, 253, 244, 0.9)", color: "#166534", border: "1px solid #bbf7d0" }}
+          />
+          <Chip
+            size="small"
+            className="sim-telemetry-chip"
+            label="SECURITY: FAIL-CLOSED SECURE"
+            sx={{ bgcolor: "rgba(238, 242, 255, 0.9)", color: "#4338ca", border: "1px solid #c7d2fe" }}
+          />
+        </Stack>
+
+        <Divider sx={{ my: 1.5, borderColor: "rgba(226, 232, 240, 0.8)" }} />
 
         {/* Navigation & Search Bar */}
         <Stack
@@ -645,6 +698,12 @@ const UserTable = ({
                 fontWeight: 600,
                 px: 2,
                 borderRadius: 2,
+                border: "1px solid rgba(0, 180, 216, 0.25)",
+                "&.Mui-selected": {
+                  background: "linear-gradient(135deg, rgba(0, 118, 168, 0.15) 0%, rgba(0, 180, 216, 0.15) 100%)",
+                  color: "#0076a8",
+                  borderColor: "#0076a8",
+                },
               },
             }}
           >
@@ -674,7 +733,7 @@ const UserTable = ({
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon fontSize="small" color="action" />
+                    <SearchIcon fontSize="small" sx={{ color: "#0076a8" }} />
                   </InputAdornment>
                 ),
                 endAdornment: searchQuery ? (
@@ -685,7 +744,13 @@ const UserTable = ({
                   </InputAdornment>
                 ) : null,
               }}
-              sx={{ minWidth: { xs: "100%", sm: 260 } }}
+              sx={{
+                minWidth: { xs: "100%", sm: 260 },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                  bgcolor: "#ffffff",
+                },
+              }}
             />
 
             {(selectedOrg || activeTab === "allUsers") && (
@@ -696,6 +761,7 @@ const UserTable = ({
                   label="Filter Role"
                   value={filterRole}
                   onChange={(e) => setFilterRole(e.target.value)}
+                  sx={{ borderRadius: 2, bgcolor: "#ffffff" }}
                 >
                   <MenuItem value="">All Roles</MenuItem>
                   {rolesList.map((r) => (
@@ -726,21 +792,14 @@ const UserTable = ({
                     <Grid item xs={12} sm={6} md={4} key={org.id}>
                       <Card
                         elevation={0}
+                        className="sim-matrix-panel"
                         sx={{
                           height: "100%",
                           display: "flex",
                           flexDirection: "column",
                           justifyContent: "space-between",
-                          borderRadius: 3,
-                          border: "1px solid #e2e8f0",
-                          transition: "all 0.2s ease-in-out",
                           cursor: "pointer",
-                          background: "#ffffff",
-                          "&:hover": {
-                            transform: "translateY(-3px)",
-                            boxShadow: "0 12px 24px -10px rgba(0, 118, 168, 0.2)",
-                            borderColor: "#0076a8",
-                          },
+                          p: 0.5,
                         }}
                         onClick={() => setSelectedOrg(org)}
                       >
@@ -755,10 +814,12 @@ const UserTable = ({
                               <Avatar
                                 sx={{
                                   background: gradient,
-                                  width: 44,
-                                  height: 44,
-                                  fontWeight: 700,
-                                  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                                  width: 48,
+                                  height: 48,
+                                  fontWeight: 800,
+                                  fontSize: "1.1rem",
+                                  boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
+                                  border: "2px solid rgba(255, 255, 255, 0.9)",
                                 }}
                               >
                                 {org.name.charAt(0).toUpperCase()}
@@ -768,7 +829,7 @@ const UserTable = ({
                                   variant="h6"
                                   fontWeight={700}
                                   sx={{
-                                    fontSize: "1.1rem",
+                                    fontSize: "1.08rem",
                                     color: "#0f172a",
                                     lineHeight: 1.2,
                                   }}
@@ -777,9 +838,10 @@ const UserTable = ({
                                 </Typography>
                                 <Typography
                                   variant="caption"
-                                  color="text.secondary"
+                                  className="sim-telemetry-chip"
+                                  sx={{ color: "text.secondary" }}
                                 >
-                                  Created {formatDate(org.createdAt)}
+                                  INITIALIZED {formatDate(org.createdAt)}
                                 </Typography>
                               </Box>
                             </Stack>
@@ -790,7 +852,7 @@ const UserTable = ({
                                   size="small"
                                   color="error"
                                   onClick={(e) => handleDeleteOrganization(org, e)}
-                                  sx={{ opacity: 0.7, "&:hover": { opacity: 1 } }}
+                                  sx={{ opacity: 0.7, "&:hover": { opacity: 1, bgcolor: "#fee2e2" } }}
                                 >
                                   <DeleteIcon fontSize="small" />
                                 </IconButton>
@@ -805,31 +867,34 @@ const UserTable = ({
                             sx={{
                               mt: 2,
                               pt: 1.5,
-                              borderTop: "1px solid #f1f5f9",
+                              borderTop: "1px dashed rgba(226, 232, 240, 0.9)",
                             }}
                           >
-                            <Chip
-                              size="small"
-                              icon={<PersonIcon fontSize="small" />}
-                              label={
-                                memberCount === 0
-                                  ? "0 members"
-                                  : `${memberCount} member${memberCount > 1 ? "s" : ""}`
-                              }
-                              sx={{
-                                fontWeight: 600,
-                                backgroundColor:
-                                  memberCount > 0 ? "#f0fdf4" : "#f8fafc",
-                                color: memberCount > 0 ? "#166534" : "#64748b",
-                                border:
-                                  memberCount > 0
-                                    ? "1px solid #bbf7d0"
-                                    : "1px solid #e2e8f0",
-                              }}
-                            />
+                            <Stack direction="row" spacing={1} alignItems="center">
+                              <span className="sim-live-beacon" />
+                              <Chip
+                                size="small"
+                                icon={<PersonIcon fontSize="small" />}
+                                label={
+                                  memberCount === 0
+                                    ? "0 Nodes"
+                                    : `${memberCount} Node${memberCount > 1 ? "s" : ""}`
+                                }
+                                sx={{
+                                  fontWeight: 600,
+                                  backgroundColor:
+                                    memberCount > 0 ? "rgba(240, 253, 244, 0.9)" : "rgba(248, 250, 252, 0.9)",
+                                  color: memberCount > 0 ? "#166534" : "#64748b",
+                                  border:
+                                    memberCount > 0
+                                      ? "1px solid #bbf7d0"
+                                      : "1px solid #e2e8f0",
+                                }}
+                              />
+                            </Stack>
 
                             {memberCount > 0 && (
-                              <AvatarGroup max={4} sx={{ "& .MuiAvatar-root": { width: 26, height: 26, fontSize: "0.75rem" } }}>
+                              <AvatarGroup max={4} sx={{ "& .MuiAvatar-root": { width: 26, height: 26, fontSize: "0.75rem", border: "2px solid #fff" } }}>
                                 {orgMembers.map((m) => (
                                   <Tooltip key={m.id} title={`${m.name} (${m.roleName})`}>
                                     <Avatar sx={{ bgcolor: "#0076a8" }}>
@@ -861,16 +926,19 @@ const UserTable = ({
                               textTransform: "none",
                               fontWeight: 600,
                               borderRadius: 2,
-                              backgroundColor: "#f1f5f9",
+                              backgroundColor: "rgba(241, 245, 249, 0.9)",
                               color: "#0f172a",
                               boxShadow: "none",
+                              border: "1px solid #e2e8f0",
                               "&:hover": {
-                                backgroundColor: "#e2e8f0",
-                                boxShadow: "none",
+                                backgroundColor: "#0076a8",
+                                color: "#ffffff",
+                                borderColor: "#0076a8",
+                                boxShadow: "0 4px 12px rgba(0, 118, 168, 0.25)",
                               },
                             }}
                           >
-                            View & Manage →
+                            Explore Cluster →
                           </Button>
 
                           {currentPermissions?.create && (
@@ -886,6 +954,11 @@ const UserTable = ({
                                   textTransform: "none",
                                   fontWeight: 600,
                                   whiteSpace: "nowrap",
+                                  borderColor: "rgba(0, 180, 216, 0.4)",
+                                  "&:hover": {
+                                    borderColor: "#0076a8",
+                                    bgcolor: "rgba(0, 118, 168, 0.06)",
+                                  },
                                 }}
                               >
                                 Add User
@@ -1020,12 +1093,10 @@ const UserTable = ({
               {/* Back navigation & Organization Detail Banner */}
               <Paper
                 elevation={0}
+                className="sim-matrix-panel"
                 sx={{
-                  p: 3,
+                  p: { xs: 2.5, sm: 3 },
                   mb: 3,
-                  borderRadius: 3,
-                  border: "1px solid #e2e8f0",
-                  background: "#ffffff",
                 }}
               >
                 <Button
@@ -1034,12 +1105,12 @@ const UserTable = ({
                   sx={{
                     mb: 2,
                     textTransform: "none",
-                    fontWeight: 600,
-                    color: "text.secondary",
-                    "&:hover": { color: "primary.main" },
+                    fontWeight: 700,
+                    color: "#0076a8",
+                    "&:hover": { color: "#005a84", bgcolor: "rgba(0, 118, 168, 0.08)" },
                   }}
                 >
-                  Back to All Organizations
+                  ← Back to All Clusters
                 </Button>
 
                 <Stack
@@ -1055,31 +1126,36 @@ const UserTable = ({
                           selectedOrg.id === "__unassigned__"
                             ? "#94a3b8"
                             : getOrgGradient(selectedOrg.name),
-                        width: 54,
-                        height: 54,
-                        fontWeight: 700,
-                        fontSize: "1.3rem",
-                        boxShadow: "0 6px 14px rgba(0,0,0,0.12)",
+                        width: 58,
+                        height: 58,
+                        fontWeight: 800,
+                        fontSize: "1.35rem",
+                        boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+                        border: "3px solid #ffffff",
                       }}
                     >
                       {selectedOrg.name.charAt(0).toUpperCase()}
                     </Avatar>
                     <Box>
                       <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Typography variant="h5" fontWeight={700} color="#0f172a">
+                        <Typography variant="h5" fontWeight={800} color="#0f172a">
                           {selectedOrg.name}
                         </Typography>
                         <Chip
                           size="small"
                           label={`${selectedOrgUsers.length} Member${selectedOrgUsers.length !== 1 ? "s" : ""}`}
-                          color="primary"
-                          variant="outlined"
-                          sx={{ fontWeight: 600 }}
+                          className="sim-telemetry-chip"
+                          sx={{
+                            fontWeight: 700,
+                            bgcolor: "rgba(0, 118, 168, 0.1)",
+                            color: "#0076a8",
+                            border: "1px solid rgba(0, 180, 216, 0.35)",
+                          }}
                         />
                       </Stack>
                       {selectedOrg.createdAt && (
-                        <Typography variant="caption" color="text.secondary">
-                          Organization created on {formatDate(selectedOrg.createdAt)}
+                        <Typography variant="caption" className="sim-telemetry-chip" sx={{ color: "text.secondary" }}>
+                          CLUSTER INITIALIZED: {formatDate(selectedOrg.createdAt)} · ZERO-TRUST DOMAIN
                         </Typography>
                       )}
                     </Box>
@@ -1090,14 +1166,16 @@ const UserTable = ({
                     {selectedOrg.id !== "__unassigned__" && currentPermissions?.create && (
                       <Button
                         variant="contained"
-                        color="primary"
                         startIcon={<PersonAddIcon />}
                         onClick={() => handleOpenAddUser(selectedOrg.name)}
+                        className="sim-btn-glow"
                         sx={{
                           borderRadius: 2,
-                          fontWeight: 600,
+                          fontWeight: 700,
                           px: 2.5,
-                          boxShadow: "0 4px 12px rgba(0, 118, 168, 0.25)",
+                          background: "linear-gradient(135deg, #0076a8 0%, #00b4d8 100%)",
+                          boxShadow: "0 4px 16px rgba(0, 118, 168, 0.35)",
+                          textTransform: "none",
                         }}
                       >
                         Add User to {selectedOrg.name}
@@ -1113,6 +1191,7 @@ const UserTable = ({
                             border: "1px solid #fee2e2",
                             bgcolor: "#fff5f5",
                             borderRadius: 2,
+                            "&:hover": { bgcolor: "#fee2e2" },
                           }}
                         >
                           <DeleteIcon fontSize="small" />
@@ -1127,43 +1206,39 @@ const UserTable = ({
               <TableContainer
                 component={Paper}
                 elevation={0}
-                sx={{
-                  borderRadius: 3,
-                  border: "1px solid #e2e8f0",
-                  overflow: "hidden",
-                }}
+                className="sim-table-container"
               >
                 <Table>
-                  <TableHead sx={{ backgroundColor: "#f8fafc" }}>
+                  <TableHead className="sim-table-head">
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
+                      <TableCell sx={{ fontWeight: 700 }}>
                         <TableSortLabel
                           active={sortConfig.key === "name"}
                           direction={sortConfig.key === "name" ? sortConfig.direction : "asc"}
                           onClick={() => handleSort("name")}
                         >
-                          Name
+                          Node Name
                         </TableSortLabel>
                       </TableCell>
-                      <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
+                      <TableCell sx={{ fontWeight: 700 }}>
                         <TableSortLabel
                           active={sortConfig.key === "email"}
                           direction={sortConfig.key === "email" ? sortConfig.direction : "asc"}
                           onClick={() => handleSort("email")}
                         >
-                          Email
+                          Network Email
                         </TableSortLabel>
                       </TableCell>
-                      <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
-                        Role
+                      <TableCell sx={{ fontWeight: 700 }}>
+                        Clearance Role
                       </TableCell>
-                      <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
+                      <TableCell sx={{ fontWeight: 700 }}>
                         Status
                       </TableCell>
-                      <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
-                        Created At
+                      <TableCell sx={{ fontWeight: 700 }}>
+                        Provisioned At
                       </TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 700, color: "#334155" }}>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>
                         Actions
                       </TableCell>
                     </TableRow>
@@ -1185,18 +1260,23 @@ const UserTable = ({
                             <PersonAddIcon fontSize="medium" />
                           </Avatar>
                           <Typography variant="subtitle1" fontWeight={700} color="#1e293b">
-                            No members in {selectedOrg.name} yet
+                            No nodes registered in {selectedOrg.name} yet
                           </Typography>
                           <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-                            Add members to this organization to grant them system and application access.
+                            Add user nodes to this organization cluster to grant them application access.
                           </Typography>
                           {currentPermissions?.create && selectedOrg.id !== "__unassigned__" && (
                             <Button
                               variant="contained"
-                              color="primary"
                               startIcon={<PersonAddIcon />}
                               onClick={() => handleOpenAddUser(selectedOrg.name)}
-                              sx={{ borderRadius: 2, fontWeight: 600 }}
+                              className="sim-btn-glow"
+                              sx={{
+                                borderRadius: 2,
+                                fontWeight: 700,
+                                background: "linear-gradient(135deg, #0076a8 0%, #00b4d8 100%)",
+                                textTransform: "none",
+                              }}
                             >
                               Add First User to {selectedOrg.name}
                             </Button>
@@ -1207,10 +1287,7 @@ const UserTable = ({
                       selectedOrgUsers.map((user) => (
                         <TableRow
                           key={user.id}
-                          sx={{
-                            "&:hover": { backgroundColor: "#f8fafc" },
-                            transition: "background-color 0.15s",
-                          }}
+                          className="sim-table-row"
                         >
                           {/* Name */}
                           <TableCell>
@@ -1227,25 +1304,28 @@ const UserTable = ({
                                 <Avatar
                                   sx={{
                                     bgcolor: "#0076a8",
-                                    width: 32,
-                                    height: 32,
+                                    width: 34,
+                                    height: 34,
                                     fontSize: "0.85rem",
-                                    fontWeight: 600,
+                                    fontWeight: 700,
+                                    boxShadow: "0 2px 8px rgba(0, 118, 168, 0.2)",
                                   }}
                                 >
                                   {user.name.charAt(0).toUpperCase()}
                                 </Avatar>
-                                <Typography variant="body2" fontWeight={600} color="#0f172a">
-                                  {user.name}
-                                  {user.isProtectedAdmin && (
-                                    <Chip
-                                      size="small"
-                                      label="Admin"
-                                      color="primary"
-                                      sx={{ ml: 1, height: 18, fontSize: "0.65rem", fontWeight: 700 }}
-                                    />
-                                  )}
-                                </Typography>
+                                <Box>
+                                  <Typography variant="body2" fontWeight={700} color="#0f172a">
+                                    {user.name}
+                                    {user.isProtectedAdmin && (
+                                      <Chip
+                                        size="small"
+                                        label="Admin"
+                                        className="sim-badge-admin"
+                                        sx={{ ml: 1, height: 20 }}
+                                      />
+                                    )}
+                                  </Typography>
+                                </Box>
                               </Stack>
                             )}
                           </TableCell>
@@ -1261,7 +1341,7 @@ const UserTable = ({
                                 }
                               />
                             ) : (
-                              <Typography variant="body2" color="text.secondary">
+                              <Typography variant="body2" color="text.secondary" className="sim-telemetry-chip">
                                 {user.email}
                               </Typography>
                             )}
@@ -1289,9 +1369,10 @@ const UserTable = ({
                                 size="small"
                                 label={user.roleName || "No Role"}
                                 sx={{
-                                  fontWeight: 600,
-                                  backgroundColor: "#f1f5f9",
-                                  color: "#334155",
+                                  fontWeight: 700,
+                                  backgroundColor: "rgba(0, 118, 168, 0.08)",
+                                  color: "#006a97",
+                                  border: "1px solid rgba(0, 180, 216, 0.2)",
                                 }}
                               />
                             )}
@@ -1314,24 +1395,14 @@ const UserTable = ({
                               <Chip
                                 size="small"
                                 label={user.status}
-                                sx={{
-                                  fontWeight: 600,
-                                  backgroundColor:
-                                    user.status === "Active" ? "#f0fdf4" : "#fef2f2",
-                                  color:
-                                    user.status === "Active" ? "#166534" : "#991b1b",
-                                  border:
-                                    user.status === "Active"
-                                      ? "1px solid #bbf7d0"
-                                      : "1px solid #fecaca",
-                                }}
+                                className={user.status === "Active" ? "sim-badge-active" : "sim-badge-inactive"}
                               />
                             )}
                           </TableCell>
 
                           {/* Created At */}
                           <TableCell>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2" color="text.secondary" className="sim-telemetry-chip">
                               {formatDate(user.createdAt)}
                             </Typography>
                           </TableCell>
@@ -1354,6 +1425,7 @@ const UserTable = ({
                                     size="small"
                                     onClick={() => handleEditClick(user)}
                                     disabled={Boolean(user.isProtectedAdmin)}
+                                    sx={{ "&:hover": { color: "#0076a8" } }}
                                   >
                                     <EditIcon fontSize="small" />
                                   </IconButton>
@@ -1390,46 +1462,42 @@ const UserTable = ({
         <TableContainer
           component={Paper}
           elevation={0}
-          sx={{
-            borderRadius: 3,
-            border: "1px solid #e2e8f0",
-            overflow: "hidden",
-          }}
+          className="sim-table-container"
         >
           <Table>
-            <TableHead sx={{ backgroundColor: "#f8fafc" }}>
+            <TableHead className="sim-table-head">
               <TableRow>
-                <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
+                <TableCell sx={{ fontWeight: 700 }}>
                   <TableSortLabel
                     active={sortConfig.key === "name"}
                     direction={sortConfig.key === "name" ? sortConfig.direction : "asc"}
                     onClick={() => handleSort("name")}
                   >
-                    Name
+                    Node Name
                   </TableSortLabel>
                 </TableCell>
-                <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
+                <TableCell sx={{ fontWeight: 700 }}>
                   <TableSortLabel
                     active={sortConfig.key === "email"}
                     direction={sortConfig.key === "email" ? sortConfig.direction : "asc"}
                     onClick={() => handleSort("email")}
                   >
-                    Email
+                    Network Email
                   </TableSortLabel>
                 </TableCell>
-                <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
-                  Organization
+                <TableCell sx={{ fontWeight: 700 }}>
+                  Cluster Domain
                 </TableCell>
-                <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
-                  Role
+                <TableCell sx={{ fontWeight: 700 }}>
+                  Clearance Role
                 </TableCell>
-                <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
+                <TableCell sx={{ fontWeight: 700 }}>
                   Status
                 </TableCell>
-                <TableCell sx={{ fontWeight: 700, color: "#334155" }}>
-                  Created At
+                <TableCell sx={{ fontWeight: 700 }}>
+                  Provisioned At
                 </TableCell>
-                <TableCell align="right" sx={{ fontWeight: 700, color: "#334155" }}>
+                <TableCell align="right" sx={{ fontWeight: 700 }}>
                   Actions
                 </TableCell>
               </TableRow>
@@ -1439,7 +1507,7 @@ const UserTable = ({
                 <TableRow>
                   <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
                     <Typography color="text.secondary">
-                      No users found matching your filters.
+                      No nodes found matching your query filter.
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -1447,10 +1515,7 @@ const UserTable = ({
                 filteredAllUsers.map((user) => (
                   <TableRow
                     key={user.id}
-                    sx={{
-                      "&:hover": { backgroundColor: "#f8fafc" },
-                      transition: "background-color 0.15s",
-                    }}
+                    className="sim-table-row"
                   >
                     {/* Name */}
                     <TableCell>
@@ -1467,22 +1532,23 @@ const UserTable = ({
                           <Avatar
                             sx={{
                               bgcolor: "#0076a8",
-                              width: 32,
-                              height: 32,
+                              width: 34,
+                              height: 34,
                               fontSize: "0.85rem",
-                              fontWeight: 600,
+                              fontWeight: 700,
+                              boxShadow: "0 2px 8px rgba(0, 118, 168, 0.2)",
                             }}
                           >
                             {user.name.charAt(0).toUpperCase()}
                           </Avatar>
-                          <Typography variant="body2" fontWeight={600} color="#0f172a">
+                          <Typography variant="body2" fontWeight={700} color="#0f172a">
                             {user.name}
                             {user.isProtectedAdmin && (
                               <Chip
                                 size="small"
                                 label="Admin"
-                                color="primary"
-                                sx={{ ml: 1, height: 18, fontSize: "0.65rem", fontWeight: 700 }}
+                                className="sim-badge-admin"
+                                sx={{ ml: 1, height: 20 }}
                               />
                             )}
                           </Typography>
@@ -1501,7 +1567,7 @@ const UserTable = ({
                           }
                         />
                       ) : (
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" color="text.secondary" className="sim-telemetry-chip">
                           {user.email}
                         </Typography>
                       )}
@@ -1527,7 +1593,7 @@ const UserTable = ({
                           ))}
                         </Select>
                       ) : user.organization ? (
-                        <Tooltip title="Click to view organization">
+                        <Tooltip title="Click to view organization cluster">
                           <Chip
                             size="small"
                             icon={<BusinessIcon sx={{ "&&": { fontSize: 13 } }} />}
@@ -1545,9 +1611,12 @@ const UserTable = ({
                               cursor: "pointer",
                               fontWeight: 600,
                               fontSize: "0.75rem",
-                              background: "#f0fdf4",
+                              background: "rgba(240, 253, 244, 0.9)",
                               color: "#166534",
                               border: "1px solid #bbf7d0",
+                              "&:hover": {
+                                bgcolor: "#bbf7d0",
+                              },
                             }}
                           />
                         </Tooltip>
@@ -1580,9 +1649,10 @@ const UserTable = ({
                           size="small"
                           label={user.roleName || "No Role"}
                           sx={{
-                            fontWeight: 600,
-                            backgroundColor: "#f1f5f9",
-                            color: "#334155",
+                            fontWeight: 700,
+                            backgroundColor: "rgba(0, 118, 168, 0.08)",
+                            color: "#006a97",
+                            border: "1px solid rgba(0, 180, 216, 0.2)",
                           }}
                         />
                       )}
@@ -1605,24 +1675,14 @@ const UserTable = ({
                         <Chip
                           size="small"
                           label={user.status}
-                          sx={{
-                            fontWeight: 600,
-                            backgroundColor:
-                              user.status === "Active" ? "#f0fdf4" : "#fef2f2",
-                            color:
-                              user.status === "Active" ? "#166534" : "#991b1b",
-                            border:
-                              user.status === "Active"
-                                ? "1px solid #bbf7d0"
-                                : "1px solid #fecaca",
-                          }}
+                          className={user.status === "Active" ? "sim-badge-active" : "sim-badge-inactive"}
                         />
                       )}
                     </TableCell>
 
                     {/* Created At */}
                     <TableCell>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color="text.secondary" className="sim-telemetry-chip">
                         {formatDate(user.createdAt)}
                       </Typography>
                     </TableCell>
@@ -1645,6 +1705,7 @@ const UserTable = ({
                               size="small"
                               onClick={() => handleEditClick(user)}
                               disabled={Boolean(user.isProtectedAdmin)}
+                              sx={{ "&:hover": { color: "#0076a8" } }}
                             >
                               <EditIcon fontSize="small" />
                             </IconButton>
@@ -1680,17 +1741,23 @@ const UserTable = ({
         maxWidth="xs"
         fullWidth
         PaperProps={{
-          sx: { borderRadius: 3, p: 1 },
+          className: "sim-dialog-paper",
+          sx: { p: 1 },
         }}
       >
         <DialogTitle sx={{ pb: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Stack direction="row" spacing={1.5} alignItems="center">
-            <Avatar sx={{ bgcolor: "#e0f2fe", color: "#0284c7", width: 36, height: 36 }}>
+            <Avatar sx={{ bgcolor: "#e0f2fe", color: "#0284c7", width: 40, height: 40 }}>
               <BusinessIcon fontSize="small" />
             </Avatar>
-            <Typography variant="h6" fontWeight={700}>
-              Add Organization
-            </Typography>
+            <Box>
+              <Typography variant="h6" fontWeight={700}>
+                Deploy Cluster Domain
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Organization Mesh Entity
+              </Typography>
+            </Box>
           </Stack>
           <IconButton size="small" onClick={() => setOpenAddOrgDialog(false)}>
             <CloseRoundedIcon fontSize="small" />
@@ -1700,7 +1767,7 @@ const UserTable = ({
         <form onSubmit={handleSaveOrganization}>
           <DialogContent sx={{ pt: 1 }}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Enter the organization name. Users can be added once the organization is created.
+              Specify the organization identifier. Users can be provisioned into this cluster once deployed.
             </Typography>
             <TextField
               autoFocus
@@ -1725,11 +1792,17 @@ const UserTable = ({
             <Button
               type="submit"
               variant="contained"
-              color="primary"
               disabled={isSubmittingOrg || !newOrgName.trim()}
-              sx={{ borderRadius: 2, fontWeight: 600, textTransform: "none", px: 2.5 }}
+              className="sim-btn-glow"
+              sx={{
+                borderRadius: 2,
+                fontWeight: 700,
+                textTransform: "none",
+                px: 2.5,
+                background: "linear-gradient(135deg, #0076a8 0%, #00b4d8 100%)",
+              }}
             >
-              {isSubmittingOrg ? "Creating…" : "Create Organization"}
+              {isSubmittingOrg ? "Deploying…" : "Deploy Organization"}
             </Button>
           </DialogActions>
         </form>
@@ -1742,20 +1815,21 @@ const UserTable = ({
         maxWidth="sm"
         fullWidth
         PaperProps={{
-          sx: { borderRadius: 3, p: 1 },
+          className: "sim-dialog-paper",
+          sx: { p: 1 },
         }}
       >
         <DialogTitle sx={{ pb: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Stack direction="row" spacing={1.5} alignItems="center">
-            <Avatar sx={{ bgcolor: "#f0fdf4", color: "#16a34a", width: 36, height: 36 }}>
+            <Avatar sx={{ bgcolor: "#f0fdf4", color: "#16a34a", width: 40, height: 40 }}>
               <PersonAddIcon fontSize="small" />
             </Avatar>
             <Box>
               <Typography variant="h6" fontWeight={700} lineHeight={1.2}>
-                Add User to Organization
+                Provision Node to Cluster
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Organization: <strong>{targetOrgForUser}</strong>
+                Assigned Cluster: <strong>{targetOrgForUser}</strong>
               </Typography>
             </Box>
           </Stack>
@@ -1771,7 +1845,7 @@ const UserTable = ({
                 sx={{
                   p: 1.5,
                   borderRadius: 2,
-                  bgcolor: "#f0fdf4",
+                  bgcolor: "rgba(240, 253, 244, 0.9)",
                   border: "1px solid #bbf7d0",
                   display: "flex",
                   alignItems: "center",
@@ -1779,8 +1853,8 @@ const UserTable = ({
                 }}
               >
                 <BusinessIcon color="success" fontSize="small" />
-                <Typography variant="body2" color="#166534" fontWeight={600}>
-                  Assigned Organization: {targetOrgForUser}
+                <Typography variant="body2" color="#166534" fontWeight={600} className="sim-telemetry-chip">
+                  ASSIGNED CLUSTER: {targetOrgForUser}
                 </Typography>
               </Box>
 
@@ -1811,10 +1885,10 @@ const UserTable = ({
               />
 
               <FormControl fullWidth size="small" required>
-                <InputLabel id="role-select-label">Role</InputLabel>
+                <InputLabel id="role-select-label">Clearance Role</InputLabel>
                 <Select
                   labelId="role-select-label"
-                  label="Role"
+                  label="Clearance Role"
                   value={addUserForm.roleName}
                   onChange={(e) =>
                     setAddUserForm({ ...addUserForm, roleName: e.target.value })
@@ -1844,7 +1918,7 @@ const UserTable = ({
               </FormControl>
 
               <TextField
-                label="Temporary Password"
+                label="Initial Password"
                 type="password"
                 variant="outlined"
                 size="small"
@@ -1869,11 +1943,17 @@ const UserTable = ({
             <Button
               type="submit"
               variant="contained"
-              color="primary"
               disabled={isSubmittingUser}
-              sx={{ borderRadius: 2, fontWeight: 600, textTransform: "none", px: 2.5 }}
+              className="sim-btn-glow"
+              sx={{
+                borderRadius: 2,
+                fontWeight: 700,
+                textTransform: "none",
+                px: 2.5,
+                background: "linear-gradient(135deg, #0076a8 0%, #00b4d8 100%)",
+              }}
             >
-              {isSubmittingUser ? "Adding…" : `Add User to ${targetOrgForUser}`}
+              {isSubmittingUser ? "Provisioning…" : `Provision to ${targetOrgForUser}`}
             </Button>
           </DialogActions>
         </form>

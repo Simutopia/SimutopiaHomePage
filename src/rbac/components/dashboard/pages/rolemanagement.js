@@ -17,6 +17,8 @@ import {
   Checkbox,
   FormControlLabel,
   Divider,
+  Chip,
+  Stack,
 } from "@mui/material";
 import {
   Edit as EditIcon,
@@ -349,58 +351,117 @@ const RolePermissionManagement = () => {
   }, [handleRefresh]);
 
   return (
-    <Container>
-      {/* Add New Role Section */}
-      <Paper sx={{ p: 2, mb: 2, alignContent: "center" }}>
-        <Typography variant="h5" gutterBottom>
-          Role & Permission Management
-        </Typography>
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center", mt: 1 }}>
-          <TextField
-            label="Role Name"
-            variant="outlined"
-            value={newRoleName}
-            onChange={(e) => setNewRoleName(e.target.value)}
+    <Container sx={{ minWidth: "96%", px: 0, py: 1 }}>
+      {/* Add New Role Section with Simulation Telemetry */}
+      <Paper
+        elevation={0}
+        className="sim-matrix-panel"
+        sx={{ p: { xs: 2.5, sm: 3 }, mb: 3 }}
+      >
+        <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }} spacing={2}>
+          <Box>
+            <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 0.5 }}>
+              <span className="sim-live-beacon" />
+              <Typography
+                variant="caption"
+                className="sim-telemetry-chip"
+                sx={{ color: "#0076a8", fontWeight: 700 }}
+              >
+                ROLE MATRIX PROTOCOL · GRANULAR CAPABILITIES
+              </Typography>
+            </Stack>
+            <Typography variant="h5" fontWeight={800} color="#0f172a">
+              Role & Capability Matrix
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Provision zero-trust access profiles, fine-tune capabilities, and establish application entitlements.
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
+            <TextField
+              label="New Role Identifier"
+              variant="outlined"
+              value={newRoleName}
+              onChange={(e) => setNewRoleName(e.target.value)}
+              size="small"
+              placeholder="e.g. SecurityAuditor"
+              sx={{ minWidth: 220, bgcolor: "#fff", "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+            />
+            <Button
+              variant="contained"
+              onClick={handleAddRole}
+              size="medium"
+              className="sim-btn-glow"
+              startIcon={<AddModeratorIcon />}
+              sx={{
+                background: "linear-gradient(135deg, #0076a8 0%, #00b4d8 100%)",
+                fontWeight: 700,
+                borderRadius: 2,
+                textTransform: "none",
+                whiteSpace: "nowrap",
+                px: 2,
+              }}
+            >
+              Add Role
+            </Button>
+            <Tooltip title="Refresh roles and permissions">
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleRefresh}
+                className="sim-btn-glow"
+                sx={{
+                  minWidth: 42,
+                  px: 1.5,
+                  borderRadius: 2,
+                  borderColor: "rgba(0, 180, 216, 0.4)",
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                }}
+              >
+                <LoopIcon fontSize="small" />
+              </Button>
+            </Tooltip>
+          </Box>
+        </Stack>
+
+        <Divider sx={{ my: 2, borderColor: "rgba(226, 232, 240, 0.8)" }} />
+
+        <Stack direction="row" spacing={1.5} flexWrap="wrap">
+          <Chip
             size="small"
+            className="sim-telemetry-chip"
+            label={`ROLES: ${roles.length}`}
+            sx={{ bgcolor: "rgba(255, 255, 255, 0.9)", border: "1px solid #cbd5e1" }}
           />
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleAddRole}
+          <Chip
             size="small"
-            sx={{
-              height: "2.5rem",
-            }}
-          >
-            <AddModeratorIcon />
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleRefresh}
+            className="sim-telemetry-chip"
+            label={`CAPABILITIES: ${permissionList.length} ENFORCED`}
+            sx={{ bgcolor: "rgba(240, 253, 244, 0.9)", color: "#166534", border: "1px solid #bbf7d0" }}
+          />
+          <Chip
             size="small"
-            sx={{
-              height: "2.5rem",
-            }}
-          >
-            <LoopIcon />
-          </Button>
-        </Box>
+            className="sim-telemetry-chip"
+            label={`REGISTERED APPS: ${apps.length}`}
+            sx={{ bgcolor: "rgba(238, 242, 255, 0.9)", color: "#4338ca", border: "1px solid #c7d2fe" }}
+          />
+        </Stack>
       </Paper>
 
       {/* Roles Table */}
-      <TableContainer component={Paper}>
-        <Table size="small" sx={{ borderCollapse: "collapse",minWidth:"98%",overflowX:"scroll" }}>
-          <TableHead>
+      <TableContainer component={Paper} elevation={0} className="sim-table-container">
+        <Table size="small" sx={{ borderCollapse: "collapse", minWidth: "98%" }}>
+          <TableHead className="sim-table-head">
             <TableRow>
-              <TableCell sx={{ padding: "4px 8px", fontWeight: "bold" }}>
-                Role Name
+              <TableCell sx={{ padding: "12px 16px", fontWeight: "bold" }}>
+                Role Identifier
               </TableCell>
-              <TableCell sx={{ padding: "4px 8px", fontWeight: "bold" }}>
-                Permissions
+              <TableCell sx={{ padding: "12px 16px", fontWeight: "bold" }}>
+                Capabilities & App Access
               </TableCell>
               <TableCell
-                sx={{ padding: "4px 8px", fontWeight: "bold" }}
+                sx={{ padding: "12px 16px", fontWeight: "bold" }}
                 align="center"
               >
                 Actions
@@ -409,13 +470,14 @@ const RolePermissionManagement = () => {
           </TableHead>
           <TableBody>
             {roles.map((role) => (
-              <TableRow key={role.roleId}>
+              <TableRow key={role.roleId} className="sim-table-row">
                 {/* Role Name */}
                 <TableCell
                   sx={{
-                    padding: "4px 8px",
+                    padding: "12px 16px",
                     fontSize: "0.875rem",
                     fontWeight: "bold",
+                    verticalAlign: "top",
                   }}
                 >
                   {editingRoleId === role.roleId ? (
@@ -424,49 +486,66 @@ const RolePermissionManagement = () => {
                       onChange={handleRoleNameChange}
                       size="small"
                       variant="outlined"
-                      disabled={
-                        role.isProtected
-                      }
-                      style={{ fontSize: "0.75rem" }}
+                      disabled={role.isProtected}
+                      sx={{ fontSize: "0.75rem" }}
                     />
                   ) : (
-                    role.roleName
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Typography variant="body2" fontWeight={700} color="#0f172a">
+                        {role.roleName}
+                      </Typography>
+                      {role.isProtected && (
+                        <Chip
+                          size="small"
+                          label="SYSTEM PROTECTED"
+                          className="sim-badge-admin"
+                          sx={{ height: 20 }}
+                        />
+                      )}
+                    </Stack>
                   )}
                 </TableCell>
 
                 {/* Permissions */}
-                <TableCell sx={{ padding: "4px 8px" }}>
-                  {permissionList.map((permission) => (
-                    <Box
-                      key={permission.key}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        mb: "2px",
-                      }}
-                    >
-                      <Typography variant="caption">
-                        {permission.label}
-                      </Typography>
-                      {editingRoleId === role.roleId ? (
-                        <Checkbox
-                          checked={!!editedRole.permissions[permission.key]}
-                          onChange={() =>
-                            handlePermissionChange(permission.key)
-                          }
-                          size="small"
-                          disabled={role.roleName.toLowerCase() === "admin"}
-                        />
-                      ) : (
-                        <Checkbox
-                          checked={!!role.permissions[permission.key]}
-                          disabled
-                          size="small"
-                        />
-                      )}
-                    </Box>
-                  ))}
+                <TableCell sx={{ padding: "12px 16px" }}>
+                  <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" }, gap: 1, mb: 1 }}>
+                    {permissionList.map((permission) => (
+                      <Box
+                        key={permission.key}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          p: "4px 8px",
+                          borderRadius: 1.5,
+                          bgcolor: "rgba(248, 250, 252, 0.8)",
+                          border: "1px solid rgba(226, 232, 240, 0.8)",
+                        }}
+                      >
+                        <Typography variant="caption" fontWeight={600} color="#334155">
+                          {permission.label}
+                        </Typography>
+                        {editingRoleId === role.roleId ? (
+                          <Checkbox
+                            checked={!!editedRole.permissions[permission.key]}
+                            onChange={() =>
+                              handlePermissionChange(permission.key)
+                            }
+                            size="small"
+                            disabled={role.roleName.toLowerCase() === "admin"}
+                            sx={{ "&.Mui-checked": { color: "#0076a8" } }}
+                          />
+                        ) : (
+                          <Checkbox
+                            checked={!!role.permissions[permission.key]}
+                            disabled
+                            size="small"
+                            sx={{ "&.Mui-checked": { color: "#0076a8" } }}
+                          />
+                        )}
+                      </Box>
+                    ))}
+                  </Box>
           {apps.length > 0 && (
             <>
                   <Divider sx={{ my: 1 }} />
