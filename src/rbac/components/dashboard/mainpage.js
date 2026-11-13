@@ -234,35 +234,6 @@ const AppLayout = ({ currentUser }) => {
 
           <Box className="workspace-toolbar-divider" />
 
-          {/* Realtime Innovation / Simulation Telemetry Beacon */}
-          {!isMobile && (
-            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flex: 1, ml: 1 }}>
-              <Chip
-                size="small"
-                icon={<Box className="sim-live-beacon" sx={{ ml: 1, mr: -0.5 }} />}
-                label="SIMULATION CORE ACTIVE"
-                sx={{
-                  bgcolor: "rgba(16, 185, 129, 0.12)",
-                  color: "#34d399",
-                  border: "1px solid rgba(16, 185, 129, 0.3)",
-                  fontFamily: "monospace",
-                  fontSize: "0.7rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.04em",
-                }}
-              />
-              <Typography
-                variant="caption"
-                sx={{
-                  color: "rgba(255, 255, 255, 0.5)",
-                  fontFamily: "monospace",
-                  display: { xs: "none", lg: "inline" },
-                }}
-              >
-                LATENCY: 18ms · TLS 1.3
-              </Typography>
-            </Stack>
-          )}
 
           <Box className="workspace-toolbar-actions" sx={{ ml: "auto" }}>
             {!isMobile && (
