@@ -1,0 +1,119 @@
+import { Box, Container, Link, Typography } from "@mui/material";
+import partners from "../data/partners";
+import { AtmosphereGrid, getLightAtmosphereSx } from "../theme/atmosphere";
+import { colors, fonts, sectionTitleSx } from "../theme/tokens";
+
+const atmosphere = "mistFlip";
+const accentFontFamily = fonts.accent;
+
+const PartnersStrip = () => (
+  <Box
+    component="section"
+    aria-label="Our Partners"
+    sx={{
+      ...getLightAtmosphereSx(atmosphere),
+      py: { xs: 5, md: 7 },
+      borderTop: `1px solid ${colors.border}`,
+      borderBottom: `1px solid ${colors.border}`,
+    }}
+  >
+    <AtmosphereGrid variant={atmosphere} />
+    <Container maxWidth="xl" sx={{ position: "relative" }}>
+      <Typography
+        variant="h2"
+        component="h2"
+        sx={{
+          ...sectionTitleSx,
+          mb: { xs: 3, md: 4 },
+        }}
+      >
+        Our Partners
+      </Typography>
+
+      <Box
+        component="ul"
+        sx={{
+          m: 0,
+          p: 0,
+          listStyle: "none",
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr 1fr",
+            sm: "repeat(3, minmax(0, 1fr))",
+            md: "repeat(5, minmax(0, 1fr))",
+          },
+          gap: { xs: 3, md: 4 },
+          alignItems: "center",
+          justifyItems: "center",
+          maxWidth: 1120,
+          mx: "auto",
+        }}
+      >
+        {partners.map((partner) => (
+          <Box
+            component="li"
+            key={partner.id}
+            sx={{ width: "100%", textAlign: "center" }}
+          >
+            <Link
+              href={partner.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${partner.name} website`}
+              underline="none"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: partner.wordmark ? 1 : 0,
+                minHeight: { xs: 64, md: 72 },
+                px: partner.logoOnDark ? 1 : 1.5,
+                py: partner.logoOnDark ? 1 : 0,
+                borderRadius: partner.logoOnDark ? 1.5 : 0,
+                bgcolor: partner.logoOnDark ? "#1a1c1e" : "transparent",
+                opacity: 0.92,
+                transition: "opacity 160ms ease, transform 160ms ease",
+                "&:hover": {
+                  opacity: 1,
+                  transform: "translateY(-1px)",
+                },
+              }}
+            >
+              <Box
+                component="img"
+                src={partner.logo}
+                alt={partner.wordmark ? "" : partner.name}
+                sx={{
+                  maxWidth: partner.wordmark ? { xs: 36, md: 44 } : "100%",
+                  maxHeight: { xs: 44, md: 52 },
+                  width: "auto",
+                  height: "auto",
+                  objectFit: "contain",
+                  flexShrink: 0,
+                }}
+              />
+              {partner.wordmark ? (
+                <Typography
+                  component="span"
+                  sx={{
+                    fontFamily: accentFontFamily,
+                    fontWeight: 400,
+                    fontSize: { xs: "0.7rem", sm: "0.78rem", md: "0.85rem" },
+                    letterSpacing: "0.04em",
+                    color: colors.body,
+                    lineHeight: 1.1,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {partner.wordmark}
+                </Typography>
+              ) : null}
+            </Link>
+          </Box>
+        ))}
+      </Box>
+    </Container>
+  </Box>
+);
+
+export default PartnersStrip;

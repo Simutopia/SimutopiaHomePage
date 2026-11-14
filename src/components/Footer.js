@@ -1,38 +1,90 @@
-import { Box, Container, Divider, Typography } from "@mui/material";
+import { Box, Button, Container, Link, Typography } from "@mui/material";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import { colors, fonts } from "../theme/tokens";
 
-const offices = [
-  { name: "USA Office", lines: ["17221 Broadoak Dr.", "Tampa, FL 33647"] },
-  {
-    name: "India Office",
-    lines: [
-      "Simutopia (India) Private Limited",
-      "4-60-5/4/1, Lawsons Bay Colony",
-      "Visakhapatnam, Andhra Pradesh 530017",
-    ],
-  },
-];
+const Footer = () => {
+  const { pathname } = useLocation();
+  const hideFooterCtas =
+    pathname === "/" || pathname.startsWith("/contact");
 
-const Footer = () => (
-  <Box component="footer" id="footer" sx={{ bgcolor: "#212529", color: "common.white", py: 3 }}>
-    <Container maxWidth="xl">
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" }, gap: 3 }}>
-        {offices.map(({ name, lines }) => (
-          <Box key={name}>
-            <Typography variant="h6" component="h2" sx={{ textDecoration: "underline" }}>
-              {name}
-            </Typography>
-            {lines.map((line) => (
-              <Typography key={line} variant="body2">{line}</Typography>
-            ))}
+  return (
+    <Box
+      component="footer"
+      id="footer"
+      sx={{
+        bgcolor: colors.white,
+        color: colors.muted,
+        fontFamily: fonts.sans,
+        py: { xs: 2.5, md: 3 },
+        borderTop: `1px solid ${colors.border}`,
+        "& .MuiTypography-root, & .MuiButton-root, & .MuiLink-root": {
+          fontFamily: fonts.sans,
+        },
+      }}
+    >
+      <Container
+        maxWidth="xl"
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: { xs: "flex-start", sm: "center" },
+          justifyContent: "space-between",
+          gap: 1.5,
+        }}
+      >
+        <Typography
+          variant="body2"
+          sx={{
+            fontFamily: fonts.sans,
+            color: colors.muted,
+            fontSize: "0.9rem",
+          }}
+        >
+          &copy; 2020-{new Date().getFullYear()} Simutopia, LLC.
+        </Typography>
+        {!hideFooterCtas ? (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2.5 }}>
+            <Link
+              href="mailto:consulting@simutopia.com"
+              underline="hover"
+              sx={{
+                fontFamily: fonts.sans,
+                color: colors.body,
+                fontSize: "0.9rem",
+                fontWeight: 500,
+                textDecoration: "none",
+              }}
+            >
+              consulting@simutopia.com
+            </Link>
+            <Button
+              component={RouterLink}
+              to="/contact"
+              variant="contained"
+              disableElevation
+              sx={{
+                px: 2.25,
+                py: 0.85,
+                fontFamily: fonts.sans,
+                fontWeight: 700,
+                fontSize: "0.9rem",
+                textTransform: "none",
+                borderRadius: 1.5,
+                bgcolor: colors.accentSoft,
+                color: colors.ink,
+                "&:hover": {
+                  bgcolor: colors.accent,
+                  color: colors.white,
+                },
+              }}
+            >
+              Talk to us
+            </Button>
           </Box>
-        ))}
-      </Box>
-      <Divider sx={{ my: 3, borderColor: "rgba(255,255,255,0.25)" }} />
-      <Typography variant="body2">
-        &copy; 2020-{new Date().getFullYear()} Simutopia, LLC.
-      </Typography>
-    </Container>
-  </Box>
-);
+        ) : null}
+      </Container>
+    </Box>
+  );
+};
 
 export default Footer;

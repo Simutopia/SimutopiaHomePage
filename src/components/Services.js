@@ -1,10 +1,12 @@
 import {
   AccountTree,
-  BarChart,
+  Architecture,
+  DirectionsWalk,
   Engineering,
   HourglassBottom,
   LaptopMac,
   Sync,
+  Tune,
 } from "@mui/icons-material";
 import {
   Box,
@@ -26,48 +28,63 @@ const productLink = (label, href) => (
 
 const services = [
   {
-    title: "Digital Twin Modeling",
+    title: "Physical-Systems (Plant / Digital-Twin) Modeling",
     icon: <Engineering fontSize="inherit" />,
     items: [
-      "Develop models describing dynamic behavior of physical systems involving multiple domains utilizing both first principles and data-driven approaches",
-      "Model fault dynamics to study the impact of failures at both component and subsystem levels on the behavior of the overall system",
-      "Create reduced order models that can be deployed in real-time control applications",
+      "Develop models describing the dynamic behavior of physical systems involving multiple domains—electrical, hydraulic, mechanical, and more—using both first-principles and data-driven approaches.",
       <>
-        Expertise in creating plant models using{" "}
+        Expertise creating plant models with{" "}
         {productLink("Simulink®", "https://www.mathworks.com/products/simulink.html?s_tid=hp_products_simulink")},{" "}
         {productLink("Simscape™", "https://www.mathworks.com/products/simscape.html")}, and{" "}
-        {productLink("Simscape™ Multibody™", "https://www.mathworks.com/products/simmechanics.html")}
+        {productLink("Simscape™ Multibody™", "https://www.mathworks.com/products/simmechanics.html")}.
       </>,
     ],
   },
   {
-    title: "Control Systems Modeling",
+    title: "System-Level Control Systems Modeling",
     icon: <Sync fontSize="inherit" />,
     items: [
-      "Develop closed-loop system models comprising plant dynamics and controller subsystems to design and analyze the controller behavior",
-      "Create supervisory control logic using state machines",
-      "Develop and test advanced motor control strategies for motion control applications",
+      "Develop closed-loop dynamic control system models to design and analyze controller behavior.",
       <>
-        Expertise in using{" "}
+        Expertise using{" "}
         {productLink("Simulink® Control Design™", "https://www.mathworks.com/products/simcontrol.html")},{" "}
         {productLink("System Identification Toolbox™", "https://www.mathworks.com/products/sysid.html")}, and{" "}
-        {productLink("Stateflow®", "https://www.mathworks.com/products/stateflow.html")}
-      </>,
-      <>
-        Generate embeddable controls software using{" "}
-        {productLink("Simulink® Coder™", "https://www.mathworks.com/products/simulink-coder.html")} toolchain
+        {productLink("Stateflow®", "https://www.mathworks.com/products/stateflow.html")}.
       </>,
     ],
   },
   {
-    title: "Training Simulators",
+    title: "Motion Control",
+    icon: <Tune fontSize="inherit" />,
+    items: [
+      "Develop advanced system-level motion control algorithms for robotics and machine automation applications.",
+    ],
+  },
+  {
+    title: "Design & Drawings",
+    icon: <Architecture fontSize="inherit" />,
+    items: [
+      <>
+        Provide design support and develop 3D CAD models. Expertise with{" "}
+        {productLink("SolidWorks®", "https://www.solidworks.com/")} and{" "}
+        {productLink("Onshape®", "https://www.onshape.com/")}.
+      </>,
+      <>
+        Perform structural integrity analysis with finite-element analysis (FEA). Expertise with{" "}
+        {productLink("Ansys Mechanical", "https://www.ansys.com/products/structures")}.
+      </>,
+      "Create 2D production drawings from 3D CAD assemblies.",
+    ],
+  },
+  {
+    title: "Training Simulator Platform",
     icon: <AccountTree fontSize="inherit" />,
     items: [
-      "Develop dynamic physical system models, including fault behaviors, and simulate them in pseudo-real time for deployment within simulator platforms",
+      "Develop system-level dynamic models that mimic a physical system, including fault behaviors, and run in pseudo-real time for deployment within simulator platforms.",
       <>
         Integrate dynamic models within 3D visualization environments such as{" "}
         {productLink("Unity®", "https://unity.com/")} and{" "}
-        {productLink("Unreal Engine®", "https://www.unrealengine.com/")}
+        {productLink("Unreal Engine®", "https://www.unrealengine.com/")}.
       </>,
     ],
   },
@@ -75,19 +92,19 @@ const services = [
     title: "Real-Time Simulation & Testing",
     icon: <HourglassBottom fontSize="inherit" />,
     items: [
-      "Develop and deploy control subsystem models using Processor-in-the-loop (PIL) framework for rapid control prototyping",
-      "Develop and deploy virtual plant models using Hardware-in-the-Loop (HIL) framework for automated testing of embedded controls software",
+      "Develop and deploy virtual plant subsystems in a Model-in-the-Loop (MIL) setup for unit and subsystem integration testing.",
+      "Develop and deploy control subsystem models in a Processor-in-the-Loop (PIL) setup with the plant model for rapid prototyping of control algorithms.",
+      "Develop and deploy virtual plant models in a Hardware-in-the-Loop (HIL) setup and create automated tests for embedded control systems software.",
       <>
-        Expertise in working with{" "}
-        {productLink("Simulink® Real-Time™", "https://www.mathworks.com/products/simulink-real-time.html")} and{" "}
-        {productLink("Speedgoat", "https://www.speedgoat.com/")}
+        Expertise with{" "}
+        {productLink("Speedgoat", "https://www.speedgoat.com/")} hardware-based HIL platforms and{" "}
+        {productLink("Simulink® Real-Time™", "https://www.mathworks.com/products/simulink-real-time.html")}.
       </>,
       <>
-        Expertise in working with{" "}
-        {productLink("Beckhoff® MATLAB® Suite", "https://www.beckhoff.com/en-us/products/automation/twincat/te1xxx-twincat-3-engineering/te1410.html")}{" "}
-        (TE1400, TE1401 & TE1410) for deploying{" "}
-        {productLink("Simulink®", "https://www.mathworks.com/products/simulink.html?s_tid=hp_products_simulink")} models on{" "}
-        {productLink("Beckhoff®", "https://www.beckhoff.com/en-us/")} PLCs
+        Expertise deploying MATLAB and Simulink based functions and models on{" "}
+        {productLink("Beckhoff®", "https://www.beckhoff.com/en-us/")} PLCs using TwinCAT (
+        {productLink("TE1400 / TE1401 / TE1410", "https://www.beckhoff.com/en-us/products/automation/twincat/te1xxx-twincat-3-engineering/te1410.html")}
+        ).
       </>,
     ],
   },
@@ -96,25 +113,23 @@ const services = [
     icon: <LaptopMac fontSize="inherit" />,
     items: [
       <>
-        Develop graphical user interface (GUI) applications using{" "}
-        {productLink("MATLAB® App Designer", "https://www.mathworks.com/products/matlab/app-designer.html")}
+        Develop GUI applications that leverage MATLAB & Simulink based code and models in the backend, including compiled standalone modules integrated with graphical environments.
       </>,
       <>
-        Develop apps that can run within{" "}
-        {productLink("MATLAB®", "https://www.mathworks.com/products/matlab.html?s_tid=hp_products_matlab")} environment or as a compiled standalone executable
+        Expertise with{" "}
+        {productLink("MATLAB®", "https://www.mathworks.com/products/matlab.html?s_tid=hp_products_matlab")} and{" "}
+        {productLink("Simulink® Compiler", "https://www.mathworks.com/products/simulink-compiler.html")} tooling.
       </>,
     ],
   },
   {
-    title: "Data Analysis",
-    icon: <BarChart fontSize="inherit" />,
+    title: "Human Flow (Pedestrian) Simulations",
+    icon: <DirectionsWalk fontSize="inherit" />,
     items: [
       <>
-        Leverage built-in{" "}
-        {productLink("MATLAB®", "https://www.mathworks.com/products/matlab.html?s_tid=hp_products_matlab")} functions and create custom tools for statistical analysis, machine learning, and signal processing
+        Simulate people motion in 3D environments for spatial design analysis—safety, efficiency, and accessibility. Expertise with{" "}
+        {productLink("Oasys MassMotion", "https://www.oasys-software.com/products/massmotion/")}.
       </>,
-      "Simulate plant models in both nominal and fault modes to synthesize data for machine learning applications",
-      "Use parallel computing techniques for solving computationally and data intensive problems",
     ],
   },
 ];
@@ -126,8 +141,21 @@ const Services = () => (
         SERVICES
       </Typography>
     </Box>
-    <Box sx={{ bgcolor: "#5e6063", pt: 5, pb: 15 }}>
+    <Box sx={{ bgcolor: "#5e6063", pt: 5, pb: 8 }}>
       <Container maxWidth="xl">
+        <Typography
+          sx={{
+            color: "rgba(255,255,255,0.85)",
+            textAlign: "center",
+            maxWidth: 720,
+            mx: "auto",
+            mb: 4,
+            fontSize: { xs: "1rem", md: "1.15rem" },
+          }}
+        >
+          Modeling, simulation, and analysis services that accelerate design and innovation
+          through model-based design.
+        </Typography>
         <Box
           sx={{
             display: "grid",
@@ -159,6 +187,24 @@ const Services = () => (
             </Card>
           ))}
         </Box>
+        <Typography
+          variant="caption"
+          component="p"
+          sx={{
+            display: "block",
+            mt: 4,
+            color: "rgba(255,255,255,0.65)",
+            maxWidth: 900,
+            mx: "auto",
+            textAlign: "center",
+            lineHeight: 1.5,
+          }}
+        >
+          MATLAB, Simulink, Stateflow, Simulink Control Design, System Identification, Simscape,
+          Simscape Multibody, and Simulink Real-Time are MathWorks® software products. TE1400,
+          TE1401, TE1410, and TwinCAT® are Beckhoff® software products. Other product names are
+          trademarks of their respective owners.
+        </Typography>
       </Container>
     </Box>
   </Box>
