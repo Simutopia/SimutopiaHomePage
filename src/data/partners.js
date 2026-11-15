@@ -1,9 +1,10 @@
 const partners = [
   {
     id: "mathworks",
-    name: "MathWorks",
+    name: "MathWorks Partner",
     href: "https://www.mathworks.com/",
-    logo: "/images/partners/mathworks.svg",
+    logo: "/images/partners/mathworks-partner.png",
+    wideLogo: true,
   },
   {
     id: "speedgoat",
@@ -13,9 +14,10 @@ const partners = [
   },
   {
     id: "beckhoff",
-    name: "Beckhoff Automation",
+    name: "BIG Beckhoff Integrator Group",
     href: "https://www.beckhoff.com/",
-    logo: "/images/partners/beckhoff.svg",
+    logo: "/images/partners/beckhoff-big.png",
+    tallLogo: true,
   },
   {
     id: "becker3d",

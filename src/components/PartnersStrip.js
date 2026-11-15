@@ -66,7 +66,9 @@ const PartnersStrip = () => (
                 alignItems: "center",
                 justifyContent: "center",
                 gap: partner.wordmark ? 1 : 0,
-                minHeight: { xs: 64, md: 72 },
+                minHeight: partner.tallLogo
+                  ? { xs: 88, md: 104 }
+                  : { xs: 64, md: 72 },
                 px: partner.logoOnDark ? 1 : 1.5,
                 py: partner.logoOnDark ? 1 : 0,
                 borderRadius: partner.logoOnDark ? 1.5 : 0,
@@ -84,8 +86,18 @@ const PartnersStrip = () => (
                 src={partner.logo}
                 alt={partner.wordmark ? "" : partner.name}
                 sx={{
-                  maxWidth: partner.wordmark ? { xs: 36, md: 44 } : "100%",
-                  maxHeight: { xs: 44, md: 52 },
+                  maxWidth: partner.wordmark
+                    ? { xs: 36, md: 44 }
+                    : partner.wideLogo
+                      ? { xs: 148, md: 176 }
+                      : partner.tallLogo
+                        ? { xs: 92, md: 110 }
+                        : "100%",
+                  maxHeight: partner.wideLogo
+                    ? { xs: 48, md: 56 }
+                    : partner.tallLogo
+                      ? { xs: 80, md: 96 }
+                      : { xs: 44, md: 52 },
                   width: "auto",
                   height: "auto",
                   objectFit: "contain",
