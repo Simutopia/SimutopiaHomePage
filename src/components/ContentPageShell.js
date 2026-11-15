@@ -13,7 +13,7 @@ const atmosphere = "mist";
 /**
  * Shared shell for public content pages (Products, Services, Case Studies, …).
  */
-const ContentPageShell = ({ title, intro, introMaxWidth, children }) => (
+const ContentPageShell = ({ title, intro, introMaxWidth, beforeTitle, children }) => (
   <Box
     component="section"
     sx={{
@@ -24,6 +24,9 @@ const ContentPageShell = ({ title, intro, introMaxWidth, children }) => (
   >
     <AtmosphereGrid variant={atmosphere} />
     <Container maxWidth="lg" sx={{ position: "relative" }}>
+      {beforeTitle ? (
+        <Box sx={{ mb: { xs: 1.5, md: 2 } }}>{beforeTitle}</Box>
+      ) : null}
       <Typography variant="h2" component="h1" sx={pageTitleSx}>
         {title}
       </Typography>

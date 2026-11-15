@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Button, IconButton, Typography, useMediaQuery } from "@mui/material";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
@@ -10,6 +10,9 @@ const slides = [
     title: "Heavy Equipment",
     subtitle: "System-level machine models, powertrain, and controls",
     image: "/images/heavyEquipment.png",
+    video: "/casestudies/excavator-system-design/excavator-system-design.mp4",
+    caseStudyPath: "/case-studies/excavator-system-design",
+    caseStudyLabel: "Excavator System Design",
   },
   {
     title: "Themed Entertainment",
@@ -33,15 +36,34 @@ const INTERVAL_MS = 4500;
 const UseCaseCarousel = () => {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const videoRefs = useRef({});
   const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   useEffect(() => {
     if (paused || prefersReducedMotion) return undefined;
+    const active = slides[index];
+    // Don't auto-advance while a video slide is playing in the hero.
+    if (active.video) return undefined;
     const timer = window.setInterval(() => {
       setIndex((current) => (current + 1) % slides.length);
     }, INTERVAL_MS);
     return () => window.clearInterval(timer);
-  }, [paused, prefersReducedMotion]);
+  }, [paused, prefersReducedMotion, index]);
+
+  useEffect(() => {
+    Object.entries(videoRefs.current).forEach(([slideIndex, node]) => {
+      if (!node) return;
+      if (Number(slideIndex) === index && !prefersReducedMotion) {
+        node.currentTime = 0;
+        const playPromise = node.play();
+        if (playPromise?.catch) {
+          playPromise.catch(() => {});
+        }
+      } else {
+        node.pause();
+      }
+    });
+  }, [index, prefersReducedMotion]);
 
   const active = slides[index];
 
@@ -74,17 +96,40 @@ const UseCaseCarousel = () => {
             pointerEvents: slideIndex === index ? "auto" : "none",
           }}
         >
-          <Box
-            component="img"
-            src={slide.image}
-            alt=""
-            sx={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-            }}
-          />
+          {slide.video && !prefersReducedMotion ? (
+            <Box
+              component="video"
+              ref={(node) => {
+                if (node) videoRefs.current[slideIndex] = node;
+              }}
+              src={slide.video}
+              poster={slide.image}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                objectPosition: "center",
+                display: "block",
+                bgcolor: colors.dark,
+              }}
+            />
+          ) : (
+            <Box
+              component="img"
+              src={slide.image}
+              alt=""
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+          )}
           <Box
             sx={{
               position: "absolute",
@@ -110,17 +155,6 @@ const UseCaseCarousel = () => {
           maxWidth: 720,
         }}
       >
-        <Typography
-          variant="overline"
-          sx={{
-            fontFamily: fonts.sans,
-            letterSpacing: "0.12em",
-            opacity: 0.85,
-            mb: 1,
-          }}
-        >
-          Use case
-        </Typography>
         <Typography
           component="h1"
           sx={{
@@ -174,26 +208,49 @@ const UseCaseCarousel = () => {
           >
             Talk to us
           </Button>
-          <Box
-            component={RouterLink}
-            to="/services"
-            sx={{
-              ...buttonLabelSx,
-              color: "common.white",
-              textDecoration: "none",
-              fontWeight: 600,
-              opacity: 0.9,
-              borderBottom: "1px solid rgba(255,255,255,0.45)",
-              pb: 0.15,
-              transition: "opacity 160ms ease, border-color 160ms ease",
-              "&:hover": {
-                opacity: 1,
-                borderColor: "common.white",
-              },
-            }}
-          >
-            See what we do
-          </Box>
+          {active.caseStudyPath ? (
+            <Box
+              component={RouterLink}
+              to={active.caseStudyPath}
+              sx={{
+                ...buttonLabelSx,
+                color: "common.white",
+                textDecoration: "none",
+                fontWeight: 600,
+                opacity: 0.95,
+                borderBottom: "1px solid rgba(255,255,255,0.55)",
+                pb: 0.15,
+                transition: "opacity 160ms ease, border-color 160ms ease",
+                "&:hover": {
+                  opacity: 1,
+                  borderColor: "common.white",
+                },
+              }}
+            >
+              View case study
+            </Box>
+          ) : (
+            <Box
+              component={RouterLink}
+              to="/services"
+              sx={{
+                ...buttonLabelSx,
+                color: "common.white",
+                textDecoration: "none",
+                fontWeight: 600,
+                opacity: 0.9,
+                borderBottom: "1px solid rgba(255,255,255,0.45)",
+                pb: 0.15,
+                transition: "opacity 160ms ease, border-color 160ms ease",
+                "&:hover": {
+                  opacity: 1,
+                  borderColor: "common.white",
+                },
+              }}
+            >
+              See what we do
+            </Box>
+          )}
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>

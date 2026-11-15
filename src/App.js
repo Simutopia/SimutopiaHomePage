@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
 import ServicesPage from "./pages/ServicesPage";
 import CaseStudiesPage from "./pages/CaseStudiesPage";
+import CaseStudyDetailPage from "./pages/CaseStudyDetailPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import RbacApp from "./rbac/RbacApp";
@@ -47,6 +48,10 @@ function App() {
             <Route path="products" element={<ProductsPage />} />
             <Route path="services" element={<ServicesPage />} />
             <Route path="case-studies" element={<CaseStudiesPage />} />
+            <Route
+              path="case-studies/:slug"
+              element={<CaseStudyDetailPage />}
+            />
             <Route
               path="industries"
               element={<Navigate to="/services#industries" replace />}

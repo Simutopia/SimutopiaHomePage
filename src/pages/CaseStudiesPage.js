@@ -1,24 +1,27 @@
 import { Box, Typography } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import ContentPageShell from "../components/ContentPageShell";
 import H2Formula from "../components/H2Formula";
+import caseStudies from "../data/caseStudies";
 import {
   contentItemTitleSx,
   contentStackGap,
+  colors,
   logoAccentCycle,
   mutedTextSx,
 } from "../theme/tokens";
 
-const caseStudies = [
-  { title: "Excavator" },
-  { title: "Realistic Soil Loads Modeling using DEM" },
-  { title: "Wheel Loader" },
-  { title: "Autonomous mining machine" },
-  { title: "Forklift Stability Analysis" },
-  { title: <><H2Formula /> Fuel Cell Power System</> },
-  { title: <><H2Formula /> Refueling</> },
-  { title: "Animatronic System Dynamics" },
-  { title: "Human Flow Simulation" },
-  { title: "Traffic Flow Simulation" },
+/** Listing titles for studies not yet fully authored */
+const upcomingTitles = [
+  "Realistic Soil Loads Modeling using DEM",
+  "Wheel Loader",
+  "Autonomous mining machine",
+  "Forklift Stability Analysis",
+  <><H2Formula /> Fuel Cell Power System</>,
+  <><H2Formula /> Refueling</>,
+  "Animatronic System Dynamics",
+  "Human Flow Simulation",
+  "Traffic Flow Simulation",
 ];
 
 const CaseStudiesPage = () => (
@@ -41,11 +44,44 @@ const CaseStudiesPage = () => (
     >
       {caseStudies.map((study, index) => (
         <Box
-          key={index}
+          key={study.slug}
           component="li"
           sx={{
             pl: 2,
             borderLeft: `3px solid ${logoAccentCycle[index % logoAccentCycle.length]}`,
+          }}
+        >
+          <Typography
+            component={RouterLink}
+            to={`/case-studies/${study.slug}`}
+            sx={{
+              ...contentItemTitleSx,
+              mb: 0.35,
+              display: "inline-block",
+              textDecoration: "none",
+              color: colors.ink,
+              borderBottom: `1px solid transparent`,
+              "&:hover": {
+                borderBottomColor: colors.accentSoft,
+                color: colors.logoWordmark,
+              },
+            }}
+          >
+            {study.title}
+          </Typography>
+          <Typography sx={mutedTextSx}>{study.summary}</Typography>
+        </Box>
+      ))}
+
+      {upcomingTitles.map((title, index) => (
+        <Box
+          key={typeof title === "string" ? title : index}
+          component="li"
+          sx={{
+            pl: 2,
+            borderLeft: `3px solid ${
+              logoAccentCycle[(caseStudies.length + index) % logoAccentCycle.length]
+            }`,
           }}
         >
           <Typography
@@ -55,7 +91,7 @@ const CaseStudiesPage = () => (
               mb: 0.35,
             }}
           >
-            {study.title}
+            {title}
           </Typography>
           <Typography sx={mutedTextSx}>Details coming soon.</Typography>
         </Box>

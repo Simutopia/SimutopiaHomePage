@@ -1,11 +1,15 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import ContentPageShell from "../components/ContentPageShell";
 import H2Formula from "../components/H2Formula";
+import { getCaseStudiesForKeyword } from "../data/caseStudies";
 import {
   bodyTextSx,
+  colors,
   contentItemTitleSx,
   contentStackGap,
   logoAccentCycle,
+  mutedTextSx,
   sectionPy,
   stickyScrollMargin,
   subsectionHeadingSx,
@@ -139,42 +143,83 @@ const industries = [
   },
 ];
 
-const ContentGroup = ({ title, items, accentColor, reversed = false }) => (
-  <Box
-    component="article"
-    sx={{
-      width: "100%",
-      maxWidth: { xs: "100%", md: 760 },
-      ml: reversed ? { xs: 0, md: "auto" } : 0,
-      // Block shifts left/right; bullets stay before the text (normal LTR).
-      pl: 2,
-      pr: { xs: 0, md: reversed ? 0 : 0 },
-      borderLeft: `3px solid ${accentColor}`,
-      textAlign: "left",
-    }}
-  >
-    <Typography component="h3" sx={contentItemTitleSx}>
-      {title}
-    </Typography>
-    <List disablePadding>
-      {items.map((item, index) => (
-        <ListItem
-          key={typeof item === "string" ? item : index}
-          disableGutters
-          sx={{
-            display: "list-item",
-            listStyleType: "disc",
-            ml: 2.25,
-            py: 0.4,
-            pl: 0.5,
-          }}
-        >
-          <Typography sx={bodyTextSx}>{item}</Typography>
-        </ListItem>
-      ))}
-    </List>
-  </Box>
-);
+const ContentGroup = ({ title, items, accentColor, reversed = false }) => {
+  const relatedStudies = getCaseStudiesForKeyword(title);
+
+  return (
+    <Box
+      component="article"
+      sx={{
+        width: "100%",
+        maxWidth: { xs: "100%", md: 760 },
+        ml: reversed ? { xs: 0, md: "auto" } : 0,
+        // Block shifts left/right; bullets stay before the text (normal LTR).
+        pl: 2,
+        borderLeft: `3px solid ${accentColor}`,
+        textAlign: "left",
+      }}
+    >
+      <Typography component="h3" sx={contentItemTitleSx}>
+        {title}
+      </Typography>
+      <List disablePadding>
+        {items.map((item, index) => (
+          <ListItem
+            key={typeof item === "string" ? item : index}
+            disableGutters
+            sx={{
+              display: "list-item",
+              listStyleType: "disc",
+              ml: 2.25,
+              py: 0.4,
+              pl: 0.5,
+            }}
+          >
+            <Typography sx={bodyTextSx}>{item}</Typography>
+          </ListItem>
+        ))}
+      </List>
+      {relatedStudies.length > 0 ? (
+        <Box sx={{ mt: 1.25 }}>
+          <Typography
+            sx={{
+              ...mutedTextSx,
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              mb: 0.5,
+            }}
+          >
+            Case studies
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+            {relatedStudies.map((study) => (
+              <Typography
+                key={study.slug}
+                component={RouterLink}
+                to={`/case-studies/${study.slug}`}
+                sx={{
+                  ...bodyTextSx,
+                  color: colors.logoWordmark,
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  width: "fit-content",
+                  borderBottom: `1px solid ${colors.accentSoft}`,
+                  "&:hover": {
+                    color: colors.ink,
+                  },
+                }}
+              >
+                {study.title} →
+              </Typography>
+            ))}
+          </Box>
+        </Box>
+      ) : null}
+    </Box>
+  );
+};
 
 const ServicesPage = () => (
   <ContentPageShell
