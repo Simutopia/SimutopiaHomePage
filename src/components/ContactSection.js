@@ -5,7 +5,15 @@ import OfficeGlobe from "./OfficeGlobe";
 import FlagIcon from "./FlagIcon";
 import offices from "../data/offices";
 import { AtmosphereGrid, getLightAtmosphereSx } from "../theme/atmosphere";
-import { colors, fonts } from "../theme/tokens";
+import {
+  bodyTextSx,
+  colors,
+  fonts,
+  mutedTextSx,
+  pageTitleSx,
+  sectionPy,
+  valueTitleSx,
+} from "../theme/tokens";
 
 const atmosphere = "blueWash";
 
@@ -18,7 +26,7 @@ const ContactSection = () => {
       id="contactTarget"
       sx={{
         ...getLightAtmosphereSx(atmosphere),
-        py: { xs: 6, md: 8 },
+        py: sectionPy,
       }}
     >
       <AtmosphereGrid variant={atmosphere} />
@@ -27,13 +35,8 @@ const ContactSection = () => {
           variant="h2"
           component="h2"
           sx={{
-            mb: { xs: 4, md: 5 },
-            fontSize: { xs: "1.15rem", md: "1.35rem" },
-            fontWeight: 500,
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            textAlign: "center",
-            color: colors.ink,
+            ...pageTitleSx,
+            mb: { xs: 2.5, md: 3 },
           }}
         >
           How can we help you?
@@ -43,7 +46,7 @@ const ContactSection = () => {
           sx={{
             display: "grid",
             gridTemplateColumns: { xs: "1fr", lg: "minmax(0, 1.1fr) minmax(0, 0.9fr)" },
-            gap: { xs: 3, md: 4 },
+            gap: { xs: 2.5, md: 3 },
             alignItems: "center",
           }}
         >
@@ -56,14 +59,11 @@ const ContactSection = () => {
             <Typography
               variant="body1"
               sx={{
+                ...bodyTextSx,
                 display: "flex",
                 alignItems: "center",
                 flexWrap: "wrap",
                 gap: 1,
-                fontFamily: fonts.sans,
-                fontSize: "1rem",
-                fontWeight: 400,
-                color: colors.body,
               }}
             >
               Reach us
@@ -86,11 +86,9 @@ const ContactSection = () => {
             <Typography
               component="h3"
               sx={{
-                fontFamily: fonts.sans,
-                fontSize: "1.25rem",
+                ...valueTitleSx,
                 fontWeight: 600,
                 pt: 0.5,
-                color: colors.ink,
               }}
             >
               Our Offices
@@ -123,14 +121,12 @@ const ContactSection = () => {
                   <Typography
                     component="h3"
                     sx={{
-                      fontFamily: "inherit",
-                      fontSize: "1.25rem",
+                      ...valueTitleSx,
                       fontWeight: 600,
                       mb: 1,
                       display: "flex",
                       alignItems: "center",
                       gap: 1.25,
-                      color: colors.ink,
                     }}
                   >
                     <FlagIcon
@@ -146,12 +142,7 @@ const ContactSection = () => {
                       <Typography
                         key={line}
                         variant="body1"
-                        sx={{
-                          fontFamily: "inherit",
-                          fontSize: "1rem",
-                          fontWeight: 400,
-                          color: colors.body,
-                        }}
+                        sx={bodyTextSx}
                       >
                         {line}
                       </Typography>
@@ -164,13 +155,11 @@ const ContactSection = () => {
                     underline="hover"
                     onClick={(event) => event.stopPropagation()}
                     sx={{
+                      ...mutedTextSx,
                       display: "inline-flex",
                       alignItems: "center",
                       gap: 1,
-                      fontFamily: "inherit",
-                      fontSize: "1rem",
-                      fontWeight: 400,
-                      color: colors.muted,
+                      textDecoration: "none",
                     }}
                   >
                     <PhoneOutlined fontSize="small" />

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import NavbarScrollButtons from "./NavbarScrollButtons";
-import { colors, fonts } from "../theme/tokens";
+import { buttonLabelSx, colors, fonts } from "../theme/tokens";
 
-export const HEADER_HEIGHT = 72;
+export const HEADER_HEIGHT = 56;
 
 const Header = () => {
   const { pathname } = useLocation();
@@ -27,17 +27,18 @@ const Header = () => {
         color: colors.ink,
         fontFamily: fonts.sans,
         bgcolor: overDarkHero
-          ? "rgba(255,255,255,0.78)"
-          : "rgba(255,255,255,0.72)",
-        backgroundImage: "none",
-        backdropFilter: "blur(18px) saturate(1.25)",
-        WebkitBackdropFilter: "blur(18px) saturate(1.25)",
+          ? "rgba(255,255,255,0.38)"
+          : "rgba(255,255,255,0.42)",
+        backgroundImage:
+          "linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.08) 100%)",
+        backdropFilter: "blur(28px) saturate(1.45)",
+        WebkitBackdropFilter: "blur(28px) saturate(1.45)",
         borderBottom: `1px solid ${
-          overDarkHero ? "rgba(255,255,255,0.35)" : colors.border
+          overDarkHero ? "rgba(255,255,255,0.42)" : "rgba(255,255,255,0.55)"
         }`,
         boxShadow: scrolled
-          ? "0 8px 24px rgba(33, 37, 41, 0.06)"
-          : "none",
+          ? "0 8px 28px rgba(33, 37, 41, 0.05)"
+          : "0 1px 0 rgba(255,255,255,0.35) inset",
         transition:
           "background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease",
         "& .MuiTypography-root, & .MuiButton-root, & .MuiIconButton-root": {
@@ -96,17 +97,15 @@ const Header = () => {
           to="/workspace/signin"
           variant="outlined"
           sx={{
+            ...buttonLabelSx,
             ml: { xs: "auto", lg: 1 },
             flexShrink: 0,
-            fontFamily: fonts.sans,
             color: colors.body,
             borderColor: "rgba(43, 46, 50, 0.22)",
-            textTransform: "none",
             fontWeight: 600,
-            fontSize: "0.9rem",
             letterSpacing: "0.02em",
             px: 1.75,
-            py: 0.6,
+            py: 0.45,
             borderRadius: 1.25,
             "&:hover": {
               borderColor: colors.ink,

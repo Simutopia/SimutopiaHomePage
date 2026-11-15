@@ -1,6 +1,6 @@
 import { Box, Button, Container, Link, Typography } from "@mui/material";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { colors, fonts } from "../theme/tokens";
+import { buttonLabelSx, colors, fonts, mutedTextSx } from "../theme/tokens";
 
 const Footer = () => {
   const { pathname } = useLocation();
@@ -15,7 +15,7 @@ const Footer = () => {
         bgcolor: colors.white,
         color: colors.muted,
         fontFamily: fonts.sans,
-        py: { xs: 2.5, md: 3 },
+        py: { xs: 1.5, md: 1.75 },
         borderTop: `1px solid ${colors.border}`,
         "& .MuiTypography-root, & .MuiButton-root, & .MuiLink-root": {
           fontFamily: fonts.sans,
@@ -35,23 +35,22 @@ const Footer = () => {
         <Typography
           variant="body2"
           sx={{
-            fontFamily: fonts.sans,
-            color: colors.muted,
-            fontSize: "0.9rem",
+            ...mutedTextSx,
+            fontSize: "0.82rem",
           }}
         >
           &copy; 2020-{new Date().getFullYear()} Simutopia, LLC.
         </Typography>
         {!hideFooterCtas ? (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2.5 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Link
               href="mailto:consulting@simutopia.com"
               underline="hover"
               sx={{
-                fontFamily: fonts.sans,
-                color: colors.body,
-                fontSize: "0.9rem",
+                ...mutedTextSx,
+                fontSize: "0.82rem",
                 fontWeight: 500,
+                color: colors.body,
                 textDecoration: "none",
               }}
             >
@@ -63,13 +62,12 @@ const Footer = () => {
               variant="contained"
               disableElevation
               sx={{
-                px: 2.25,
-                py: 0.85,
-                fontFamily: fonts.sans,
+                ...buttonLabelSx,
+                px: 1.75,
+                py: 0.55,
                 fontWeight: 700,
-                fontSize: "0.9rem",
-                textTransform: "none",
-                borderRadius: 1.5,
+                fontSize: "0.82rem",
+                borderRadius: 1.25,
                 bgcolor: colors.accentSoft,
                 color: colors.ink,
                 "&:hover": {

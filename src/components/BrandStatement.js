@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Box, Container, Typography, useMediaQuery } from "@mui/material";
 import { keyframes } from "@mui/system";
 import { AtmosphereGrid, getLightAtmosphereSx } from "../theme/atmosphere";
-import { colors } from "../theme/tokens";
+import { colors, fonts, sectionPy } from "../theme/tokens";
 
 const atmosphere = "quiet";
 
@@ -96,7 +96,7 @@ const BrandStatement = () => {
         display: "flex",
         alignItems: "center",
         px: { xs: 2, md: 3 },
-        py: { xs: 5, md: 6 },
+        py: sectionPy,
       }}
     >
       <AtmosphereGrid variant={atmosphere} />
@@ -148,6 +148,7 @@ const BrandStatement = () => {
               mx: { xs: "auto", md: 0 },
               width: "100%",
               maxWidth: { xs: 420, md: 440 },
+              fontFamily: fonts.sans,
               fontStyle: "italic",
               fontWeight: 300,
               fontSize: { xs: "1.15rem", sm: "1.25rem", md: "1.45rem" },

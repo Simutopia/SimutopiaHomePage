@@ -1,24 +1,15 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
 import ContentPageShell from "../components/ContentPageShell";
-import { colors, fonts } from "../theme/tokens";
-
-/** Readable H₂ — larger than default Unicode/HTML subscript */
-const H2Formula = () => (
-  <Box component="span" sx={{ whiteSpace: "nowrap" }}>
-    H
-    <Box
-      component="span"
-      sx={{
-        fontSize: "0.78em",
-        fontWeight: 600,
-        verticalAlign: "-0.15em",
-        ml: "0.02em",
-      }}
-    >
-      2
-    </Box>
-  </Box>
-);
+import H2Formula from "../components/H2Formula";
+import {
+  bodyTextSx,
+  contentItemTitleSx,
+  contentStackGap,
+  logoAccentCycle,
+  sectionPy,
+  stickyScrollMargin,
+  subsectionHeadingSx,
+} from "../theme/tokens";
 
 /** Areas of Expertise ← simutopia.com Services section */
 const expertiseAreas = [
@@ -148,48 +139,21 @@ const industries = [
   },
 ];
 
-const sectionHeadingSx = {
-  fontFamily: fonts.sans,
-  fontSize: { xs: "1.35rem", md: "1.5rem" },
-  fontWeight: 700,
-  color: colors.ink,
-  mb: { xs: 2.5, md: 3 },
-  pb: 1,
-  borderBottom: `1px solid ${colors.borderStrong}`,
-};
-
-const itemTitleSx = {
-  fontFamily: fonts.sans,
-  fontSize: { xs: "1.05rem", md: "1.12rem" },
-  fontWeight: 650,
-  color: colors.ink,
-  mb: 0.75,
-};
-
-const itemBodySx = {
-  fontFamily: fonts.sans,
-  fontSize: "0.95rem",
-  lineHeight: 1.55,
-  color: colors.body,
-};
-
-/** Same cycle as QCOLT / logo mark: blue → red → yellow → green */
-const logoAccentCycle = [
-  colors.logoBlue,
-  colors.logoRed,
-  colors.logoYellow,
-  colors.logoGreen,
-];
-
-const ContentGroup = ({ title, items, accentColor }) => (
+const ContentGroup = ({ title, items, accentColor, reversed = false }) => (
   <Box
     component="article"
     sx={{
+      width: "100%",
+      maxWidth: { xs: "100%", md: 760 },
+      ml: reversed ? { xs: 0, md: "auto" } : 0,
+      // Block shifts left/right; bullets stay before the text (normal LTR).
       pl: 2,
+      pr: { xs: 0, md: reversed ? 0 : 0 },
       borderLeft: `3px solid ${accentColor}`,
+      textAlign: "left",
     }}
   >
-    <Typography component="h3" sx={itemTitleSx}>
+    <Typography component="h3" sx={contentItemTitleSx}>
       {title}
     </Typography>
     <List disablePadding>
@@ -205,7 +169,7 @@ const ContentGroup = ({ title, items, accentColor }) => (
             pl: 0.5,
           }}
         >
-          <Typography sx={itemBodySx}>{item}</Typography>
+          <Typography sx={bodyTextSx}>{item}</Typography>
         </ListItem>
       ))}
     </List>
@@ -221,16 +185,16 @@ const ServicesPage = () => (
     <Box
       id="areas-of-expertise"
       component="section"
-      sx={{ mb: { xs: 6, md: 8 }, scrollMarginTop: { xs: 88, md: 104 } }}
+      sx={{ mb: sectionPy, scrollMarginTop: stickyScrollMargin }}
     >
-      <Typography component="h2" sx={sectionHeadingSx}>
+      <Typography component="h2" sx={subsectionHeadingSx}>
         Areas of Expertise
       </Typography>
       <Box
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "1fr", md: "repeat(2, minmax(0, 1fr))" },
-          gap: { xs: 3, md: 4 },
+          gap: contentStackGap,
         }}
       >
         {expertiseAreas.map((group, index) => (
@@ -247,17 +211,17 @@ const ServicesPage = () => (
     <Box
       id="industries"
       component="section"
-      sx={{ scrollMarginTop: { xs: 88, md: 104 } }}
+      sx={{ scrollMarginTop: stickyScrollMargin }}
     >
-      <Typography component="h2" sx={sectionHeadingSx}>
+      <Typography component="h2" sx={subsectionHeadingSx}>
         Industries
       </Typography>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: { xs: 3, md: 3.5 },
-          maxWidth: 820,
+          gap: contentStackGap,
+          width: "100%",
         }}
       >
         {industries.map((group, index) => (
@@ -266,6 +230,7 @@ const ServicesPage = () => (
             title={group.title}
             items={group.items}
             accentColor={logoAccentCycle[index % logoAccentCycle.length]}
+            reversed={index % 2 === 1}
           />
         ))}
       </Box>

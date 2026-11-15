@@ -35,7 +35,7 @@ const navButtonSx = (active) => ({
   color: active ? colors.ink : colors.body,
   minWidth: "auto",
   px: 1.25,
-  py: 0.75,
+  py: 0.5,
   borderRadius: 1,
   position: "relative",
   "&::after": {

@@ -1,7 +1,16 @@
 import { Box, Container, Typography } from "@mui/material";
 import coreValues from "../data/coreValues";
 import { AtmosphereGrid, getLightAtmosphereSx } from "../theme/atmosphere";
-import { colors, sectionIntroSx, sectionTitleSx } from "../theme/tokens";
+import {
+  bodyTextSx,
+  colors,
+  mutedTextSx,
+  sectionIntroMb,
+  sectionIntroSx,
+  sectionPy,
+  sectionTitleSx,
+  valueTitleSx,
+} from "../theme/tokens";
 
 const atmosphere = "greenWash";
 
@@ -11,7 +20,7 @@ const CoreValuesSection = () => (
     aria-label="Core Values"
     sx={{
       ...getLightAtmosphereSx(atmosphere),
-      py: { xs: 6, md: 8 },
+      py: sectionPy,
       borderTop: `1px solid ${colors.border}`,
     }}
   >
@@ -23,7 +32,7 @@ const CoreValuesSection = () => (
         sx={{
           ...sectionTitleSx,
           my: 0,
-          mb: 1,
+          mb: { xs: 1, md: 1.15 },
         }}
       >
         Core Values
@@ -32,7 +41,7 @@ const CoreValuesSection = () => (
         sx={{
           ...sectionIntroSx,
           maxWidth: 640,
-          mb: { xs: 4, md: 5 },
+          mb: sectionIntroMb,
         }}
       >
         These five values guide how we work, hire, and grow together — our core DNA:{" "}
@@ -64,8 +73,8 @@ const CoreValuesSection = () => (
             xs: "1fr",
             md: "repeat(2, minmax(0, 1fr))",
           },
-          columnGap: { md: 5, lg: 6 },
-          rowGap: { xs: 3.5, md: 4.5 },
+          columnGap: { md: 4, lg: 5 },
+          rowGap: { xs: 2.25, md: 2.75 },
           maxWidth: 960,
           mx: "auto",
         }}
@@ -92,11 +101,8 @@ const CoreValuesSection = () => (
             <Typography
               component="h4"
               sx={{
-                fontSize: { xs: "1.25rem", md: "1.4rem" },
-                fontWeight: 700,
-                lineHeight: 1.25,
-                mb: 0.4,
-                color: colors.ink,
+                ...valueTitleSx,
+                mb: 0.25,
               }}
             >
               <Box component="span" sx={{ color: value.color }}>
@@ -106,11 +112,11 @@ const CoreValuesSection = () => (
             </Typography>
             <Typography
               sx={{
+                ...mutedTextSx,
                 fontStyle: "italic",
                 fontWeight: 500,
-                fontSize: { xs: "0.95rem", md: "1rem" },
                 color: colors.soft,
-                mb: 1.15,
+                mb: 0.75,
               }}
             >
               {value.mantra}
@@ -127,10 +133,8 @@ const CoreValuesSection = () => (
                   key={point}
                   component="li"
                   sx={{
-                    fontSize: { xs: "0.95rem", md: "1rem" },
-                    lineHeight: 1.55,
-                    mb: 0.75,
-                    color: colors.body,
+                    ...bodyTextSx,
+                    mb: 0.45,
                   }}
                 >
                   {point}

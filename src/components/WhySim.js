@@ -8,7 +8,16 @@ import {
 } from "@mui/icons-material";
 import { Box, Container, Typography, useMediaQuery } from "@mui/material";
 import { AtmosphereGrid, getLightAtmosphereSx } from "../theme/atmosphere";
-import { colors, sectionIntroSx, sectionTitleSx } from "../theme/tokens";
+import {
+  bodyTextSx,
+  colors,
+  contentItemTitleSx,
+  eyebrowSx,
+  sectionIntroMb,
+  sectionIntroSx,
+  sectionPy,
+  sectionTitleSx,
+} from "../theme/tokens";
 
 const atmosphere = "greenWash";
 
@@ -74,7 +83,7 @@ const WhySim = () => {
       component="section"
       sx={{
         ...getLightAtmosphereSx(atmosphere),
-        py: { xs: 6, md: 8 },
+        py: sectionPy,
         borderTop: `1px solid ${colors.border}`,
       }}
     >
@@ -85,7 +94,7 @@ const WhySim = () => {
             maxWidth: 820,
             mx: "auto",
             textAlign: "center",
-            mb: { xs: 4, md: 5 },
+            mb: sectionIntroMb,
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(28px)",
             transition: prefersReducedMotion
@@ -98,7 +107,7 @@ const WhySim = () => {
             component="h2"
             sx={{
               ...sectionTitleSx,
-              mb: 1.5,
+              mb: { xs: 1, md: 1.15 },
             }}
           >
             Why Simulate?
@@ -106,7 +115,6 @@ const WhySim = () => {
           <Typography
             sx={{
               ...sectionIntroSx,
-              fontSize: { xs: "1.05rem", md: "1.2rem" },
               maxWidth: 520,
             }}
           >
@@ -149,7 +157,7 @@ const WhySim = () => {
               sm: "repeat(2, minmax(0, 1fr))",
               md: "repeat(5, minmax(0, 1fr))",
             },
-            gap: { xs: 3, md: 0 },
+            gap: { xs: 2, md: 0 },
           }}
         >
           <Box
@@ -157,7 +165,7 @@ const WhySim = () => {
             sx={{
               display: { xs: "none", md: "block" },
               position: "absolute",
-              top: 32,
+              top: 28,
               left: "10%",
               right: "10%",
               height: 1,
@@ -192,10 +200,9 @@ const WhySim = () => {
                   display: "flex",
                   flexDirection: { xs: "row", md: "column" },
                   alignItems: { xs: "flex-start", md: "center" },
-                  gap: { xs: 2, md: 1.75 },
+                  gap: { xs: 1.5, md: 1.15 },
                   textAlign: { xs: "left", md: "center" },
                   width: "100%",
-                  minHeight: { md: 220 },
                 }}
               >
                 <Box
@@ -231,12 +238,9 @@ const WhySim = () => {
                   <Typography
                     component="p"
                     sx={{
-                      fontSize: "0.72rem",
-                      letterSpacing: "0.14em",
-                      textTransform: "uppercase",
+                      ...eyebrowSx,
                       color: colors.soft,
-                      mb: 0.6,
-                      fontWeight: 600,
+                      mb: 0.3,
                     }}
                   >
                     {String(index + 1).padStart(2, "0")}
@@ -244,24 +248,14 @@ const WhySim = () => {
                   <Typography
                     component="h3"
                     sx={{
-                      fontSize: { xs: "1.1rem", md: "1.15rem" },
+                      ...contentItemTitleSx,
                       fontWeight: 700,
-                      mb: 0.65,
-                      color: colors.ink,
-                      minHeight: { md: "2.6em" },
+                      mb: 0.35,
                     }}
                   >
                     {title}
                   </Typography>
-                  <Typography
-                    sx={{
-                      color: colors.body,
-                      lineHeight: 1.5,
-                      fontSize: "0.95rem",
-                    }}
-                  >
-                    {text}
-                  </Typography>
+                  <Typography sx={bodyTextSx}>{text}</Typography>
                 </Box>
               </Box>
             </Box>

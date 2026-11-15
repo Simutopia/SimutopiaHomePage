@@ -1,7 +1,7 @@
 import { Box, Container, Link, Typography } from "@mui/material";
 import partners from "../data/partners";
 import { AtmosphereGrid, getLightAtmosphereSx } from "../theme/atmosphere";
-import { colors, fonts, sectionTitleSx } from "../theme/tokens";
+import { colors, fonts, sectionPy, sectionTitleMb, sectionTitleSx } from "../theme/tokens";
 
 const atmosphere = "mistFlip";
 const accentFontFamily = fonts.accent;
@@ -12,7 +12,7 @@ const PartnersStrip = () => (
     aria-label="Our Partners"
     sx={{
       ...getLightAtmosphereSx(atmosphere),
-      py: { xs: 5, md: 7 },
+      py: sectionPy,
       borderTop: `1px solid ${colors.border}`,
       borderBottom: `1px solid ${colors.border}`,
     }}
@@ -24,7 +24,7 @@ const PartnersStrip = () => (
         component="h2"
         sx={{
           ...sectionTitleSx,
-          mb: { xs: 3, md: 4 },
+          mb: sectionTitleMb,
         }}
       >
         Our Partners

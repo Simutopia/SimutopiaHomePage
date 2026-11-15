@@ -2,7 +2,15 @@ import { useEffect, useState } from "react";
 import { Box, Container, Typography, useMediaQuery } from "@mui/material";
 import testimonials from "../data/testimonials";
 import { AtmosphereGrid, getLightAtmosphereSx } from "../theme/atmosphere";
-import { colors, fonts, sectionTitleSx } from "../theme/tokens";
+import {
+  bodyTextSx,
+  colors,
+  fonts,
+  mutedTextSx,
+  sectionPy,
+  sectionTitleMb,
+  sectionTitleSx,
+} from "../theme/tokens";
 
 const atmosphere = "blueWash";
 const accentFontFamily = fonts.accent;
@@ -33,7 +41,7 @@ const TestimonialsSection = () => {
       onMouseLeave={() => setPaused(false)}
       sx={{
         ...getLightAtmosphereSx(atmosphere),
-        py: { xs: 5, md: 6 },
+        py: sectionPy,
         borderTop: `1px solid ${colors.border}`,
       }}
     >
@@ -44,7 +52,7 @@ const TestimonialsSection = () => {
           component="h2"
           sx={{
             ...sectionTitleSx,
-            mb: { xs: 3, md: 3.5 },
+            mb: sectionTitleMb,
           }}
         >
           What Clients Say
@@ -94,11 +102,11 @@ const TestimonialsSection = () => {
                 <Typography
                   component="blockquote"
                   sx={{
+                    ...bodyTextSx,
                     m: 0,
                     maxWidth: 640,
-                    fontSize: { xs: "1.05rem", md: "1.15rem" },
+                    fontSize: { xs: "1.05rem", md: "1.12rem" },
                     fontWeight: 300,
-                    lineHeight: 1.55,
                     color: colors.ink,
                   }}
                 >
@@ -107,8 +115,8 @@ const TestimonialsSection = () => {
                 <Box sx={{ mt: 2.25 }}>
                   <Typography
                     sx={{
+                      ...bodyTextSx,
                       fontWeight: 700,
-                      fontSize: "0.95rem",
                       color: colors.ink,
                       lineHeight: 1.3,
                     }}
@@ -117,8 +125,7 @@ const TestimonialsSection = () => {
                   </Typography>
                   <Typography
                     sx={{
-                      color: colors.muted,
-                      fontSize: "0.9rem",
+                      ...mutedTextSx,
                       lineHeight: 1.4,
                       mt: 0.35,
                     }}

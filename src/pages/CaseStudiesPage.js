@@ -1,24 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import ContentPageShell from "../components/ContentPageShell";
-import { colors, fonts } from "../theme/tokens";
-
-/** Readable H₂ — match Services page */
-const H2Formula = () => (
-  <Box component="span" sx={{ whiteSpace: "nowrap" }}>
-    H
-    <Box
-      component="span"
-      sx={{
-        fontSize: "0.78em",
-        fontWeight: 600,
-        verticalAlign: "-0.15em",
-        ml: "0.02em",
-      }}
-    >
-      2
-    </Box>
-  </Box>
-);
+import H2Formula from "../components/H2Formula";
+import {
+  contentItemTitleSx,
+  contentStackGap,
+  logoAccentCycle,
+  mutedTextSx,
+} from "../theme/tokens";
 
 const caseStudies = [
   { title: "Excavator" },
@@ -31,13 +19,6 @@ const caseStudies = [
   { title: "Animatronic System Dynamics" },
   { title: "Human Flow Simulation" },
   { title: "Traffic Flow Simulation" },
-];
-
-const logoAccentCycle = [
-  colors.logoBlue,
-  colors.logoRed,
-  colors.logoYellow,
-  colors.logoGreen,
 ];
 
 const CaseStudiesPage = () => (
@@ -53,7 +34,7 @@ const CaseStudiesPage = () => (
         p: 0,
         display: "flex",
         flexDirection: "column",
-        gap: { xs: 2, md: 2.25 },
+        gap: contentStackGap,
         maxWidth: 720,
         mx: "auto",
       }}
@@ -70,25 +51,13 @@ const CaseStudiesPage = () => (
           <Typography
             component="h2"
             sx={{
-              fontFamily: fonts.sans,
-              fontSize: { xs: "1.05rem", md: "1.12rem" },
-              fontWeight: 650,
-              color: colors.ink,
-              lineHeight: 1.4,
+              ...contentItemTitleSx,
+              mb: 0.35,
             }}
           >
             {study.title}
           </Typography>
-          <Typography
-            sx={{
-              fontFamily: fonts.sans,
-              fontSize: "0.9rem",
-              color: colors.muted,
-              mt: 0.35,
-            }}
-          >
-            Details coming soon.
-          </Typography>
+          <Typography sx={mutedTextSx}>Details coming soon.</Typography>
         </Box>
       ))}
     </Box>

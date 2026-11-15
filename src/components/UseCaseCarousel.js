@@ -3,7 +3,7 @@ import { Box, Button, IconButton, Typography, useMediaQuery } from "@mui/materia
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import { Link as RouterLink } from "react-router-dom";
-import { colors, fonts } from "../theme/tokens";
+import { buttonLabelSx, colors, fonts } from "../theme/tokens";
 
 const slides = [
   {
@@ -112,13 +112,19 @@ const UseCaseCarousel = () => {
       >
         <Typography
           variant="overline"
-          sx={{ letterSpacing: "0.12em", opacity: 0.85, mb: 1 }}
+          sx={{
+            fontFamily: fonts.sans,
+            letterSpacing: "0.12em",
+            opacity: 0.85,
+            mb: 1,
+          }}
         >
           Use case
         </Typography>
         <Typography
           component="h1"
           sx={{
+            fontFamily: fonts.sans,
             fontSize: { xs: "2rem", md: "3.25rem" },
             fontWeight: 300,
             lineHeight: 1.15,
@@ -128,7 +134,12 @@ const UseCaseCarousel = () => {
           {active.title}
         </Typography>
         <Typography
-          sx={{ fontSize: { xs: "1.05rem", md: "1.35rem" }, opacity: 0.92, mb: 2.5 }}
+          sx={{
+            fontFamily: fonts.sans,
+            fontSize: { xs: "1.05rem", md: "1.35rem" },
+            opacity: 0.92,
+            mb: 2.5,
+          }}
         >
           {active.subtitle}
         </Typography>
@@ -148,12 +159,10 @@ const UseCaseCarousel = () => {
             variant="contained"
             disableElevation
             sx={{
+              ...buttonLabelSx,
               px: 2.5,
               py: 1,
-              fontFamily: fonts.sans,
               fontWeight: 700,
-              fontSize: "0.95rem",
-              textTransform: "none",
               borderRadius: 1.5,
               bgcolor: colors.accentSoft,
               color: colors.ink,
@@ -169,11 +178,10 @@ const UseCaseCarousel = () => {
             component={RouterLink}
             to="/services"
             sx={{
+              ...buttonLabelSx,
               color: "common.white",
               textDecoration: "none",
-              fontFamily: fonts.sans,
               fontWeight: 600,
-              fontSize: "0.95rem",
               opacity: 0.9,
               borderBottom: "1px solid rgba(255,255,255,0.45)",
               pb: 0.15,

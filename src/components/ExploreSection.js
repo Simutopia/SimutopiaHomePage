@@ -1,15 +1,13 @@
 import { Box, Button, Container } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { AtmosphereGrid, getLightAtmosphereSx } from "../theme/atmosphere";
-import { colors, fonts } from "../theme/tokens";
+import { buttonLabelSx, colors, sectionPy } from "../theme/tokens";
 
 const atmosphere = "dual";
 
 const secondaryButtonSx = {
-  fontFamily: fonts.sans,
+  ...buttonLabelSx,
   fontWeight: 600,
-  fontSize: "0.95rem",
-  textTransform: "none",
   borderRadius: 1.5,
   px: 2.5,
   py: 1,
@@ -23,10 +21,8 @@ const secondaryButtonSx = {
 };
 
 const primaryButtonSx = {
-  fontFamily: fonts.sans,
+  ...buttonLabelSx,
   fontWeight: 700,
-  fontSize: "0.95rem",
-  textTransform: "none",
   borderRadius: 1.5,
   px: 2.5,
   py: 1,
@@ -44,7 +40,7 @@ const ExploreSection = () => (
     aria-label="Next steps"
     sx={{
       ...getLightAtmosphereSx(atmosphere),
-      py: { xs: 5, md: 6 },
+      py: sectionPy,
       borderTop: `1px solid ${colors.border}`,
     }}
   >
