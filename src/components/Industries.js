@@ -5,53 +5,40 @@ const industries = [
     title: "HEAVY EQUIPMENT",
     image: "/images/heavyEquipment.png",
     description: [
-      "Develop models (digital twins) describing dynamic behavior of the machine comprising multiple interacting domains: electrical, hydraulic, mechanical, etc.",
-      "Develop and test supervisory machine control algorithms.",
-      "Predict machine performance in terms of its ability to achieve target operating cycle requirements.",
-      "Test embedded controls software using machine models in a hardware-in-the-loop (HIL) test platform.",
-      "Leverage machine models and in-field data to synthesize artificial intelligence (AI) algorithms for predictive maintenance and machine performance optimization.",
+      "Develop system-level dynamic simulation models of machines such as excavators, wheel loaders, motor graders, forklifts, and tractors.",
+      "Use machine models to design and analyze 3D mechanical linkages, size powertrain and hydraulic components, and design and test control logic for advanced operator assistance—including vehicle stability analysis.",
+      "Implement ground-contact dynamics and co-simulate with DEM software for realistic soil loads.",
+    ],
+  },
+  {
+    title: "THEMED ENTERTAINMENT",
+    image: "/images/entertainment.png",
+    reversed: true,
+    description: [
+      "Apply model-based design experience from Walt Disney Imagineering on ride systems and audio-animatronics to themed entertainment projects.",
+      "Develop dynamic models of tracked and trackless ride systems for motion analysis, dynamic forces, guest accelerations, and supervisory control design.",
+      "Perform Monte Carlo studies for capacity planning and cycle-time optimization.",
+      "Simulate people movement with Oasys MassMotion® for safety, efficiency, and accessibility of guest flow in 3D environments.",
+      "Develop animatronics models with kinematics, dynamics, and collision detection; implement motion control for smooth following and vibration suppression; support FEA structural analysis and 3D/2D design deliverables.",
     ],
   },
   {
     title: "INDUSTRIAL AUTOMATION",
     image: "/images/industrialAutomation.png",
+    description: [
+      "Develop dynamic models of industrial machinery across interacting domains: electrical, hydraulic, mechanical, and more.",
+      "Perform machine design optimization studies to automate operations.",
+      "Leverage machine models and in-field data to synthesize AI algorithms for predictive maintenance, anomaly detection, and operations optimization.",
+    ],
+  },
+  {
+    title: "HYDROGEN",
+    image: "/images/simutopia-engineering-background.png",
     reversed: true,
     description: [
-      "Develop models (digital twins) describing dynamic behavior of the machine comprising multiple interacting domains: electrical, hydraulic, mechanical, etc.",
-      "Develop and test supervisory control logic algorithms.",
-      "Perform Monte Carlo scenario simulation studies for anomaly detection, fault isolation, and to increase operational efficiency.",
-      "Leverage machine models and in-field data to synthesize artificial intelligence (AI) algorithms for predictive maintenance and operations optimization.",
-    ],
-  },
-  {
-    title: "ENTERTAINMENT",
-    image: "/images/entertainment.png",
-    description: [
-      "Develop dynamic models for both tracked and trackless ride systems.",
-      "Perform motion analysis, predict dynamic forces on the ride system components and guest accelerations.",
-      "Perform Monte Carlo scenario simulation studies for capacity planning and cycle-time optimization.",
-      "Develop and test supervisory control logic for ride systems.",
-      "Develop animatronics system models with kinematics, dynamics and collision detection capabilities.",
-    ],
-  },
-  {
-    title: "ROBOTICS",
-    image: "/images/robotics.png",
-    reversed: true,
-    description: [
-      "Develop dynamic robotic system models with kinematics, dynamics and collision detection capabilities.",
-      "Develop and test supervisory control logic algorithms.",
-      "Develop and test advanced motion control algorithms.",
-      "Test and validate robot’s design and its interactions with the environment.",
-    ],
-  },
-  {
-    title: "MEDICAL DEVICES",
-    image: "/images/medicalDevices.png",
-    description: [
-      "Develop models (digital twins) describing dynamic behavior of the device comprising multiple interacting domains: electrical, hydraulic, mechanical, etc.",
-      "Develop and test supervisory device control algorithms.",
-      "Test embedded controls software using device models in a hardware-in-the-loop (HIL) test platform.",
+      "Support clients across hydrogen production, distribution, and use of H₂ fuel.",
+      "Develop dynamic models of H₂ electrolyzer systems and fuel cell power systems, including balance-of-plant subsystems, for component sizing, energy management, and operations optimization.",
+      "Develop closed-loop H₂ refueling station system models for component sizing and controls design against fuel dispensing and station operation requirements.",
     ],
   },
 ];
@@ -81,6 +68,7 @@ const Industries = () => (
           sx={{
             width: "100%",
             height: "auto",
+            minHeight: { lg: 280 },
             objectFit: "cover",
             gridColumn: { lg: reversed ? 2 : 1 },
             gridRow: { lg: 1 },

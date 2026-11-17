@@ -9,10 +9,11 @@
     "@mui/icons-material": "^6.1.8",
     "@mui/material": "^6.1.8",
     "@popperjs/core": "^2.6.0",
-    "react": "^19.0.0",
+    "react": "^19.3.1",
     "react-dom": "^19.0.0",
+    "react-globe.gl": "^2.38.0",
     "react-router-dom": "^7.0.1",
-    "react-scripts": "5.0.1"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
