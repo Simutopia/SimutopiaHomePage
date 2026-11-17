@@ -140,7 +140,14 @@ const UserTable = ({
   // Dialog 1: Add Organization
   const [openAddOrgDialog, setOpenAddOrgDialog] = useState(false);
   const [newOrgName, setNewOrgName] = useState("");
+  const [newOrgSubscriptionDate, setNewOrgSubscriptionDate] = useState("");
   const [isSubmittingOrg, setIsSubmittingOrg] = useState(false);
+
+  // Dialog: Extend Organization Subscription
+  const [openExtendOrgDialog, setOpenExtendOrgDialog] = useState(false);
+  const [orgToExtend, setOrgToExtend] = useState(null);
+  const [customOrgEndDate, setCustomOrgEndDate] = useState("");
+  const [isSubmittingExtendOrg, setIsSubmittingExtendOrg] = useState(false);
 
   // Dialog 2: Add User to Organization
   const [openAddUserDialog, setOpenAddUserDialog] = useState(false);
@@ -151,6 +158,7 @@ const UserTable = ({
     roleName: "",
     status: "Active",
     password: "",
+    subscriptionEndDate: "",
   });
   const [isSubmittingUser, setIsSubmittingUser] = useState(false);
 
@@ -191,6 +199,7 @@ const UserTable = ({
       roleName: rolesList[0] || "",
       status: "Active",
       password: "",
+      subscriptionEndDate: "",
     });
     setOpenAddUserDialog(true);
   };
@@ -214,7 +223,10 @@ const UserTable = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ name: trimmed }),
+          body: JSON.stringify({
+            name: trimmed,
+            subscriptionEndDate: newOrgSubscriptionDate || undefined,
+          }),
         }
       );
       const resData = await response.json();
@@ -229,13 +241,18 @@ const UserTable = ({
 
       const created = {
         id: resData.organization._id,
+        _id: resData.organization._id,
         name: resData.organization.name,
+        subscriptionEndDate: resData.organization.subscriptionEndDate || null,
+        isSubscriptionActive: Boolean(resData.organization.subscriptionEndDate),
+        daysRemaining: 30,
         createdAt: resData.organization.createdAt,
       };
 
       setOrganizations((prev) => [...prev, created]);
       setOpenAddOrgDialog(false);
       setNewOrgName("");
+      setNewOrgSubscriptionDate("");
       showSnackbar("Organization created successfully!", 3000, "success");
 
       // Automatically select the new organization so user can add members right away!
@@ -247,6 +264,62 @@ const UserTable = ({
       showSnackbar("Unable to create organization.", 3000, "error");
     } finally {
       setIsSubmittingOrg(false);
+    }
+  };
+
+  // Handler: Update / Extend Organization Subscription
+  const handleUpdateOrgSubscription = async (daysToAdd, customDate = null) => {
+    if (!orgToExtend) return;
+    const orgId = orgToExtend.id || orgToExtend._id;
+    setIsSubmittingExtendOrg(true);
+    try {
+      const payload =
+        typeof daysToAdd === "number"
+          ? { daysToAdd }
+          : { subscriptionEndDate: customDate };
+      const response = await fetch(
+        `${API.DATA_URL}${API.DATA_ENDPOINTS.organizations}/${orgId}/subscription`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+      const resData = await response.json();
+      if (!response.ok) {
+        showSnackbar(
+          resData.message || "Unable to update subscription.",
+          3000,
+          "error"
+        );
+        return;
+      }
+
+      showSnackbar(
+        resData.message || "Organization subscription updated successfully!",
+        3000,
+        "success"
+      );
+      setOpenExtendOrgDialog(false);
+      setOrgToExtend(null);
+      setCustomOrgEndDate("");
+
+      if (handleRefresh) {
+        handleRefresh();
+      } else if (resData.organization) {
+        setOrganizations((prev) =>
+          prev.map((o) =>
+            o.id === orgId || o._id === orgId
+              ? { ...o, ...resData.organization }
+              : o
+          )
+        );
+      }
+    } catch {
+      showSnackbar("Unable to update organization subscription.", 3000, "error");
+    } finally {
+      setIsSubmittingExtendOrg(false);
     }
   };
 
@@ -322,6 +395,7 @@ const UserTable = ({
       roleId: roleMap[addUserForm.roleName],
       status: addUserForm.status,
       password: addUserForm.password,
+      subscriptionEndDate: addUserForm.subscriptionEndDate || undefined,
     };
 
     try {
@@ -349,6 +423,7 @@ const UserTable = ({
         email: resData.user.email,
         roleName: addUserForm.roleName,
         status: resData.user.status,
+        subscriptionEndDate: resData.user.subscriptionEndDate,
         createdAt: resData.user.createdAt,
         isProtectedAdmin: false,
       };
@@ -377,6 +452,9 @@ const UserTable = ({
       roleName: user.roleName,
       status: user.status,
       organization: user.organization || "",
+      subscriptionEndDate: user.subscriptionEndDate
+        ? String(user.subscriptionEndDate).slice(0, 10)
+        : "",
     });
   };
 
@@ -398,6 +476,7 @@ const UserTable = ({
       email: editValues.email,
       roleId: roleMap[editValues.roleName],
       status: editValues.status,
+      subscriptionEndDate: editValues.subscriptionEndDate || null,
     };
 
     try {
@@ -630,47 +709,6 @@ const UserTable = ({
           </Stack>
         </Stack>
 
-        {/* Live Telemetry Ribbon */}
-        <Stack
-          direction="row"
-          spacing={1.5}
-          alignItems="center"
-          flexWrap="wrap"
-          sx={{
-            py: 1.2,
-            px: 2,
-            mb: 2,
-            borderRadius: 2,
-            background: "linear-gradient(90deg, rgba(0, 118, 168, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%)",
-            border: "1px solid rgba(0, 180, 216, 0.18)",
-          }}
-        >
-          <Chip
-            size="small"
-            className="sim-telemetry-chip"
-            label={`NODES: ${users.length}`}
-            sx={{ bgcolor: "rgba(255, 255, 255, 0.9)", border: "1px solid #cbd5e1" }}
-          />
-          <Chip
-            size="small"
-            className="sim-telemetry-chip"
-            label={`CLUSTERS: ${organizations.length}`}
-            sx={{ bgcolor: "rgba(255, 255, 255, 0.9)", border: "1px solid #cbd5e1" }}
-          />
-          <Chip
-            size="small"
-            className="sim-telemetry-chip"
-            label={`ACTIVE: ${users.filter((u) => u.status === "Active").length}`}
-            sx={{ bgcolor: "rgba(240, 253, 244, 0.9)", color: "#166534", border: "1px solid #bbf7d0" }}
-          />
-          <Chip
-            size="small"
-            className="sim-telemetry-chip"
-            label="SECURITY: FAIL-CLOSED SECURE"
-            sx={{ bgcolor: "rgba(238, 242, 255, 0.9)", color: "#4338ca", border: "1px solid #c7d2fe" }}
-          />
-        </Stack>
-
         <Divider sx={{ my: 1.5, borderColor: "rgba(226, 232, 240, 0.8)" }} />
 
         {/* Navigation & Search Bar */}
@@ -852,9 +890,22 @@ const UserTable = ({
                                   size="small"
                                   color="error"
                                   onClick={(e) => handleDeleteOrganization(org, e)}
-                                  sx={{ opacity: 0.7, "&:hover": { opacity: 1, bgcolor: "#fee2e2" } }}
+                                  sx={{
+                                    width: 32,
+                                    height: 32,
+                                    borderRadius: 2,
+                                    backgroundColor: "rgba(254, 242, 242, 0.7)",
+                                    border: "1px solid rgba(254, 202, 202, 0.8)",
+                                    color: "#dc2626",
+                                    flexShrink: 0,
+                                    ml: 1,
+                                    "&:hover": {
+                                      backgroundColor: "#fee2e2",
+                                      borderColor: "#fca5a5",
+                                    },
+                                  }}
                                 >
-                                  <DeleteIcon fontSize="small" />
+                                  <DeleteIcon sx={{ fontSize: 17 }} />
                                 </IconButton>
                               </Tooltip>
                             )}
@@ -874,7 +925,7 @@ const UserTable = ({
                               <span className="sim-live-beacon" />
                               <Chip
                                 size="small"
-                                icon={<PersonIcon fontSize="small" />}
+                                icon={<PersonIcon sx={{ fontSize: "14px !important" }} />}
                                 label={
                                   memberCount === 0
                                     ? "0 Nodes"
@@ -894,10 +945,10 @@ const UserTable = ({
                             </Stack>
 
                             {memberCount > 0 && (
-                              <AvatarGroup max={4} sx={{ "& .MuiAvatar-root": { width: 26, height: 26, fontSize: "0.75rem", border: "2px solid #fff" } }}>
+                              <AvatarGroup max={4} sx={{ "& .MuiAvatar-root": { width: 28, height: 28, fontSize: "0.75rem", border: "2px solid #fff", boxShadow: "0 2px 4px rgba(0,0,0,0.08)" } }}>
                                 {orgMembers.map((m) => (
                                   <Tooltip key={m.id} title={`${m.name} (${m.roleName})`}>
-                                    <Avatar sx={{ bgcolor: "#0076a8" }}>
+                                    <Avatar sx={{ bgcolor: "#0076a8", fontWeight: 700 }}>
                                       {m.name.charAt(0).toUpperCase()}
                                     </Avatar>
                                   </Tooltip>
@@ -905,28 +956,125 @@ const UserTable = ({
                               </AvatarGroup>
                             )}
                           </Stack>
+
+                          {/* Organization Subscription Status Row */}
+                          <Box
+                            sx={{
+                              mt: 2,
+                              pt: 1.5,
+                              borderTop: "1px dashed rgba(226, 232, 240, 0.9)",
+                            }}
+                          >
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
+                              alignItems="center"
+                            >
+                              <Stack direction="row" spacing={1} alignItems="center">
+                                <Typography
+                                  variant="caption"
+                                  fontWeight={700}
+                                  className="sim-telemetry-chip"
+                                  sx={{
+                                    color: "text.secondary",
+                                    fontSize: "0.68rem",
+                                    letterSpacing: "0.04em",
+                                    textTransform: "uppercase",
+                                  }}
+                                >
+                                  SUBSCRIPTION:
+                                </Typography>
+                                {org.isSubscriptionActive ? (
+                                  <Chip
+                                    size="small"
+                                    label={`Active (${org.daysRemaining}d)`}
+                                    color="success"
+                                    variant="outlined"
+                                    sx={{
+                                      height: 24,
+                                      fontSize: "0.72rem",
+                                      fontWeight: 700,
+                                      backgroundColor: "rgba(240, 253, 244, 0.9)",
+                                      borderColor: "#86efac",
+                                      color: "#166534",
+                                    }}
+                                  />
+                                ) : (
+                                  <Chip
+                                    size="small"
+                                    label="Expired / Inactive"
+                                    color="error"
+                                    variant="outlined"
+                                    sx={{
+                                      height: 24,
+                                      fontSize: "0.72rem",
+                                      fontWeight: 700,
+                                      backgroundColor: "rgba(254, 242, 242, 0.9)",
+                                      borderColor: "#fca5a5",
+                                      color: "#991b1b",
+                                    }}
+                                  />
+                                )}
+                              </Stack>
+
+                              <Tooltip title="Extend or Renew Organization Subscription">
+                                <Button
+                                  variant="outlined"
+                                  size="small"
+                                  color={org.isSubscriptionActive ? "primary" : "error"}
+                                  startIcon={<LoopIcon sx={{ fontSize: "14px !important" }} />}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOrgToExtend(org);
+                                    setOpenExtendOrgDialog(true);
+                                  }}
+                                  sx={{
+                                    height: 28,
+                                    borderRadius: 2,
+                                    fontSize: "0.74rem",
+                                    fontWeight: 700,
+                                    textTransform: "none",
+                                    px: 1.5,
+                                    borderColor: org.isSubscriptionActive
+                                      ? "rgba(0, 118, 168, 0.4)"
+                                      : "rgba(239, 68, 68, 0.4)",
+                                    "&:hover": {
+                                      backgroundColor: org.isSubscriptionActive
+                                        ? "rgba(0, 118, 168, 0.08)"
+                                        : "rgba(239, 68, 68, 0.08)",
+                                    },
+                                  }}
+                                >
+                                  {org.isSubscriptionActive ? "Extend" : "Renew"}
+                                </Button>
+                              </Tooltip>
+                            </Stack>
+                          </Box>
                         </CardContent>
 
                         <CardActions
                           sx={{
                             px: 2,
                             pb: 2,
-                            pt: 0,
+                            pt: 1,
                             display: "flex",
-                            gap: 1,
+                            alignItems: "center",
+                            gap: 1.5,
                           }}
                           onClick={(e) => e.stopPropagation()}
                         >
                           <Button
                             variant="contained"
                             size="small"
-                            fullWidth
                             onClick={() => setSelectedOrg(org)}
                             sx={{
+                              flex: 1,
+                              height: 36,
                               textTransform: "none",
                               fontWeight: 600,
+                              fontSize: "0.82rem",
                               borderRadius: 2,
-                              backgroundColor: "rgba(241, 245, 249, 0.9)",
+                              backgroundColor: "rgba(241, 245, 249, 0.95)",
                               color: "#0f172a",
                               boxShadow: "none",
                               border: "1px solid #e2e8f0",
@@ -947,17 +1095,37 @@ const UserTable = ({
                                 variant="outlined"
                                 size="small"
                                 color="primary"
-                                startIcon={<PersonAddIcon fontSize="small" />}
+                                startIcon={
+                                  <PersonAddIcon
+                                    sx={{
+                                      fontSize: "17px !important",
+                                      display: "flex",
+                                    }}
+                                  />
+                                }
                                 onClick={() => handleOpenAddUser(org.name)}
                                 sx={{
+                                  height: 36,
                                   borderRadius: 2,
                                   textTransform: "none",
                                   fontWeight: 600,
+                                  fontSize: "0.82rem",
                                   whiteSpace: "nowrap",
-                                  borderColor: "rgba(0, 180, 216, 0.4)",
+                                  px: 1.75,
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  borderColor: "rgba(0, 118, 168, 0.4)",
+                                  color: "#0076a8",
+                                  "& .MuiButton-startIcon": {
+                                    mr: 0.75,
+                                    ml: 0,
+                                    display: "flex",
+                                    alignItems: "center",
+                                  },
                                   "&:hover": {
                                     borderColor: "#0076a8",
-                                    bgcolor: "rgba(0, 118, 168, 0.06)",
+                                    backgroundColor: "rgba(0, 118, 168, 0.08)",
                                   },
                                 }}
                               >
@@ -1014,16 +1182,44 @@ const UserTable = ({
                         </Stack>
                         <Chip
                           size="small"
+                          icon={<PersonIcon sx={{ fontSize: "14px !important" }} />}
                           label={`${unassignedUsers.length} user${unassignedUsers.length > 1 ? "s" : ""}`}
-                          sx={{ mt: 1, fontWeight: 600 }}
+                          sx={{
+                            mt: 1.5,
+                            fontWeight: 600,
+                            fontSize: "0.75rem",
+                            height: 24,
+                            backgroundColor: "rgba(241, 245, 249, 0.9)",
+                            color: "#475569",
+                            border: "1px solid #cbd5e1",
+                          }}
                         />
                       </CardContent>
-                      <CardActions sx={{ px: 2, pb: 2 }}>
+                      <CardActions sx={{ px: 2, pb: 2, pt: 1 }}>
                         <Button
                           variant="outlined"
                           size="small"
                           fullWidth
-                          sx={{ borderRadius: 2, textTransform: "none" }}
+                          onClick={() =>
+                            setSelectedOrg({
+                              id: "__unassigned__",
+                              name: "Unassigned Users",
+                              createdAt: null,
+                            })
+                          }
+                          sx={{
+                            height: 36,
+                            borderRadius: 2,
+                            textTransform: "none",
+                            fontWeight: 600,
+                            fontSize: "0.82rem",
+                            borderColor: "#cbd5e1",
+                            color: "#475569",
+                            "&:hover": {
+                              borderColor: "#94a3b8",
+                              backgroundColor: "rgba(241, 245, 249, 0.8)",
+                            },
+                          }}
                         >
                           View Unassigned Users →
                         </Button>
@@ -1110,7 +1306,7 @@ const UserTable = ({
                     "&:hover": { color: "#005a84", bgcolor: "rgba(0, 118, 168, 0.08)" },
                   }}
                 >
-                  ← Back to All Clusters
+                    Back to All Clusters
                 </Button>
 
                 <Stack
@@ -1152,6 +1348,24 @@ const UserTable = ({
                             border: "1px solid rgba(0, 180, 216, 0.35)",
                           }}
                         />
+                        {selectedOrg.id !== "__unassigned__" && (
+                          <Chip
+                            size="small"
+                            label={
+                              selectedOrg.isSubscriptionActive
+                                ? `Active (${selectedOrg.daysRemaining}d left)`
+                                : "Subscription Expired"
+                            }
+                            color={selectedOrg.isSubscriptionActive ? "success" : "error"}
+                            variant="outlined"
+                            sx={{
+                              fontWeight: 700,
+                              backgroundColor: selectedOrg.isSubscriptionActive
+                                ? "rgba(240, 253, 244, 0.9)"
+                                : "rgba(254, 242, 242, 0.9)",
+                            }}
+                          />
+                        )}
                       </Stack>
                       {selectedOrg.createdAt && (
                         <Typography variant="caption" className="sim-telemetry-chip" sx={{ color: "text.secondary" }}>
@@ -1162,17 +1376,42 @@ const UserTable = ({
                   </Stack>
 
                   {/* Actions for this specific organization */}
-                  <Stack direction="row" spacing={1.5} alignItems="center">
+                  <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+                    {selectedOrg.id !== "__unassigned__" && (
+                      <Button
+                        variant="outlined"
+                        color={selectedOrg.isSubscriptionActive ? "primary" : "error"}
+                        startIcon={<LoopIcon sx={{ fontSize: "16px !important" }} />}
+                        onClick={() => {
+                          setOrgToExtend(selectedOrg);
+                          setOpenExtendOrgDialog(true);
+                        }}
+                        sx={{
+                          height: 36,
+                          borderRadius: 2,
+                          fontWeight: 700,
+                          fontSize: "0.82rem",
+                          textTransform: "none",
+                          px: 2,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {selectedOrg.isSubscriptionActive ? "Extend Subscription" : "Renew Subscription"}
+                      </Button>
+                    )}
                     {selectedOrg.id !== "__unassigned__" && currentPermissions?.create && (
                       <Button
                         variant="contained"
-                        startIcon={<PersonAddIcon />}
+                        startIcon={<PersonAddIcon sx={{ fontSize: "17px !important" }} />}
                         onClick={() => handleOpenAddUser(selectedOrg.name)}
                         className="sim-btn-glow"
                         sx={{
+                          height: 36,
                           borderRadius: 2,
                           fontWeight: 700,
-                          px: 2.5,
+                          fontSize: "0.82rem",
+                          px: 2.25,
+                          whiteSpace: "nowrap",
                           background: "linear-gradient(135deg, #0076a8 0%, #00b4d8 100%)",
                           boxShadow: "0 4px 16px rgba(0, 118, 168, 0.35)",
                           textTransform: "none",
@@ -1188,13 +1427,15 @@ const UserTable = ({
                           color="error"
                           onClick={(e) => handleDeleteOrganization(selectedOrg, e)}
                           sx={{
+                            width: 36,
+                            height: 36,
                             border: "1px solid #fee2e2",
                             bgcolor: "#fff5f5",
                             borderRadius: 2,
                             "&:hover": { bgcolor: "#fee2e2" },
                           }}
                         >
-                          <DeleteIcon fontSize="small" />
+                          <DeleteIcon sx={{ fontSize: 18 }} />
                         </IconButton>
                       </Tooltip>
                     )}
@@ -1236,6 +1477,9 @@ const UserTable = ({
                         Status
                       </TableCell>
                       <TableCell sx={{ fontWeight: 700 }}>
+                        Subscription
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>
                         Provisioned At
                       </TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>
@@ -1246,7 +1490,7 @@ const UserTable = ({
                   <TableBody>
                     {selectedOrgUsers.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={6} align="center" sx={{ py: 6 }}>
+                        <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
                           <Avatar
                             sx={{
                               bgcolor: "#f0fdf4",
@@ -1400,6 +1644,69 @@ const UserTable = ({
                             )}
                           </TableCell>
 
+                          {/* Subscription Status (Inherited from Organization Cluster) */}
+                          <TableCell>
+                            {user.isProtectedAdmin ? (
+                              <Chip
+                                size="small"
+                                label="Exempt (Admin)"
+                                sx={{
+                                  fontWeight: 700,
+                                  backgroundColor: "#f1f5f9",
+                                  color: "#475569",
+                                  border: "1px solid #cbd5e1",
+                                }}
+                              />
+                            ) : (() => {
+                              const orgName = (user.organization || "").trim().toLowerCase();
+                              const userOrg = organizations.find(
+                                (o) => (o.name || "").trim().toLowerCase() === orgName
+                              );
+                              if (userOrg) {
+                                const isPast = !userOrg.isSubscriptionActive;
+                                const days = userOrg.daysRemaining || 0;
+                                const endDate = userOrg.subscriptionEndDate
+                                  ? new Date(userOrg.subscriptionEndDate)
+                                  : null;
+                                return (
+                                  <Stack spacing={0.5} alignItems="flex-start">
+                                    <Chip
+                                      size="small"
+                                      label={isPast ? "Org Expired" : `Org Active (${days}d)`}
+                                      sx={{
+                                        fontWeight: 700,
+                                        backgroundColor: isPast ? "#fee2e2" : "#dcfce7",
+                                        color: isPast ? "#991b1b" : "#166534",
+                                        border: `1px solid ${isPast ? "#fca5a5" : "#86efac"}`,
+                                      }}
+                                    />
+                                    {endDate && !isNaN(endDate.getTime()) && (
+                                      <Typography
+                                        variant="caption"
+                                        color="text.secondary"
+                                        sx={{ fontSize: "0.72rem" }}
+                                      >
+                                        Until {endDate.toLocaleDateString()}
+                                      </Typography>
+                                    )}
+                                  </Stack>
+                                );
+                              }
+                              return (
+                                <Chip
+                                  size="small"
+                                  label="No Org / Expired"
+                                  sx={{
+                                    fontWeight: 600,
+                                    backgroundColor: "#fee2e2",
+                                    color: "#991b1b",
+                                    border: "1px solid #fca5a5",
+                                  }}
+                                />
+                              );
+                            })()}
+                          </TableCell>
+
                           {/* Created At */}
                           <TableCell>
                             <Typography variant="body2" color="text.secondary" className="sim-telemetry-chip">
@@ -1419,29 +1726,44 @@ const UserTable = ({
                                 </IconButton>
                               </Stack>
                             ) : (
-                              <Stack direction="row" spacing={0.5} justifyContent="flex-end">
+                              <Stack direction="row" spacing={1} justifyContent="flex-end">
                                 {currentPermissions?.edit && (
-                                  <IconButton
-                                    size="small"
-                                    onClick={() => handleEditClick(user)}
-                                    disabled={Boolean(user.isProtectedAdmin)}
-                                    sx={{ "&:hover": { color: "#0076a8" } }}
-                                  >
-                                    <EditIcon fontSize="small" />
-                                  </IconButton>
+                                  <Tooltip title="Edit User">
+                                    <IconButton
+                                      size="small"
+                                      onClick={() => handleEditClick(user)}
+                                      disabled={Boolean(user.isProtectedAdmin)}
+                                      sx={{
+                                        width: 32,
+                                        height: 32,
+                                        borderRadius: 1.5,
+                                        "&:hover": { color: "#0076a8", bgcolor: "rgba(0, 118, 168, 0.08)" },
+                                      }}
+                                    >
+                                      <EditIcon fontSize="small" />
+                                    </IconButton>
+                                  </Tooltip>
                                 )}
                                 {currentPermissions?.delete && (
-                                  <IconButton
-                                    size="small"
-                                    color="error"
-                                    onClick={() => handleDeleteUser(user)}
-                                    disabled={Boolean(
-                                      user.isProtectedAdmin ||
-                                        (currentUser && currentUser.id === user.id)
-                                    )}
-                                  >
-                                    <DeleteIcon fontSize="small" />
-                                  </IconButton>
+                                  <Tooltip title="Delete User">
+                                    <IconButton
+                                      size="small"
+                                      color="error"
+                                      onClick={() => handleDeleteUser(user)}
+                                      disabled={Boolean(
+                                        user.isProtectedAdmin ||
+                                          (currentUser && currentUser.id === user.id)
+                                      )}
+                                      sx={{
+                                        width: 32,
+                                        height: 32,
+                                        borderRadius: 1.5,
+                                        "&:hover": { bgcolor: "#fee2e2" },
+                                      }}
+                                    >
+                                      <DeleteIcon fontSize="small" />
+                                    </IconButton>
+                                  </Tooltip>
                                 )}
                               </Stack>
                             )}
@@ -1495,6 +1817,9 @@ const UserTable = ({
                   Status
                 </TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>
+                  Subscription
+                </TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>
                   Provisioned At
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
@@ -1505,7 +1830,7 @@ const UserTable = ({
             <TableBody>
               {filteredAllUsers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
+                  <TableCell colSpan={8} align="center" sx={{ py: 6 }}>
                     <Typography color="text.secondary">
                       No nodes found matching your query filter.
                     </Typography>
@@ -1680,6 +2005,69 @@ const UserTable = ({
                       )}
                     </TableCell>
 
+                    {/* Subscription Status (Inherited from Organization Cluster) */}
+                    <TableCell>
+                      {user.isProtectedAdmin ? (
+                        <Chip
+                          size="small"
+                          label="Exempt (Admin)"
+                          sx={{
+                            fontWeight: 700,
+                            backgroundColor: "#f1f5f9",
+                            color: "#475569",
+                            border: "1px solid #cbd5e1",
+                          }}
+                        />
+                      ) : (() => {
+                        const orgName = (user.organization || "").trim().toLowerCase();
+                        const userOrg = organizations.find(
+                          (o) => (o.name || "").trim().toLowerCase() === orgName
+                        );
+                        if (userOrg) {
+                          const isPast = !userOrg.isSubscriptionActive;
+                          const days = userOrg.daysRemaining || 0;
+                          const endDate = userOrg.subscriptionEndDate
+                            ? new Date(userOrg.subscriptionEndDate)
+                            : null;
+                          return (
+                            <Stack spacing={0.5} alignItems="flex-start">
+                              <Chip
+                                size="small"
+                                label={isPast ? "Org Expired" : `Org Active (${days}d)`}
+                                sx={{
+                                  fontWeight: 700,
+                                  backgroundColor: isPast ? "#fee2e2" : "#dcfce7",
+                                  color: isPast ? "#991b1b" : "#166534",
+                                  border: `1px solid ${isPast ? "#fca5a5" : "#86efac"}`,
+                                }}
+                              />
+                              {endDate && !isNaN(endDate.getTime()) && (
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                  sx={{ fontSize: "0.72rem" }}
+                                >
+                                  Until {endDate.toLocaleDateString()}
+                                </Typography>
+                              )}
+                            </Stack>
+                          );
+                        }
+                        return (
+                          <Chip
+                            size="small"
+                            label="No Org / Expired"
+                            sx={{
+                              fontWeight: 600,
+                              backgroundColor: "#fee2e2",
+                              color: "#991b1b",
+                              border: "1px solid #fca5a5",
+                            }}
+                          />
+                        );
+                      })()}
+                    </TableCell>
+
                     {/* Created At */}
                     <TableCell>
                       <Typography variant="body2" color="text.secondary" className="sim-telemetry-chip">
@@ -1699,29 +2087,44 @@ const UserTable = ({
                           </IconButton>
                         </Stack>
                       ) : (
-                        <Stack direction="row" spacing={0.5} justifyContent="flex-end">
+                        <Stack direction="row" spacing={1} justifyContent="flex-end">
                           {currentPermissions?.edit && (
-                            <IconButton
-                              size="small"
-                              onClick={() => handleEditClick(user)}
-                              disabled={Boolean(user.isProtectedAdmin)}
-                              sx={{ "&:hover": { color: "#0076a8" } }}
-                            >
-                              <EditIcon fontSize="small" />
-                            </IconButton>
+                            <Tooltip title="Edit User">
+                              <IconButton
+                                size="small"
+                                onClick={() => handleEditClick(user)}
+                                disabled={Boolean(user.isProtectedAdmin)}
+                                sx={{
+                                  width: 32,
+                                  height: 32,
+                                  borderRadius: 1.5,
+                                  "&:hover": { color: "#0076a8", bgcolor: "rgba(0, 118, 168, 0.08)" },
+                                }}
+                              >
+                                <EditIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
                           )}
                           {currentPermissions?.delete && (
-                            <IconButton
-                              size="small"
-                              color="error"
-                              onClick={() => handleDeleteUser(user)}
-                              disabled={Boolean(
-                                user.isProtectedAdmin ||
-                                  (currentUser && currentUser.id === user.id)
-                              )}
-                            >
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
+                            <Tooltip title="Delete User">
+                              <IconButton
+                                size="small"
+                                color="error"
+                                onClick={() => handleDeleteUser(user)}
+                                disabled={Boolean(
+                                  user.isProtectedAdmin ||
+                                    (currentUser && currentUser.id === user.id)
+                                )}
+                                sx={{
+                                  width: 32,
+                                  height: 32,
+                                  borderRadius: 1.5,
+                                  "&:hover": { bgcolor: "#fee2e2" },
+                                }}
+                              >
+                                <DeleteIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
                           )}
                         </Stack>
                       )}
@@ -1779,6 +2182,18 @@ const UserTable = ({
               onChange={(e) => setNewOrgName(e.target.value)}
               placeholder="e.g. Acme Corporation"
               required
+            />
+            <TextField
+              fullWidth
+              label="Subscription End Date (Optional)"
+              type="date"
+              variant="outlined"
+              size="small"
+              InputLabelProps={{ shrink: true }}
+              value={newOrgSubscriptionDate}
+              onChange={(e) => setNewOrgSubscriptionDate(e.target.value)}
+              helperText="Optional: Set organization subscription expiry. Leave empty for no subscription."
+              sx={{ mt: 2 }}
             />
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 2 }}>
@@ -1930,6 +2345,23 @@ const UserTable = ({
                 }
                 required
               />
+
+              <TextField
+                label="Subscription End Date"
+                type="date"
+                variant="outlined"
+                size="small"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                helperText="Optional override. Usually inherited directly from Organization cluster."
+                value={addUserForm.subscriptionEndDate}
+                onChange={(e) =>
+                  setAddUserForm({
+                    ...addUserForm,
+                    subscriptionEndDate: e.target.value,
+                  })
+                }
+              />
             </Stack>
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 2 }}>
@@ -1957,6 +2389,176 @@ const UserTable = ({
             </Button>
           </DialogActions>
         </form>
+      </Dialog>
+
+      {/* DIALOG 3: EXTEND / MANAGE ORGANIZATION SUBSCRIPTION */}
+      <Dialog
+        open={openExtendOrgDialog}
+        onClose={() => {
+          if (!isSubmittingExtendOrg) {
+            setOpenExtendOrgDialog(false);
+            setOrgToExtend(null);
+          }
+        }}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{
+          className: "sim-dialog-paper",
+          sx: { p: 1 },
+        }}
+      >
+        <DialogTitle sx={{ pb: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Avatar sx={{ bgcolor: "#f0fdf4", color: "#16a34a", width: 40, height: 40 }}>
+              <LoopIcon fontSize="small" />
+            </Avatar>
+            <Box>
+              <Typography variant="h6" fontWeight={700} lineHeight={1.2}>
+                Organization Subscription
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Target: <strong>{orgToExtend?.name}</strong>
+              </Typography>
+            </Box>
+          </Stack>
+          <IconButton
+            size="small"
+            onClick={() => {
+              setOpenExtendOrgDialog(false);
+              setOrgToExtend(null);
+            }}
+          >
+            <CloseRoundedIcon fontSize="small" />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent sx={{ pt: 1.5 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Manage the subscription period for <strong>{orgToExtend?.name}</strong>. All members in this cluster will instantly inherit this status.
+          </Typography>
+
+          <Box
+            sx={{
+              p: 1.5,
+              mb: 2,
+              borderRadius: 2,
+              backgroundColor: orgToExtend?.isSubscriptionActive
+                ? "rgba(240, 253, 244, 0.9)"
+                : "rgba(254, 242, 242, 0.9)",
+              border: `1px solid ${
+                orgToExtend?.isSubscriptionActive ? "#bbf7d0" : "#fca5a5"
+              }`,
+            }}
+          >
+            <Typography variant="caption" display="block" color="text.secondary">
+              CURRENT STATUS:
+            </Typography>
+            <Typography
+              variant="body2"
+              fontWeight={700}
+              color={orgToExtend?.isSubscriptionActive ? "#166534" : "#991b1b"}
+            >
+              {orgToExtend?.isSubscriptionActive
+                ? `Active (${orgToExtend.daysRemaining} days remaining)`
+                : "Expired / No Active Subscription"}
+            </Typography>
+            {orgToExtend?.subscriptionEndDate && (
+              <Typography variant="caption" color="text.secondary">
+                Valid until: {new Date(orgToExtend.subscriptionEndDate).toLocaleDateString()}
+              </Typography>
+            )}
+          </Box>
+
+          <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>
+            Quick Extension:
+          </Typography>
+          <Grid container spacing={1} sx={{ mb: 2.5 }}>
+            <Grid item xs={6}>
+              <Button
+                variant="outlined"
+                fullWidth
+                disabled={isSubmittingExtendOrg}
+                onClick={() => handleUpdateOrgSubscription(30)}
+                sx={{ borderRadius: 2, textTransform: "none", fontWeight: 600 }}
+              >
+                +30 Days
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                variant="outlined"
+                fullWidth
+                disabled={isSubmittingExtendOrg}
+                onClick={() => handleUpdateOrgSubscription(90)}
+                sx={{ borderRadius: 2, textTransform: "none", fontWeight: 600 }}
+              >
+                +90 Days
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                variant="outlined"
+                fullWidth
+                disabled={isSubmittingExtendOrg}
+                onClick={() => handleUpdateOrgSubscription(180)}
+                sx={{ borderRadius: 2, textTransform: "none", fontWeight: 600 }}
+              >
+                +180 Days
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                variant="outlined"
+                fullWidth
+                disabled={isSubmittingExtendOrg}
+                onClick={() => handleUpdateOrgSubscription(365)}
+                sx={{ borderRadius: 2, textTransform: "none", fontWeight: 600 }}
+              >
+                +1 Year
+              </Button>
+            </Grid>
+          </Grid>
+
+          <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>
+            Or Set Custom Expiry Date:
+          </Typography>
+          <Stack spacing={1.5}>
+            <TextField
+              type="date"
+              variant="outlined"
+              size="small"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              value={customOrgEndDate}
+              onChange={(e) => setCustomOrgEndDate(e.target.value)}
+            />
+            <Stack direction="row" spacing={1}>
+              <Button
+                variant="contained"
+                fullWidth
+                disabled={isSubmittingExtendOrg || !customOrgEndDate}
+                onClick={() => handleUpdateOrgSubscription(null, customOrgEndDate)}
+                sx={{
+                  borderRadius: 2,
+                  fontWeight: 700,
+                  textTransform: "none",
+                  background: "linear-gradient(135deg, #0076a8 0%, #00b4d8 100%)",
+                }}
+              >
+                Save Custom Date
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                disabled={isSubmittingExtendOrg}
+                onClick={() => handleUpdateOrgSubscription(null, null)}
+                sx={{ borderRadius: 2, textTransform: "none", whiteSpace: "nowrap" }}
+              >
+                Expire Now
+              </Button>
+            </Stack>
+          </Stack>
+        </DialogContent>
       </Dialog>
     </Container>
   );

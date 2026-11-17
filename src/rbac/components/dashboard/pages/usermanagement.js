@@ -109,7 +109,7 @@ const UserManagement = () => {
         ]);
 
       const rawUsers = (usersResponse.users || []).map((user) => ({
-        id: user._id,
+        id: user.id || user._id,
         organization: user.organization || "",
         name: user.name,
         email: user.email,
@@ -117,12 +117,21 @@ const UserManagement = () => {
         status: user.status,
         createdAt: user.createdAt,
         isProtectedAdmin: user.isProtectedAdmin,
+        subscriptionEndDate: user.subscriptionEndDate || null,
+        subscription: user.subscription || null,
+        isSubscriptionActive: user.isSubscriptionActive,
       }));
 
       const rawOrgs = (orgsResponse.organizations || []).map((org) => ({
-        id: org._id,
+        id: org._id || org.id,
+        _id: org._id || org.id,
         name: org.name,
+        subscriptionEndDate: org.subscriptionEndDate || null,
+        isSubscriptionActive: Boolean(org.isSubscriptionActive),
+        subscriptionStatus: org.subscriptionStatus || (org.isSubscriptionActive ? "active" : "expired"),
+        daysRemaining: typeof org.daysRemaining === "number" ? org.daysRemaining : 0,
         createdAt: org.createdAt,
+        updatedAt: org.updatedAt,
       }));
 
       setUsersList(rawUsers);

@@ -27,6 +27,7 @@ import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
 import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
 import FileDownloadRoundedIcon from "@mui/icons-material/FileDownloadRounded";
+import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import ImageIcon from "@mui/icons-material/Image";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import API from "../../../constants";
@@ -245,6 +246,7 @@ const renderVideoEmbed = (videoUrl) => {
 
 const MyApps = () => {
   const [apps, setApps] = useState([]);
+  const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -267,6 +269,9 @@ const MyApps = () => {
           throw new Error(data.message || "Unable to load your apps.");
         }
         setApps(data.apps || []);
+        if (data.subscription) {
+          setSubscription(data.subscription);
+        }
       } catch (loadError) {
         if (loadError.name !== "AbortError") {
           console.error("Unable to load accessible apps:", loadError);
@@ -294,6 +299,14 @@ const MyApps = () => {
 
   // Handle Download ZIP package
   const handleDownloadZip = (app) => {
+    if (
+      !subscription ||
+      !subscription.isSubscriptionActive ||
+      app.canOpen === false ||
+      app.blockedReason === "subscription_expired"
+    ) {
+      return;
+    }
     if (app.downloadUrl) {
       const link = document.createElement("a");
       link.href = app.downloadUrl;
@@ -389,6 +402,47 @@ const MyApps = () => {
 
   return (
     <Box sx={{ width: "100%" }}>
+      {/* Subscription Over Alert */}
+      {subscription && !subscription.isSubscriptionActive && (
+        <Alert
+          severity="error"
+          icon={<LockRoundedIcon fontSize="inherit" />}
+          sx={{
+            mb: 3,
+            borderRadius: 2.5,
+            border: "1.5px solid #fecaca",
+            backgroundColor: "#fff5f5",
+            color: "#991b1b",
+            "& .MuiAlert-icon": { color: "#dc2626" },
+          }}
+        >
+          <Typography variant="subtitle2" fontWeight={800}>
+            Subscription Over
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 0.5 }}>
+            {subscription.message || "Your subscription has ended. Please contact your administrator to renew or extend access."}
+          </Typography>
+          {subscription.subscriptionEndDate && (
+            <Typography variant="caption" sx={{ display: "block", mt: 0.5, fontWeight: 600, color: "#b91c1c" }}>
+              Expired on: {new Date(subscription.subscriptionEndDate).toLocaleDateString()}
+            </Typography>
+          )}
+        </Alert>
+      )}
+
+      {/* Active Subscription Indicator */}
+      {subscription && subscription.isSubscriptionActive && subscription.daysRemaining !== null && (
+        <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+          <Chip
+            size="small"
+            color={subscription.daysRemaining <= 5 ? "warning" : "success"}
+            variant="outlined"
+            label={`Subscription Active: ${subscription.daysRemaining} day${subscription.daysRemaining === 1 ? "" : "s"} remaining (until ${new Date(subscription.subscriptionEndDate).toLocaleDateString()})`}
+            sx={{ fontWeight: 600, fontSize: "0.75rem" }}
+          />
+        </Stack>
+      )}
+
       {/* Search & Overview Header */}
       <Stack
         direction={{ xs: "column", sm: "row" }}
@@ -466,6 +520,10 @@ const MyApps = () => {
         {filteredApps.map((app) => {
           const gradient = getAppGradient(app.key || app.name);
           const initials = getAppInitials(app.name);
+          const isAppBlocked =
+            Boolean(subscription && !subscription.isSubscriptionActive) ||
+            app.canOpen === false ||
+            app.blockedReason === "subscription_expired";
 
           return (
             <Card
@@ -474,19 +532,55 @@ const MyApps = () => {
               className="sim-matrix-panel"
               sx={{
                 p: 0.5,
+                position: "relative",
                 transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
-                backgroundColor: "rgba(255, 255, 255, 0.94)",
-                "&:hover": {
-                  transform: "translateY(-5px)",
-                  boxShadow: "0 14px 28px -4px rgba(0, 118, 168, 0.25)",
-                },
-                "&:active": {
-                  transform: "scale(0.97)",
-                },
+                backgroundColor: isAppBlocked ? "rgba(241, 245, 249, 0.75)" : "rgba(255, 255, 255, 0.94)",
+                filter: isAppBlocked ? "grayscale(100%)" : "none",
+                opacity: isAppBlocked ? 0.45 : 1,
+                cursor: isAppBlocked ? "not-allowed !important" : "pointer",
+                border: isAppBlocked ? "1px solid #cbd5e1" : "1px solid transparent",
+                "&:hover": isAppBlocked
+                  ? {
+                      transform: "none",
+                      boxShadow: "none",
+                    }
+                  : {
+                      transform: "translateY(-5px)",
+                      boxShadow: "0 14px 28px -4px rgba(0, 118, 168, 0.25)",
+                    },
+                "&:active": isAppBlocked
+                  ? { transform: "none" }
+                  : { transform: "scale(0.97)" },
               }}
             >
+              {isAppBlocked && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 8,
+                    right: 8,
+                    zIndex: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 26,
+                    height: 26,
+                    borderRadius: "50%",
+                    backgroundColor: "rgba(239, 68, 68, 0.9)",
+                    color: "#ffffff",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
+                  }}
+                  title="Subscription Expired - Application Locked"
+                >
+                  <LockRoundedIcon sx={{ fontSize: 15 }} />
+                </Box>
+              )}
               <CardActionArea
-                onClick={() => setSelectedApp(app)}
+                disabled={isAppBlocked}
+                onClick={() => {
+                  if (isAppBlocked) return;
+                  setSelectedApp(app);
+                }}
                 sx={{
                   p: { xs: 2, sm: 2.5 },
                   display: "flex",
@@ -494,6 +588,7 @@ const MyApps = () => {
                   alignItems: "center",
                   textAlign: "center",
                   height: "100%",
+                  cursor: isAppBlocked ? "not-allowed !important" : "pointer",
                 }}
               >
                 {/* App Icon */}
@@ -537,21 +632,21 @@ const MyApps = () => {
                 </Typography>
 
                 {/* Badges / indicators */}
-                <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mb: 0.5 }}>
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.75 }}>
                   {app.imageUrl && (
                     <Chip
                       size="small"
-                      icon={<ImageIcon sx={{ "&&": { fontSize: 11 } }} />}
+                      icon={<ImageIcon sx={{ "&&": { fontSize: 12 } }} />}
                       label="Photo"
-                      sx={{ height: 18, fontSize: "0.65rem" }}
+                      sx={{ height: 20, fontSize: "0.68rem" }}
                     />
                   )}
                   {app.videoUrl && (
                     <Chip
                       size="small"
-                      icon={<VideocamIcon sx={{ "&&": { fontSize: 11 } }} />}
+                      icon={<VideocamIcon sx={{ "&&": { fontSize: 12 } }} />}
                       label="Video"
-                      sx={{ height: 18, fontSize: "0.65rem" }}
+                      sx={{ height: 20, fontSize: "0.68rem" }}
                     />
                   )}
                 </Stack>
@@ -569,6 +664,24 @@ const MyApps = () => {
                 >
                   {app.clientType === "public" ? "Browser App" : "SSO App"}
                 </Typography>
+
+                {isAppBlocked && (
+                  <Chip
+                    size="small"
+                    icon={<LockRoundedIcon sx={{ "&&": { fontSize: 12 } }} />}
+                    label="Subscription Over"
+                    color="error"
+                    variant="outlined"
+                    sx={{
+                      height: 20,
+                      fontSize: "0.68rem",
+                      fontWeight: 700,
+                      mt: 0.75,
+                      borderColor: "rgba(239, 68, 68, 0.4)",
+                      backgroundColor: "rgba(254, 242, 242, 0.8)",
+                    }}
+                  />
+                )}
               </CardActionArea>
             </Card>
           );
@@ -755,39 +868,62 @@ const MyApps = () => {
 
             {/* Actions: Download App (ZIP) and Launch Application */}
             <DialogActions sx={{ px: 3, pb: 2.5, pt: 1.5, justifyContent: "space-between" }}>
-              <Button
-                variant="outlined"
-                color="secondary"
-                startIcon={<FileDownloadRoundedIcon />}
-                onClick={() => handleDownloadZip(selectedApp)}
-                sx={{
-                  borderRadius: 2,
-                  px: 2.5,
-                  py: 1,
-                  fontWeight: 600,
-                }}
-              >
-                Download App (ZIP)
-              </Button>
+              {/* Security: Download option is completely hidden & stripped when subscription is expired */}
+              {subscription?.isSubscriptionActive && selectedApp?.canOpen !== false ? (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  startIcon={<FileDownloadRoundedIcon />}
+                  onClick={() => handleDownloadZip(selectedApp)}
+                  sx={{
+                    borderRadius: 2,
+                    px: 2.5,
+                    py: 1,
+                    fontWeight: 600,
+                  }}
+                >
+                  Download App (ZIP)
+                </Button>
+              ) : (
+                <Box />
+              )}
 
-              <Button
-                component="a"
-                href={selectedApp.launchUrl || selectedApp.url}
-                target="_blank"
-                rel="noreferrer"
-                variant="contained"
-                color="primary"
-                endIcon={<OpenInNewRoundedIcon />}
-                sx={{
-                  borderRadius: 2,
-                  px: 3,
-                  py: 1,
-                  fontWeight: 600,
-                  boxShadow: "0 4px 12px rgba(0, 118, 168, 0.25)",
-                }}
-              >
-                Launch Application
-              </Button>
+              {subscription && !subscription.isSubscriptionActive ? (
+                <Button
+                  variant="contained"
+                  disabled
+                  startIcon={<LockRoundedIcon />}
+                  sx={{
+                    borderRadius: 2,
+                    px: 3,
+                    py: 1,
+                    fontWeight: 600,
+                    backgroundColor: "#e2e8f0 !important",
+                    color: "#64748b !important",
+                  }}
+                >
+                  Subscription Over (Locked)
+                </Button>
+              ) : (
+                <Button
+                  component="a"
+                  href={selectedApp.launchUrl || selectedApp.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  variant="contained"
+                  color="primary"
+                  endIcon={<OpenInNewRoundedIcon />}
+                  sx={{
+                    borderRadius: 2,
+                    px: 3,
+                    py: 1,
+                    fontWeight: 600,
+                    boxShadow: "0 4px 12px rgba(0, 118, 168, 0.25)",
+                  }}
+                >
+                  Launch Application
+                </Button>
+              )}
             </DialogActions>
           </>
         )}

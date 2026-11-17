@@ -346,7 +346,7 @@ const AppManagement = () => {
               px: 2.5,
               py: 1.2,
               fontWeight: 700,
-              background: "linear-gradient(135deg, #0076a8 0%, #00b4d8 100%)",
+              background: "linear-gradient(135deg, #00a81c 0%, #32d800 100%)",
               boxShadow: "0 4px 16px rgba(0, 118, 168, 0.35)",
               whiteSpace: "nowrap",
               textTransform: "none",
@@ -415,7 +415,7 @@ const AppManagement = () => {
             p: 3,
             mb: 3,
             borderRadius: 3,
-            border: "1px solid #0076a8",
+            border: "1px solid #00a832",
             boxShadow: "0 8px 24px rgba(0, 118, 168, 0.08)",
           }}
         >

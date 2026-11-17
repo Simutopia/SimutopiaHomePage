@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -136,6 +137,20 @@ function Home({ role, editable }) {
     <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto", pb: 4 }}>
       {userDetails ? (
         <Stack spacing={3}>
+          {userDetails.subscription && !userDetails.subscription.isSubscriptionActive && (
+            <Alert
+              severity="error"
+              variant="filled"
+              sx={{
+                borderRadius: 2.5,
+                fontWeight: 600,
+                boxShadow: "0 4px 12px rgba(220, 38, 38, 0.2)",
+              }}
+            >
+              Subscription Over: Your organization ({userDetails.organization || "Unassigned"}) does not have an active subscription. Application launch, access tokens, and downloads are blocked until renewed by an administrator.
+            </Alert>
+          )}
+
           {/* Main Identity Command Banner */}
           <Paper
             elevation={0}
@@ -217,7 +232,7 @@ function Home({ role, editable }) {
                     {userDetails.email}
                   </Typography>
 
-                  <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }} flexWrap="wrap">
+                  <Stack direction="row" spacing={1} useFlexGap alignItems="center" sx={{ mt: 1.25, gap: 1 }} flexWrap="wrap">
                     <Chip
                       size="small"
                       icon={<ShieldRoundedIcon sx={{ "&&": { fontSize: 13 } }} />}
@@ -226,7 +241,7 @@ function Home({ role, editable }) {
                         fontWeight: 800,
                         fontSize: "0.68rem",
                         bgcolor: "#eff6ff",
-                        color: "#1d4ed8",
+                        color: "#1dd81d",
                         border: "1px solid #bfdbfe",
                       }}
                     />
@@ -246,12 +261,35 @@ function Home({ role, editable }) {
                       />
                     )}
 
-                    <Chip
-                      size="small"
-                      label={`Node ID: ${String(userDetails.id).slice(-6)}`}
-                      className="sim-telemetry-chip"
-                      sx={{ bgcolor: "#f1f5f9", color: "#475569" }}
-                    />
+                    {userDetails.subscription && (
+                      <Chip
+                        size="small"
+                        label={
+                          userDetails.subscription.isAdmin
+                            ? "Admin Exemption"
+                            : userDetails.subscription.isSubscriptionActive
+                            ? userDetails.subscription.daysRemaining !== null
+                              ? `Subscription: ${userDetails.subscription.daysRemaining}d left`
+                              : "Subscription Active"
+                            : "Subscription Over"
+                        }
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: "0.68rem",
+                          bgcolor: userDetails.subscription.isSubscriptionActive
+                            ? "#f0fdf4"
+                            : "#fef2f2",
+                          color: userDetails.subscription.isSubscriptionActive
+                            ? "#15803d"
+                            : "#b91c1c",
+                          border: `1px solid ${
+                            userDetails.subscription.isSubscriptionActive
+                              ? "#bbf7d0"
+                              : "#fecaca"
+                          }`,
+                        }}
+                      />
+                    )}
                   </Stack>
                 </Box>
               </Stack>
@@ -269,7 +307,7 @@ function Home({ role, editable }) {
                   py: 0.8,
                   borderColor: "#cbd5e1",
                   bgcolor: "#ffffff",
-                  "&:hover": { borderColor: "#0076a8", bgcolor: "#f0f9ff" },
+                  "&:hover": { borderColor: "#00a832", bgcolor: "#f0f9ff" },
                 }}
               >
                 Change Password
@@ -295,7 +333,7 @@ function Home({ role, editable }) {
       >
         <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Stack direction="row" spacing={1.5} alignItems="center">
-            <Avatar sx={{ bgcolor: "rgba(0, 118, 168, 0.12)", color: "#0076a8", width: 40, height: 40 }}>
+            <Avatar sx={{ bgcolor: "rgba(0, 118, 168, 0.12)", color: "#00a816", width: 40, height: 40 }}>
               <KeyRoundedIcon />
             </Avatar>
             <Box>

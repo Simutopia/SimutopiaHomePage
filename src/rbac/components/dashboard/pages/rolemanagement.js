@@ -631,17 +631,19 @@ const RolePermissionManagement = () => {
                           <EditIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Delete">
-                        <IconButton
-                          color="secondary"
-                          onClick={() => handleDelete(role)}
-                          size="small"
-                          disabled={
-                            role?.isProtected
-                          }
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
+                      <Tooltip title={role?.isProtected ? "Protected role cannot be deleted" : "Delete"}>
+                        <span>
+                          <IconButton
+                            color="secondary"
+                            onClick={() => handleDelete(role)}
+                            size="small"
+                            disabled={
+                              role?.isProtected
+                            }
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </span>
                       </Tooltip>
                     </>
                   )}

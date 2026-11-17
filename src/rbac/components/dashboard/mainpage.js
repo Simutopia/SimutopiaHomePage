@@ -173,20 +173,6 @@ const AppLayout = ({ currentUser }) => {
           p: 2,
         }}
       >
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Box className="sim-live-beacon" />
-          <Typography
-            variant="caption"
-            sx={{
-              fontFamily: "monospace",
-              color: "#64748b",
-              fontWeight: 600,
-              fontSize: "0.68rem",
-            }}
-          >
-            SYS · 256-BIT ENCRYPTED
-          </Typography>
-        </Stack>
       </Box>
     </Box>
   );
