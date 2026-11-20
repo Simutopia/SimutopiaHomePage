@@ -11,6 +11,9 @@
 # production
 /build
 
+# large source video backups (keep locally, do not commit)
+*.original.mp4
+
 # misc
 .DS_Store
 .env

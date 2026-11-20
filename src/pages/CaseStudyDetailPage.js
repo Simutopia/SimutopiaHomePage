@@ -1,7 +1,7 @@
 import { Box, Button, List, ListItem, Typography } from "@mui/material";
 import { Link as RouterLink, Navigate, useParams } from "react-router-dom";
 import ContentPageShell from "../components/ContentPageShell";
-import { getCaseStudyBySlug } from "../data/caseStudies";
+import { getCaseStudyBySlug, getServicePath } from "../data/caseStudies";
 import {
   bodyTextSx,
   buttonLabelSx,
@@ -12,6 +12,14 @@ import {
   mutedTextSx,
   subsectionHeadingSx,
 } from "../theme/tokens";
+
+const bulletItemSx = {
+  display: "list-item",
+  listStyleType: "disc",
+  ml: 2.25,
+  py: 0.4,
+  pl: 0.5,
+};
 
 const Section = ({ title, items, accentColor }) => (
   <Box
@@ -25,21 +33,35 @@ const Section = ({ title, items, accentColor }) => (
       {title}
     </Typography>
     <List disablePadding>
-      {items.map((item) => (
-        <ListItem
-          key={item}
-          disableGutters
-          sx={{
-            display: "list-item",
-            listStyleType: "disc",
-            ml: 2.25,
-            py: 0.4,
-            pl: 0.5,
-          }}
-        >
-          <Typography sx={bodyTextSx}>{item}</Typography>
-        </ListItem>
-      ))}
+      {items.map((item) => {
+        const text = typeof item === "string" ? item : item.text;
+        const children = typeof item === "string" ? null : item.children;
+        return (
+          <ListItem key={text} disableGutters sx={bulletItemSx}>
+            <Box>
+              <Typography sx={bodyTextSx}>{text}</Typography>
+              {children?.length ? (
+                <List disablePadding component="ul" sx={{ mt: 0.25 }}>
+                  {children.map((child) => (
+                    <ListItem
+                      key={child}
+                      disableGutters
+                      sx={{
+                        ...bulletItemSx,
+                        listStyleType: "circle",
+                        ml: 2.5,
+                        py: 0.25,
+                      }}
+                    >
+                      <Typography sx={bodyTextSx}>{child}</Typography>
+                    </ListItem>
+                  ))}
+                </List>
+              ) : null}
+            </Box>
+          </ListItem>
+        );
+      })}
     </List>
   </Box>
 );
@@ -129,7 +151,7 @@ const CaseStudyDetailPage = () => {
             <Typography
               key={keyword}
               component={RouterLink}
-              to="/services"
+              to={getServicePath(keyword)}
               sx={{
                 ...bodyTextSx,
                 fontSize: "0.88rem",

@@ -21,6 +21,17 @@ const normalizeServiceKeyword = (keyword) => {
   return alias || trimmed;
 };
 
+/** Stable URL hash id for a Services section title (expertise or industry). */
+export const toServiceSectionId = (keyword) =>
+  normalizeServiceKeyword(keyword)
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+export const getServicePath = (keyword) =>
+  `/services#${toServiceSectionId(keyword)}`;
+
 const caseStudies = [
   {
     slug: "excavator-system-design",
@@ -35,7 +46,7 @@ const caseStudies = [
       "Apps Development",
     ],
     video: "/casestudies/excavator-system-design/excavator-system-design.mp4",
-    poster: "/images/heavyEquipment.png",
+    poster: "/images/excavator-poster.jpg",
     goals: [
       "Develop an excavator system model that can be used to perform design studies.",
       "Determine pin locations for the kinematic linkages to achieve the desired working envelope.",
@@ -58,6 +69,48 @@ const caseStudies = [
       "The project provided an excellent simulation framework for future product development using model-based design.",
     ],
     cta: "Learn how we can help you reduce time to market using digital twins of your machines to perform design analysis and control software development.",
+  },
+  {
+    slug: "human-flow-simulations",
+    title: "Human Flow Simulations",
+    shortTitle: "Human Flow",
+    summary:
+      "Human flow simulation for a large entertainment center to inform 3D spatial design before construction.",
+    keywords: [
+      "Urban Mobility Simulations",
+      "Themed Entertainment",
+      "Control Systems Modeling",
+    ],
+    video: "/casestudies/human-flow-simulations/human-flow-simulations.mp4",
+    poster: "/images/human-flow-poster.jpg",
+    goals: [
+      "Simulate guest movement through the venue under normal and peak conditions.",
+      "Compare layout options for guest experience, operational efficiency, and safety.",
+      "Identify where guest-management strategies and sensing tools should be built in before construction.",
+    ],
+    approach: [
+      "Developed a detailed 3D spatial model of the entertainment center in Oasys MassMotion.",
+      "Leveraged the “BIM Import” functionality to import a model of the system true to scale.",
+      {
+        text: "Developed advanced control algorithms for smart guest flow management including:",
+        children: [
+          "Dynamic dispatching",
+          "Flow diversion",
+          "Unidirectional routing",
+          "Metering & holding",
+        ],
+      },
+      "Performed “what if” studies using Monte Carlo simulation approach with a vast range of operating conditions and guest behavioral metrics.",
+      "Created scripts in MATLAB® to import the results easily from large numbers of simulations and create plots that help with analyzing the results.",
+    ],
+    outcomes: [
+      "Tested several potential layouts within the simulation environment without having to build physical mockups of all these configurations in a large test facility.",
+      "Enabled the Client to determine the layout that provides the best guest experience while ensuring all requirements are met towards operational safety.",
+      "Determined comfortable guest capacity for this layout.",
+      "Simulated safety scenarios including fire egress and emergency evacuation.",
+      "Identified critical areas to implement guest management strategies and build in the necessary tools (cameras, people counters, etc.) ahead of time before commencement of the physical construction.",
+    ],
+    cta: "Learn how we can help you design safer, smarter, and more efficient spaces through human flow simulation studies.",
   },
 ];
 

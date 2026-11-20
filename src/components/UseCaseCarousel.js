@@ -9,7 +9,7 @@ const slides = [
   {
     title: "Heavy Equipment",
     subtitle: "System-level machine models, powertrain, and controls",
-    image: "/images/heavyEquipment.png",
+    image: "/images/excavator-poster.jpg",
     video: "/casestudies/excavator-system-design/excavator-system-design.mp4",
     caseStudyPath: "/case-studies/excavator-system-design",
     caseStudyLabel: "Excavator System Design",
@@ -17,7 +17,10 @@ const slides = [
   {
     title: "Themed Entertainment",
     subtitle: "Ride systems, animatronics, and guest-flow analysis",
-    image: "/images/entertainment.png",
+    image: "/images/human-flow-poster.jpg",
+    video: "/casestudies/human-flow-simulations/human-flow-simulations.mp4",
+    caseStudyPath: "/case-studies/human-flow-simulations",
+    caseStudyLabel: "Human Flow Simulations",
   },
   {
     title: "Industrial Automation",
