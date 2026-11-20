@@ -6,11 +6,11 @@ import offices from "../data/offices";
 import { colors } from "../theme/tokens";
 
 const EARTH_TEXTURE =
-  "//cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg";
+  `${process.env.PUBLIC_URL || ""}/images/globe/earth-blue-marble.jpg`;
 const BUMP_TEXTURE =
-  "//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png";
+  `${process.env.PUBLIC_URL || ""}/images/globe/earth-topology.png`;
 const BACKGROUND_TEXTURE =
-  "//cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png";
+  `${process.env.PUBLIC_URL || ""}/images/globe/night-sky.png`;
 
 const createPinElement = (office, isActive, onSelect) => {
   const root = document.createElement("button");
