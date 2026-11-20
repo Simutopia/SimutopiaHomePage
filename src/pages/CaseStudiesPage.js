@@ -20,7 +20,6 @@ const upcomingTitles = [
   <><H2Formula /> Fuel Cell Power System</>,
   <><H2Formula /> Refueling</>,
   "Animatronic System Dynamics",
-  "Human Flow Simulation",
   "Traffic Flow Simulation",
 ];
 

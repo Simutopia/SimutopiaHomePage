@@ -2,7 +2,12 @@ import { Box, List, ListItem, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import ContentPageShell from "../components/ContentPageShell";
 import H2Formula from "../components/H2Formula";
-import { getCaseStudiesForKeyword } from "../data/caseStudies";
+import { useLayoutEffect } from "react";
+import { useLocation } from "react-router-dom";
+import {
+  getCaseStudiesForKeyword,
+  toServiceSectionId,
+} from "../data/caseStudies";
 import {
   bodyTextSx,
   colors,
@@ -148,6 +153,7 @@ const ContentGroup = ({ title, items, accentColor, reversed = false }) => {
 
   return (
     <Box
+      id={toServiceSectionId(title)}
       component="article"
       sx={{
         width: "100%",
@@ -157,6 +163,7 @@ const ContentGroup = ({ title, items, accentColor, reversed = false }) => {
         pl: 2,
         borderLeft: `3px solid ${accentColor}`,
         textAlign: "left",
+        scrollMarginTop: stickyScrollMargin,
       }}
     >
       <Typography component="h3" sx={contentItemTitleSx}>
@@ -221,66 +228,83 @@ const ContentGroup = ({ title, items, accentColor, reversed = false }) => {
   );
 };
 
-const ServicesPage = () => (
-  <ContentPageShell
-    title="Services"
-    intro="We bring together deep technical expertise, fluency in advanced simulation tools, and multi-industry perspective to solve a wide variety of engineering challenges. Explore our areas of expertise and industries we serve below."
-    introMaxWidth={880}
-  >
-    <Box
-      id="areas-of-expertise"
-      component="section"
-      sx={{ mb: sectionPy, scrollMarginTop: stickyScrollMargin }}
-    >
-      <Typography component="h2" sx={subsectionHeadingSx}>
-        Areas of Expertise
-      </Typography>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: { xs: "1fr", md: "repeat(2, minmax(0, 1fr))" },
-          gap: contentStackGap,
-        }}
-      >
-        {expertiseAreas.map((group, index) => (
-          <ContentGroup
-            key={group.title}
-            title={group.title}
-            items={group.items}
-            accentColor={logoAccentCycle[index % logoAccentCycle.length]}
-          />
-        ))}
-      </Box>
-    </Box>
+const ServicesPage = () => {
+  const { hash } = useLocation();
 
-    <Box
-      id="industries"
-      component="section"
-      sx={{ scrollMarginTop: stickyScrollMargin }}
+  useLayoutEffect(() => {
+    if (!hash) return undefined;
+    const id = decodeURIComponent(hash.replace(/^#/, ""));
+    const scrollToTarget = () => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "auto", block: "start" });
+    };
+    scrollToTarget();
+    // Retry once after paint in case layout/fonts shift the position.
+    const timer = window.setTimeout(scrollToTarget, 50);
+    return () => window.clearTimeout(timer);
+  }, [hash]);
+
+  return (
+    <ContentPageShell
+      title="Services"
+      intro="We bring together deep technical expertise, fluency in advanced simulation tools, and multi-industry perspective to solve a wide variety of engineering challenges. Explore our areas of expertise and industries we serve below."
+      introMaxWidth={880}
     >
-      <Typography component="h2" sx={subsectionHeadingSx}>
-        Industries
-      </Typography>
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: contentStackGap,
-          width: "100%",
-        }}
+        id="areas-of-expertise"
+        component="section"
+        sx={{ mb: sectionPy, scrollMarginTop: stickyScrollMargin }}
       >
-        {industries.map((group, index) => (
-          <ContentGroup
-            key={group.title}
-            title={group.title}
-            items={group.items}
-            accentColor={logoAccentCycle[index % logoAccentCycle.length]}
-            reversed={index % 2 === 1}
-          />
-        ))}
+        <Typography component="h2" sx={subsectionHeadingSx}>
+          Areas of Expertise
+        </Typography>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "repeat(2, minmax(0, 1fr))" },
+            gap: contentStackGap,
+          }}
+        >
+          {expertiseAreas.map((group, index) => (
+            <ContentGroup
+              key={group.title}
+              title={group.title}
+              items={group.items}
+              accentColor={logoAccentCycle[index % logoAccentCycle.length]}
+            />
+          ))}
+        </Box>
       </Box>
-    </Box>
-  </ContentPageShell>
-);
+
+      <Box
+        id="industries"
+        component="section"
+        sx={{ scrollMarginTop: stickyScrollMargin }}
+      >
+        <Typography component="h2" sx={subsectionHeadingSx}>
+          Industries
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: contentStackGap,
+            width: "100%",
+          }}
+        >
+          {industries.map((group, index) => (
+            <ContentGroup
+              key={group.title}
+              title={group.title}
+              items={group.items}
+              accentColor={logoAccentCycle[index % logoAccentCycle.length]}
+              reversed={index % 2 === 1}
+            />
+          ))}
+        </Box>
+      </Box>
+    </ContentPageShell>
+  );
+};
 
 export default ServicesPage;
